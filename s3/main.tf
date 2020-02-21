@@ -29,6 +29,18 @@ resource "aws_s3_bucket_public_access_block" "log_bucket" {
   block_public_policy = true
 }
 
+data "template_file" "log_bucket_policy" {
+  template = file("../tdr-terraform-modules/s3/templates/secure_transport.json.tpl")
+  vars = {
+    bucket_name = aws_s3_bucket.log_bucket.id
+  }
+}
+
+resource "aws_s3_bucket_policy" "log_bucket" {
+  bucket = aws_s3_bucket.log_bucket.id
+  policy = data.template_file.log_bucket_policy.rendered
+}
+
 resource "aws_s3_bucket" "bucket" {
   bucket = local.bucket_name
   acl    = var.acl
@@ -65,4 +77,16 @@ resource "aws_s3_bucket_public_access_block" "bucket" {
   block_public_policy     = var.block_public_policy
   ignore_public_acls      = var.ignore_public_acls
   restrict_public_buckets = var.restrict_public_buckets
+}
+
+data "template_file" "bucket_policy" {
+  template = file("../tdr-terraform-modules/s3/templates/secure_transport.json.tpl")
+  vars = {
+    bucket_name = aws_s3_bucket.bucket.id
+  }
+}
+
+resource "aws_s3_bucket_policy" "bucket" {
+  bucket = aws_s3_bucket.bucket.id
+  policy = data.template_file.bucket_policy.rendered
 }
