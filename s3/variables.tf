@@ -1,8 +1,14 @@
-variable "common_tags" {}
+variable "common_tags" {
+  description = "tags used across the project"
+}
 
-variable "function" {}
+variable "project" {
+  description = "abbreviation for the project, e.g. tdr, forms the first part of the bucket name"
+}
 
-variable "project" {}
+variable "function" {
+  description = "forms the second part of the bucket name, eg. upload"
+}
 
 variable "environment_suffix" {
   description = "includes environment suffix in bucket name"
