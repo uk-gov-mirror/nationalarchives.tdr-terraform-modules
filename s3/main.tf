@@ -87,7 +87,7 @@ resource "aws_s3_bucket_public_access_block" "bucket" {
 }
 
 data "template_file" "bucket_policy" {
-  template = file("./tdr-terraform-modules/s3/templates/secure_transport.json.tpl")
+  template = file("./tdr-terraform-modules/s3/templates/${var.bucket_policy}.json.tpl")
   vars = {
     bucket_name = aws_s3_bucket.bucket.id
   }

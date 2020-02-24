@@ -41,5 +41,10 @@ variable "restrict_public_buckets" {
 
 variable "access_logs" {
   description = "creates a logging bucket and configures access logs"
-  default = true
+  default     = true
+}
+
+variable "bucket_policy" {
+  description = "bucket policy within templates folder"
+  default     = "secure_transport"
 }
