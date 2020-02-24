@@ -11,7 +11,7 @@ git clone https://github.com/nationalarchives/tdr-terraform-modules
 * example block of code to call a module:
 ```
 module "guardduty-s3" {
-  source      = "tdr-terraform-modules/s3"
+  source      = "./tdr-terraform-modules/s3"
   project     = "tdr"
   function    = "guardduty"
   common_tags = local.common_tags
