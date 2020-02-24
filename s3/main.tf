@@ -33,7 +33,7 @@ resource "aws_s3_bucket_public_access_block" "log_bucket" {
 
 data "template_file" "log_bucket_policy" {
   count  = var.access_logs == true ? 1 : 0
-  template = file("../tdr-terraform-modules/s3/templates/secure_transport.json.tpl")
+  template = file("./tdr-terraform-modules/s3/templates/secure_transport.json.tpl")
   vars = {
     bucket_name = aws_s3_bucket.log_bucket.*.id[0]
   }
