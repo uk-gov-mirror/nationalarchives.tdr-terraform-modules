@@ -8,7 +8,7 @@
 git clone https://github.com/nationalarchives/tdr-terraform-modules
 ```
 * specify a branch or tag when cloning if needed
-* example block of code to call the module:
+* example block of code to call a module:
 ```
 module "guardduty-s3" {
   source      = "tdr-terraform-modules/s3"
