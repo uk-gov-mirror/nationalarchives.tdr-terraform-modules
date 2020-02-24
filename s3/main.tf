@@ -16,16 +16,16 @@ resource "aws_s3_bucket" "log_bucket" {
   }
 
   tags = merge(
-    var.common_tags,
-    map(
-      "Name", "${local.bucket_name}-logs",
-    )
+  var.common_tags,
+  map(
+  "Name", "${local.bucket_name}-logs",
+  )
   )
 }
 
 resource "aws_s3_bucket_public_access_block" "log_bucket" {
   count  = var.access_logs == true ? 1 : 0
-  bucket = aws_s3_bucket.log_bucket.id
+  bucket = aws_s3_bucket.log_bucket.*.id[0]
 
   block_public_acls   = true
   block_public_policy = true
@@ -35,14 +35,14 @@ data "template_file" "log_bucket_policy" {
   count  = var.access_logs == true ? 1 : 0
   template = file("../tdr-terraform-modules/s3/templates/secure_transport.json.tpl")
   vars = {
-    bucket_name = aws_s3_bucket.log_bucket.id
+    bucket_name = aws_s3_bucket.log_bucket.*.id[0]
   }
 }
 
 resource "aws_s3_bucket_policy" "log_bucket" {
   count  = var.access_logs == true ? 1 : 0
-  bucket = aws_s3_bucket.log_bucket.id
-  policy = data.template_file.log_bucket_policy.rendered
+  bucket = aws_s3_bucket.log_bucket.*.id[0]
+  policy = data.template_file.log_bucket_policy.*.rendered[0]
 }
 
 resource "aws_s3_bucket" "bucket" {
@@ -61,16 +61,19 @@ resource "aws_s3_bucket" "bucket" {
     enabled = var.versioning
   }
 
-  logging {
-    target_bucket = var.access_logs == true? aws_s3_bucket.log_bucket.id : ""
-    target_prefix = var.access_logs == true? local.bucket_name : ""
+  dynamic "logging" {
+    for_each = var.access_logs == true ? [var.access_logs] : []
+    content {
+      target_bucket = aws_s3_bucket.log_bucket.*.id[0]
+      target_prefix = local.bucket_name
+    }
   }
 
   tags = merge(
-    var.common_tags,
-    map(
-      "Name", local.bucket_name,
-    )
+  var.common_tags,
+  map(
+  "Name", local.bucket_name,
+  )
   )
 }
 

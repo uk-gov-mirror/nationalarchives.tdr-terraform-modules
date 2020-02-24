@@ -5,7 +5,7 @@
 ## usage
 * clone into the root directory of the repository using the module
 ```
-git clone https://github.com/nationalarchives/tdr-terraform-modules
+git clone git@github.com:nationalarchives/tdr-terraform-modules.git
 ```
 * specify a branch or tag when cloning if needed
 * example block of code to call a module:
