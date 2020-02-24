@@ -38,3 +38,8 @@ variable "ignore_public_acls" {
 variable "restrict_public_buckets" {
   default = true
 }
+
+variable "access_logs" {
+  description = "creates a logging bucket and configures access logs"
+  default = true
+}

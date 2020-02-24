@@ -1,4 +1,5 @@
 resource "aws_s3_bucket" "log_bucket" {
+  count  = var.access_logs == true ? 1 : 0
   acl    = "log-delivery-write"
   bucket = "${local.bucket_name}-logs"
 
@@ -23,6 +24,7 @@ resource "aws_s3_bucket" "log_bucket" {
 }
 
 resource "aws_s3_bucket_public_access_block" "log_bucket" {
+  count  = var.access_logs == true ? 1 : 0
   bucket = aws_s3_bucket.log_bucket.id
 
   block_public_acls   = true
@@ -30,6 +32,7 @@ resource "aws_s3_bucket_public_access_block" "log_bucket" {
 }
 
 data "template_file" "log_bucket_policy" {
+  count  = var.access_logs == true ? 1 : 0
   template = file("../tdr-terraform-modules/s3/templates/secure_transport.json.tpl")
   vars = {
     bucket_name = aws_s3_bucket.log_bucket.id
@@ -37,6 +40,7 @@ data "template_file" "log_bucket_policy" {
 }
 
 resource "aws_s3_bucket_policy" "log_bucket" {
+  count  = var.access_logs == true ? 1 : 0
   bucket = aws_s3_bucket.log_bucket.id
   policy = data.template_file.log_bucket_policy.rendered
 }
@@ -58,8 +62,8 @@ resource "aws_s3_bucket" "bucket" {
   }
 
   logging {
-    target_bucket = aws_s3_bucket.log_bucket.id
-    target_prefix = local.bucket_name
+    target_bucket = var.access_logs == true? aws_s3_bucket.log_bucket.id : ""
+    target_prefix = var.access_logs == true? local.bucket_name : ""
   }
 
   tags = merge(
