@@ -62,7 +62,7 @@ resource "aws_s3_bucket" "bucket" {
   }
 
   dynamic "logging" {
-    for_each = var.access_logs == true ? [var.access_logs] : []
+    for_each = var.access_logs == true ? ["include_block"] : []
     content {
       target_bucket = aws_s3_bucket.log_bucket.*.id[0]
       target_prefix = local.bucket_name
