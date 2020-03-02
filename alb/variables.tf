@@ -57,7 +57,7 @@ variable "public_subnets" {
 
 variable "ssl_policy" {
   description = "SSL policy for ALB"
-  default     = "ELBSecurityPolicy-FS-2018-06"
+  default     = "ELBSecurityPolicy-TLS-1-2-Ext-2018-06"
 }
 
 variable "target_id" {

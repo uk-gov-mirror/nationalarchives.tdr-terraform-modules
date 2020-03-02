@@ -23,16 +23,18 @@ resource "random_string" "alb_prefix" {
 }
 
 resource "aws_alb_target_group_attachment" "alb_module" {
+  count            = var.alb_target_type == "instance" ? 1 : 0
   target_group_arn = aws_alb_target_group.alb_module.arn
   target_id        = var.target_id
 }
 
 resource "aws_alb_target_group" "alb_module" {
   # name cannot be longer than 32 characters
-  name     = "${var.project}-${var.function}-${random_string.alb_prefix.result}-${var.environment}"
-  port     = var.alb_target_group_port
-  protocol = "HTTP"
-  vpc_id   = var.vpc_id
+  name        = "${var.project}-${var.function}-${random_string.alb_prefix.result}-${var.environment}"
+  port        = var.alb_target_group_port
+  protocol    = "HTTP"
+  target_type = var.alb_target_type
+  vpc_id      = var.vpc_id
 
   health_check {
     healthy_threshold   = "3"
