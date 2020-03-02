@@ -10,8 +10,8 @@ resource "aws_alb" "alb_module" {
   }
 
   tags = merge(
-  var.common_tags,
-  map("Name", "${var.project}-${var.function}-${var.environment}")
+    var.common_tags,
+    map("Name", "${var.project}-${var.function}-${var.environment}")
   )
 }
 
@@ -23,30 +23,31 @@ resource "random_string" "alb_prefix" {
 }
 
 resource "aws_alb_target_group_attachment" "alb_module" {
+  count            = var.alb_target_type == "instance" ? 1 : 0
   target_group_arn = aws_alb_target_group.alb_module.arn
   target_id        = var.target_id
 }
 
 resource "aws_alb_target_group" "alb_module" {
   # name cannot be longer than 32 characters
-  name     = "${var.project}-${var.function}-${random_string.alb_prefix.result}-${var.environment}"
-  port     = 80
-  protocol = "HTTP"
-  vpc_id   = var.vpc_id
+  name        = "${var.project}-${var.function}-${random_string.alb_prefix.result}-${var.environment}"
+  port        = var.alb_target_group_port
+  protocol    = "HTTP"
+  target_type = var.alb_target_type
+  vpc_id      = var.vpc_id
 
   health_check {
     healthy_threshold   = "3"
     interval            = "30"
     protocol            = "HTTP"
-    matcher             = "200"
+    matcher             = var.health_check_matcher
     timeout             = "3"
     path                = "/${var.health_check_path}"
     unhealthy_threshold = "2"
   }
-
   tags = merge(
-  var.common_tags,
-  map("Name", "${var.project}-${var.function}-${random_string.alb_prefix.result}-${var.environment}")
+    var.common_tags,
+    map("Name", "${var.project}-${var.function}-${random_string.alb_prefix.result}-${var.environment}")
   )
 }
 
@@ -69,6 +70,7 @@ resource "aws_alb_listener" "alb_module" {
 }
 
 resource "aws_alb_listener" "http" {
+  count             = var.http_listener == true ? 1 : 0
   load_balancer_arn = aws_alb.alb_module.id
   port              = 80
   default_action {
