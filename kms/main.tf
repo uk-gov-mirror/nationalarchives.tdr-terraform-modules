@@ -2,10 +2,10 @@ resource "aws_kms_key" "encryption" {
   description         = "KMS key for encryption within ${var.environment} environment"
   enable_key_rotation = true
   tags = merge(
-  var.common_tags,
-  map(
-  "Name", "${var.project}-${var.function}-${var.environment}"
-  )
+    var.common_tags,
+    map(
+      "Name", "${var.project}-${var.function}-${var.environment}"
+    )
   )
 }
 
