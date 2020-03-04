@@ -15,6 +15,7 @@ resource "aws_wafregional_ipset" "trusted" {
 resource "aws_wafregional_byte_match_set" "restricted_uri" {
   count = var.restricted_uri == "" ? 0 : 1
   name  = "${var.project}-${var.function}-${var.environment}-restricted-uri"
+
   byte_match_tuples {
     text_transformation   = "NONE"
     target_string         = var.restricted_uri
@@ -120,6 +121,7 @@ resource "aws_wafregional_web_acl" "alb" {
     )
   )
 }
+
 
 resource "aws_wafregional_web_acl_association" "alb_web_acl" {
   count        = length(var.alb_target_groups)
