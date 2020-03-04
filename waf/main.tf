@@ -120,7 +120,6 @@ resource "aws_wafregional_web_acl" "alb" {
   )
 }
 
-
 resource "aws_wafregional_web_acl_association" "alb_web_acl" {
   count        = length(var.alb_target_groups)
   resource_arn = var.alb_target_groups[count.index]
