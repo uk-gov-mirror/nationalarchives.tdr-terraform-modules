@@ -49,7 +49,6 @@ resource "aws_wafregional_rule" "restricted_access" {
       "Name", "${var.project}-${var.function}-${var.environment}-restricted-uri",
     )
   )
-
 }
 
 resource "aws_wafregional_geo_match_set" "geo_match" {
@@ -83,7 +82,6 @@ resource "aws_wafregional_rule" "geo_match" {
       "Name", "${var.project}-${var.function}-${var.environment}-restricted-uri",
     )
   )
-
 }
 
 resource "aws_wafregional_web_acl" "alb" {
