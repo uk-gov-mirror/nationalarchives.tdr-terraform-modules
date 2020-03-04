@@ -14,15 +14,21 @@ variable "environment" {
   description = "environment, e.g. prod"
 }
 
-variable "alb_target_group_arn" {
-  description = "ALB target group ARN for WAF rule association"
+variable "alb_target_groups" {
+  description = "List of ALB target group ARNs for WAF rule association"
 }
 
 variable "trusted_ips" {
   description = "trusted IP addresses in csv format"
+  default     = ""
 }
 
 variable "restricted_uri" {
   description = "Resricted URI"
+  default     = ""
+}
+
+variable "geo_match" {
+  description = "Country codes in csv format"
   default     = ""
 }
