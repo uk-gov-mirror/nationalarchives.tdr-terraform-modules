@@ -19,4 +19,5 @@ module "guardduty-s3" {
 
 ## modules
 * Application Load Balancer (ALB)
-* S3
+* Key Management Service (KMS)
+* Simple Storage Service (S3)
