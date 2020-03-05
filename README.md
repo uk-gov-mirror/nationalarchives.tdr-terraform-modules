@@ -22,3 +22,5 @@ module "guardduty-s3" {
 * Application Load Balancer (ALB)
 * Key Management Service (KMS)
 * Simple Storage Service (S3)
+* Web Application Firewall (WAF) - should be upgraded to WAFv2 when supported by Terraform
+
