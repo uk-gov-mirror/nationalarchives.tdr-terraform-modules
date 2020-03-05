@@ -18,6 +18,7 @@ module "guardduty-s3" {
 ```
 
 ## modules
+* Amazon Machine Image (AMI)
 * Application Load Balancer (ALB)
 * Key Management Service (KMS)
 * Simple Storage Service (S3)
