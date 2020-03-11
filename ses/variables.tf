@@ -11,9 +11,9 @@ variable "domain" {
   default     = "nationalarchives.gov.uk"
 }
 
-variable "from_address" {
-  description = "from address prefix, e.g. do-not-reply"
-  default     = "do-not-reply"
+variable "email_address" {
+  description = "address prefix, e.g. secops"
+  default     = "tdr-secops"
 }
 
 variable "hosted_zone_id" {

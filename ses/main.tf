@@ -16,6 +16,6 @@ resource "aws_ses_domain_identity_verification" "email_verification" {
   depends_on = [aws_route53_record.amazonses_verification_record]
 }
 
-resource "aws_ses_email_identity" "from_address" {
-  email    = var.environment_full_name == "production" ? "${var.from_address}@${var.project}.${var.domain}" : "${var.from_address}@${var.project}-${var.environment_full_name}.${var.domain}"
+resource "aws_ses_email_identity" "email_address" {
+  email    = var.environment_full_name == "production" ? "${var.email_address}@${var.project}.${var.domain}" : "${var.email_address}@${var.project}-${var.environment_full_name}.${var.domain}"
 }
