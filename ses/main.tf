@@ -3,7 +3,7 @@ resource "aws_ses_domain_identity" "email_domain" {
 }
 
 resource "aws_route53_record" "amazonses_verification_record" {
-  zone_id = data.aws_route53_zone.hosted_zone.zone_id
+  zone_id = var.hosted_zone_id
   name    = var.environment_full_name == "production" ? "_amazonses.${var.project}.${var.domain}" : "_amazonses.${var.project}-${var.environment_full_name}.${var.domain}"
   type    = "TXT"
   ttl     = "600"

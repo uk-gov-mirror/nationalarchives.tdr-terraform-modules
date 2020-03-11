@@ -1,3 +1,7 @@
+variable "common_tags" {
+  description = "tags used across the project"
+}
+
 variable "project" {
   description = "abbreviation for the project, e.g. tdr, forms the first part of the resource name"
 }
@@ -11,11 +15,11 @@ variable "domain" {
   default     = "nationalarchives.gov.uk"
 }
 
-variable "from_address" {
-  description = "from address prefix, e.g. do-not-reply"
-  default     = "do-not-reply"
+variable "ns_ttl" {
+  description = "time to live for name servers"
+  default     = "172800"
 }
 
-variable "hosted_zone_id" {
-  description = "Hosted zone ID"
-}
+
+
+
