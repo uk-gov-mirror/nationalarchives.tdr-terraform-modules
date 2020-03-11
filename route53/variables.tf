@@ -19,7 +19,3 @@ variable "ns_ttl" {
   description = "time to live for name servers"
   default     = "172800"
 }
-
-
-
-

@@ -17,5 +17,5 @@ resource "aws_ses_domain_identity_verification" "email_verification" {
 }
 
 resource "aws_ses_email_identity" "email_address" {
-  email    = var.environment_full_name == "production" ? "${var.email_address}@${var.project}.${var.domain}" : "${var.email_address}@${var.project}-${var.environment_full_name}.${var.domain}"
+  email = var.environment_full_name == "production" ? "${var.email_address}@${var.project}.${var.domain}" : "${var.email_address}@${var.project}-${var.environment_full_name}.${var.domain}"
 }
