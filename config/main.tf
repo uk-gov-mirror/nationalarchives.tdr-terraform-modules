@@ -8,6 +8,17 @@ resource "aws_config_configuration_recorder" "config_recorder" {
   }
 }
 
+resource "aws_sns_topic" "config_topic" {
+  name  = "${var.project}-config-${local.environment}-${local.region}"
+  tags = merge(
+    var.common_tags,
+    map(
+      "Name", "${var.project}-config-${local.environment}",
+    )
+  )
+
+}
+
 data "template_file" "config_assume_role_policy" {
   template = file("./tdr-terraform-modules/config/templates/config_assume_role_policy.json.tpl")
 }
@@ -38,6 +49,23 @@ resource "aws_iam_role_policy_attachment" "s3_policy_attach" {
   policy_arn = aws_iam_policy.s3_access_policy.*.arn[0]
 }
 
+data "template_file" "sns_topic_access_policy" {
+  template = file("./tdr-terraform-modules/config/templates/sns_topic_access_policy.json.tpl")
+}
+
+resource "aws_iam_policy" "sns_topic_access_policy" {
+  count       = local.region == var.primary_region ? 1 : 0
+  name        = "${var.project}-sns-publish-${local.environment}"
+  description = "Allows pusblishing to SNS topic"
+  policy      = data.template_file.sns_topic_access_policy.rendered
+}
+
+resource "aws_iam_role_policy_attachment" "sns_topic_policy_attach" {
+  count      = local.region == var.primary_region ? 1 : 0
+  role       = aws_iam_role.config_role.*.name[0]
+  policy_arn = aws_iam_policy.sns_topic_access_policy.*.arn[0]
+}
+
 resource "aws_iam_role_policy_attachment" "config_policy_attach" {
   count      = local.region == var.primary_region ? 1 : 0
   role       = aws_iam_role.config_role.*.name[0]
@@ -48,6 +76,7 @@ resource "aws_config_delivery_channel" "config_channel" {
   name           = "${var.project}-config-${local.environment}"
   s3_bucket_name = var.bucket_id
   s3_key_prefix  = data.aws_region.current.name
+  sns_topic_arn  = aws_sns_topic.config_topic.arn
   depends_on     = [aws_config_configuration_recorder.config_recorder]
 }
 
@@ -94,3 +123,4 @@ resource "aws_config_config_rule" "aws_managed_regional_rule" {
 
   depends_on = [aws_config_configuration_recorder.config_recorder]
 }
+
