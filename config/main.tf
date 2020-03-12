@@ -1,5 +1,5 @@
 resource "aws_config_configuration_recorder" "config_recorder" {
-  name     = "example"
+  name     = "${var.project}-${local.environment}-${local.region}"
   role_arn = local.region == var.primary_region ? aws_iam_role.config_role.*.arn[0] : "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${upper(var.project)}Config${title(var.environment_full_name)}"
 
   recording_group {
