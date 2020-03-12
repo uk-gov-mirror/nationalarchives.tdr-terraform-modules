@@ -29,3 +29,13 @@ variable "primary_region" {
 variable "primary_config_recorder_id" {
   default = ""
 }
+
+variable "global_config_rule_list" {
+  description = "list of global config rules without input parameters to be applied in a single region"
+  default     = ["IAM_USER_NO_POLICIES_CHECK", "ROOT_ACCOUNT_MFA_ENABLED"]
+}
+
+variable "regional_config_rule_list" {
+  description = "list of global config rules without input parameters to be applied in every region"
+  default     = ["INCOMING_SSH_DISABLED", "VPC_DEFAULT_SECURITY_GROUP_CLOSED"]
+}

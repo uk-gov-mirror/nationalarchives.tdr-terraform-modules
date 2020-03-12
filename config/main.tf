@@ -57,37 +57,38 @@ resource "aws_config_configuration_recorder_status" "config_status" {
   depends_on = [aws_config_delivery_channel.config_channel]
 }
 
-resource "aws_config_config_rule" "root_account_mfa_enabled" {
-  count = local.region == var.primary_region ? 1 : 0
-  name  = "root-account-mfa-enabled"
+resource "aws_config_config_rule" "aws_managed_global_rule" {
+  count = local.region == var.primary_region ? length(var.global_config_rule_list) : 0
+  name  = lower(var.global_config_rule_list[count.index])
 
   source {
     owner             = "AWS"
-    source_identifier = "ROOT_ACCOUNT_MFA_ENABLED"
+    source_identifier = var.global_config_rule_list[count.index]
   }
 
   tags = merge(
     var.common_tags,
     map(
-      "Name", "root-account-mfa-enabled",
+      "Name", lower(var.global_config_rule_list[count.index]),
     )
   )
 
   depends_on = [aws_config_configuration_recorder.config_recorder]
 }
 
-resource "aws_config_config_rule" "restricted_ssh" {
-  name = "restricted-ssh"
+resource "aws_config_config_rule" "aws_managed_regional_rule" {
+  count = length(var.regional_config_rule_list)
+  name  = lower(var.regional_config_rule_list[count.index])
 
   source {
     owner             = "AWS"
-    source_identifier = "INCOMING_SSH_DISABLED"
+    source_identifier = var.regional_config_rule_list[count.index]
   }
 
   tags = merge(
     var.common_tags,
     map(
-      "Name", "restricted-ssh",
+      "Name", lower(var.regional_config_rule_list[count.index]),
     )
   )
 
