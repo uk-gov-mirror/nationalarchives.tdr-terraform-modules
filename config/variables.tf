@@ -18,10 +18,6 @@ variable "project" {
   description = "abbreviation for the project, e.g. tdr, forms the first part of the bucket name"
 }
 
-variable "environment_full_name" {
-  description = "full environment name, e.g. staging"
-}
-
 variable "primary_region" {
   default = "eu-west-2"
 }

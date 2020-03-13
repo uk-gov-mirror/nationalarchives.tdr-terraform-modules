@@ -1,6 +1,6 @@
 resource "aws_config_configuration_recorder" "config_recorder" {
   name     = "${var.project}-${local.environment}-${local.region}"
-  role_arn = local.region == var.primary_region ? aws_iam_role.config_role.*.arn[0] : "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${upper(var.project)}Config${title(var.environment_full_name)}"
+  role_arn = local.region == var.primary_region ? aws_iam_role.config_role.*.arn[0] : "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${upper(var.project)}Config${title(local.environment)}"
 
   recording_group {
     all_supported                 = var.all_supported
@@ -25,7 +25,7 @@ data "template_file" "config_assume_role_policy" {
 
 resource "aws_iam_role" "config_role" {
   count              = local.region == var.primary_region ? 1 : 0
-  name               = "${upper(var.project)}Config${title(var.environment_full_name)}"
+  name               = "${upper(var.project)}Config${title(local.environment)}"
   assume_role_policy = data.template_file.config_assume_role_policy.rendered
 }
 
@@ -38,7 +38,7 @@ data "template_file" "s3_access_policy" {
 
 resource "aws_iam_policy" "s3_access_policy" {
   count       = local.region == var.primary_region ? 1 : 0
-  name        = "${var.project}-config-${local.environment}"
+  name        = "${upper(var.project)}Config${title(local.environment)}"
   description = "Allows access to AWS Config S3 bucket"
   policy      = data.template_file.s3_access_policy.rendered
 }
@@ -55,7 +55,7 @@ data "template_file" "sns_topic_access_policy" {
 
 resource "aws_iam_policy" "sns_topic_access_policy" {
   count       = local.region == var.primary_region ? 1 : 0
-  name        = "${var.project}-sns-publish-${local.environment}"
+  name        = "${upper(var.project)}SNSPublish${title(local.environment)}"
   description = "Allows pusblishing to SNS topic"
   policy      = data.template_file.sns_topic_access_policy.rendered
 }
