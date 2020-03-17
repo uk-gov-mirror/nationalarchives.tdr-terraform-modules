@@ -8,7 +8,8 @@ resource "aws_route53_zone" "hosted_zone" {
     )
   )
 }
-
+# uncomment the block below if importing an existing hosted zone to the Terraform state file
+/*
 resource "aws_route53_record" "hosted_zone_ns" {
   zone_id = aws_route53_zone.hosted_zone.zone_id
   name    = var.environment_full_name == "production" ? "${var.project}.${var.domain}" : "${var.project}-${var.environment_full_name}.${var.domain}"
@@ -22,3 +23,4 @@ resource "aws_route53_record" "hosted_zone_ns" {
     "${aws_route53_zone.hosted_zone.name_servers.3}.",
   ]
 }
+*/
