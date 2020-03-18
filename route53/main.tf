@@ -10,7 +10,7 @@ resource "aws_route53_zone" "hosted_zone" {
 }
 # conditional includes the block below for environments with a manually created hosted zone imported to the Terraform state file
 resource "aws_route53_record" "hosted_zone_ns" {
-  count   = var.environment_full_name == "management" || var.environment_full_name == "staging" ? 1 : 0
+  count   = var.environment_full_name == "management" || var.environment_full_name == "integration" ? 1 : 0
   zone_id = aws_route53_zone.hosted_zone.zone_id
   name    = var.environment_full_name == "production" ? "${var.project}.${var.domain}" : "${var.project}-${var.environment_full_name}.${var.domain}"
   type    = "NS"
