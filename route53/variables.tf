@@ -19,3 +19,8 @@ variable "ns_ttl" {
   description = "time to live for name servers"
   default     = "172800"
 }
+
+variable "manual_creation" {
+  description = "DNS zone created manually and imported to Terraform state"
+  default     = false
+}
