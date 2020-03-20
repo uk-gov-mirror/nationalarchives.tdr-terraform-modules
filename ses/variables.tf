@@ -19,3 +19,8 @@ variable "email_address" {
 variable "hosted_zone_id" {
   description = "Hosted zone ID"
 }
+
+variable "dns_delegated" {
+  description = "DNS zone delegated from higher level domain"
+  default     = true
+}
