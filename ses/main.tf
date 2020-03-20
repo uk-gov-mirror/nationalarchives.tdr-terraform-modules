@@ -12,7 +12,7 @@ resource "aws_route53_record" "amazonses_verification_record" {
 
 # implement this resource after DNS delegation is in place to avoid terraform errors
 resource "aws_ses_domain_identity_verification" "email_verification" {
-  count  = var.domain == true ? 0 : 1
+  count  = var.dns_delegated == false ? 0 : 1
   domain = aws_ses_domain_identity.email_domain.id
 
   depends_on = [aws_route53_record.amazonses_verification_record]
@@ -20,13 +20,13 @@ resource "aws_ses_domain_identity_verification" "email_verification" {
 
 # implement this resource after DNS delegation is in place to avoid terraform errors
 resource "aws_ses_domain_dkim" "email_dkim" {
-  count  = var.domain == true ? 0 : 1
+  count  = var.dns_delegated == false ? 0 : 1
   domain = aws_ses_domain_identity.email_domain.domain
 }
 
 # implement this resource after DNS delegation is in place to avoid terraform errors
 resource "aws_route53_record" "amazonses_dkim_record" {
-  count  = var.domain == true ? 0 : 3
+  count  = var.dns_delegated == false ? 0 : 3
   zone_id = var.hosted_zone_id
   name    = "${element(aws_ses_domain_dkim.email_dkim.*.dkim_tokens[0], count.index)}._domainkey.${local.domain}"
   type    = "CNAME"
