@@ -28,4 +28,5 @@ module "guardduty-s3" {
 * Simple Email Service (SES)
 * Simple Storage Service (S3)
 * Web Application Firewall (WAF) - should be upgraded to WAFv2 when supported by Terraform
+* CloudTrail
 
