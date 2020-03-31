@@ -32,7 +32,7 @@ resource "aws_cloudtrail" "cloudtrail" {
   s3_key_prefix                 = local.cloudtrail_prefix
   include_global_service_events = var.include_global_service_events
   is_multi_region_trail         = var.is_multi_region_trail
-  tags                          = var.common_tags
   cloud_watch_logs_role_arn     = aws_iam_role.cloudtrail_role.arn
   cloud_watch_logs_group_arn    = aws_cloudwatch_log_group.cloudtrail.arn
+  tags                          = var.common_tags
 }
