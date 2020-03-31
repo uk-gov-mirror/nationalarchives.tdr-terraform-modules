@@ -48,3 +48,8 @@ variable "bucket_policy" {
   description = "bucket policy within templates folder"
   default     = "secure_transport"
 }
+
+variable "kms_key_id" {
+  description = "KMS Key ID to encrypt S3 bucket"
+  default     = ""
+}
