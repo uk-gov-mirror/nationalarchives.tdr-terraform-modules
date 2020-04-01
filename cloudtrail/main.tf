@@ -34,5 +34,7 @@ resource "aws_cloudtrail" "cloudtrail" {
   is_multi_region_trail         = var.is_multi_region_trail
   cloud_watch_logs_role_arn     = aws_iam_role.cloudtrail_role.arn
   cloud_watch_logs_group_arn    = aws_cloudwatch_log_group.cloudtrail.arn
+  enable_log_file_validation    = true
+  kms_key_id                    = var.kms_key_id
   tags                          = var.common_tags
 }
