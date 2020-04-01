@@ -20,6 +20,7 @@ module "guardduty-s3" {
 ## modules
 * Amazon Machine Image (AMI)
 * Application Load Balancer (ALB)
+* CloudTrail
 * Config
 * GuardDuty
 * Key Management Service (KMS)
@@ -28,5 +29,3 @@ module "guardduty-s3" {
 * Simple Email Service (SES)
 * Simple Storage Service (S3)
 * Web Application Firewall (WAF) - should be upgraded to WAFv2 when supported by Terraform
-* CloudTrail
-
