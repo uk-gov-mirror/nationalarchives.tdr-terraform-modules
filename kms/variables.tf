@@ -13,3 +13,8 @@ variable "function" {
 variable "environment" {
   description = "environment, e.g. prod"
 }
+
+variable "key_policy" {
+  description = "key policy within templates folder"
+  default     = "enable_iam"
+}

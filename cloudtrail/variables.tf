@@ -11,7 +11,6 @@ variable "function" {
   default     = "cloudtrail"
 }
 
-
 variable "s3_bucket_name" {
   description = "Name of the S3 bucket to be used for CloudTrail logs"
 }
@@ -24,4 +23,8 @@ variable "is_multi_region_trail" {
 variable "include_global_service_events" {
   description = "Include global events, e.g. IAM"
   default     = true
+}
+
+variable "kms_key_id" {
+  description = "KMS Key ID for CloudTrail encryption"
 }
