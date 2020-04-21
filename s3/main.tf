@@ -2,6 +2,7 @@ resource "aws_s3_bucket" "log_bucket" {
   count  = var.access_logs == true ? 1 : 0
   acl    = "log-delivery-write"
   bucket = "${local.bucket_name}-logs"
+  force_destroy = true
 
   server_side_encryption_configuration {
     rule {
@@ -48,6 +49,7 @@ resource "aws_s3_bucket_policy" "log_bucket" {
 resource "aws_s3_bucket" "bucket" {
   bucket = local.bucket_name
   acl    = var.acl
+  force_destroy = true
 
   server_side_encryption_configuration {
     rule {
