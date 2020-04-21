@@ -49,6 +49,7 @@ resource "aws_alb_target_group" "alb_module" {
     var.common_tags,
     map("Name", "${var.project}-${var.function}-${random_string.alb_prefix.result}-${var.environment}")
   )
+  depends_on = [aws_alb.alb_module]
 }
 
 data "aws_acm_certificate" "alb_module" {
