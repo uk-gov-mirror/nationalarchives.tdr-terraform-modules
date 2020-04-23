@@ -51,6 +51,7 @@ variable "bucket_policy" {
 
 variable "kms_key_id" {
   description = "KMS Key ID to encrypt S3 bucket"
+  default     = ""
 }
 
 variable "cors" {
