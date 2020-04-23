@@ -72,6 +72,16 @@ resource "aws_s3_bucket" "bucket" {
     }
   }
 
+  dynamic "cors_rule" {
+    for_each = var.cors == true ? ["include-cors"] : []
+    content {
+      allowed_headers = ["*"]
+      allowed_methods = ["PUT", "POST", "GET"]
+      allowed_origins = [var.frontend_url]
+      expose_headers  = ["ETag"]
+    }
+  }
+
   tags = merge(
     var.common_tags,
     map(
