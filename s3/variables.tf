@@ -51,6 +51,7 @@ variable "bucket_policy" {
 
 variable "kms_key_id" {
   description = "KMS Key ID to encrypt S3 bucket"
+  default     = ""
 }
 
 variable "cors" {
@@ -62,3 +63,4 @@ variable "frontend_url" {
   description = "the url of the frontend. This is only needed if adding cors support so it defaults to empty string"
   default     = ""
 }
+
