@@ -46,6 +46,12 @@ variable "health_check_matcher" {
   default     = "200"
 }
 
+variable "health_check_unhealthy_threshold" {
+  description = "The number of consecutive failed health checks required to mark the target as unhealthy"
+  type        = number
+  default     = 2
+}
+
 variable "http_listener" {
   description = "HTTP listener on port 80 for HTTP to HTTPS redirect"
   default     = true
