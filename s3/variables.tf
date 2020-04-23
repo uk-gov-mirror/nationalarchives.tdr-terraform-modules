@@ -63,3 +63,4 @@ variable "frontend_url" {
   description = "the url of the frontend. This is only needed if adding cors support so it defaults to empty string"
   default     = ""
 }
+
