@@ -32,6 +32,11 @@ variable "alb_target_type" {
   default     = "instance"
 }
 
+variable "certificate_arn" {
+  description = "SSL certificate ARN"
+  default     = ""
+}
+
 variable "domain_name" {
   description = "Domain name to be used in SSL certificate"
 }
