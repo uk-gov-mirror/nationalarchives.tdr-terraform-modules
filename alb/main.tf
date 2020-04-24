@@ -43,7 +43,7 @@ resource "aws_alb_target_group" "alb_module" {
     matcher             = var.health_check_matcher
     timeout             = "3"
     path                = "/${var.health_check_path}"
-    unhealthy_threshold = "2"
+    unhealthy_threshold = var.health_check_unhealthy_threshold
   }
   tags = merge(
     var.common_tags,
