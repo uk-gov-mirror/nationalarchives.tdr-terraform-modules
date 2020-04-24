@@ -52,17 +52,12 @@ resource "aws_alb_target_group" "alb_module" {
   depends_on = [aws_alb.alb_module]
 }
 
-data "aws_acm_certificate" "alb_module" {
-  domain   = var.domain_name
-  statuses = ["ISSUED"]
-}
-
 resource "aws_alb_listener" "alb_module" {
   load_balancer_arn = aws_alb.alb_module.id
   port              = "443"
   protocol          = "HTTPS"
   ssl_policy        = var.ssl_policy
-  certificate_arn   = var.certificate_arn == "" ? data.aws_acm_certificate.alb_module.arn :var.certificate_arn
+  certificate_arn   = var.certificate_arn
 
   default_action {
     target_group_arn = aws_alb_target_group.alb_module.id
