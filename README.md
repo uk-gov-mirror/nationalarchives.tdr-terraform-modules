@@ -20,6 +20,7 @@ module "guardduty-s3" {
 ## modules
 * Amazon Machine Image (AMI)
 * Application Load Balancer (ALB)
+* Certificate Manager
 * CloudTrail
 * Config
 * GuardDuty
