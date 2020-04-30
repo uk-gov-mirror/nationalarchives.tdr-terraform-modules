@@ -1,15 +1,15 @@
 resource "aws_s3_bucket" "log_bucket" {
-  count  = var.access_logs == true ? 1 : 0
-  acl    = "log-delivery-write"
-  bucket = "${local.bucket_name}-logs"
-  force_destroy = true
+  count         = var.access_logs == true && var.apply_resource == true ? 1 : 0
+  acl           = "log-delivery-write"
+  bucket        = "${local.bucket_name}-logs"
+  force_destroy = var.force_destroy
 
   server_side_encryption_configuration {
     rule {
       apply_server_side_encryption_by_default {
-        sse_algorithm = var.kms_key_id == "" ? "AES256" : "aws:kms"
+        sse_algorithm     = var.kms_key_id == "" ? "AES256" : "aws:kms"
         kms_master_key_id = var.kms_key_id == "" ? null : var.kms_key_id
-        }
+      }
     }
   }
 
@@ -26,31 +26,24 @@ resource "aws_s3_bucket" "log_bucket" {
 }
 
 resource "aws_s3_bucket_public_access_block" "log_bucket" {
-  count  = var.access_logs == true ? 1 : 0
+  count  = var.access_logs == true && var.apply_resource == true ? 1 : 0
   bucket = aws_s3_bucket.log_bucket.*.id[0]
 
   block_public_acls   = true
   block_public_policy = true
 }
 
-data "template_file" "log_bucket_policy" {
-  count    = var.access_logs == true ? 1 : 0
-  template = file("./tdr-terraform-modules/s3/templates/secure_transport.json.tpl")
-  vars = {
-    bucket_name = aws_s3_bucket.log_bucket.*.id[0]
-  }
-}
-
 resource "aws_s3_bucket_policy" "log_bucket" {
-  count  = var.access_logs == true ? 1 : 0
+  count  = var.access_logs == true && var.apply_resource == true ? 1 : 0
   bucket = aws_s3_bucket.log_bucket.*.id[0]
-  policy = data.template_file.log_bucket_policy.*.rendered[0]
+  policy = templatefile("./tdr-terraform-modules/s3/templates/secure_transport.json.tpl", { bucket_name = aws_s3_bucket.log_bucket.*.id[0] })
 }
 
 resource "aws_s3_bucket" "bucket" {
-  bucket = local.bucket_name
-  acl    = var.acl
-  force_destroy = true
+  count         = var.apply_resource == true ? 1 : 0
+  bucket        = local.bucket_name
+  acl           = var.acl
+  force_destroy = var.force_destroy
 
   server_side_encryption_configuration {
     rule {
@@ -62,6 +55,17 @@ resource "aws_s3_bucket" "bucket" {
 
   versioning {
     enabled = var.versioning
+  }
+  dynamic "lifecycle_rule" {
+    for_each = var.version_lifecycle == true ? ["include_block"] : []
+    content {
+      id = "delete-old-versions"
+      enabled = true
+
+      noncurrent_version_expiration {
+        days = 30
+      }
+    }
   }
 
   dynamic "logging" {
@@ -90,23 +94,18 @@ resource "aws_s3_bucket" "bucket" {
   )
 }
 
-resource "aws_s3_bucket_public_access_block" "bucket" {
-  bucket = aws_s3_bucket.bucket.id
+resource "aws_s3_bucket_policy" "bucket" {
+  count  = var.apply_resource == true ? 1 : 0
+  bucket = aws_s3_bucket.bucket.*.id[0]
+  policy = templatefile("./tdr-terraform-modules/s3/templates/${var.bucket_policy}.json.tpl", { bucket_name = aws_s3_bucket.bucket.*.id[0] })
+}
 
+resource "aws_s3_bucket_public_access_block" "bucket" {
+  count                   = var.apply_resource == true ? 1 : 0
+  bucket                  = aws_s3_bucket.bucket.*.id[0]
   block_public_acls       = var.block_public_acls
   block_public_policy     = var.block_public_policy
   ignore_public_acls      = var.ignore_public_acls
   restrict_public_buckets = var.restrict_public_buckets
-}
-
-data "template_file" "bucket_policy" {
-  template = file("./tdr-terraform-modules/s3/templates/${var.bucket_policy}.json.tpl")
-  vars = {
-    bucket_name = aws_s3_bucket.bucket.id
-  }
-}
-
-resource "aws_s3_bucket_policy" "bucket" {
-  bucket = aws_s3_bucket.bucket.id
-  policy = data.template_file.bucket_policy.rendered
+  depends_on              = [aws_s3_bucket_policy.bucket]
 }
