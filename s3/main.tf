@@ -56,6 +56,17 @@ resource "aws_s3_bucket" "bucket" {
   versioning {
     enabled = var.versioning
   }
+  dynamic "lifecycle_rule" {
+    for_each = var.version_lifecycle == true ? ["include_block"] : []
+    content {
+      id = "delete-old-versions"
+      enabled = true
+
+      noncurrent_version_expiration {
+        days = 30
+      }
+    }
+  }
 
   dynamic "logging" {
     for_each = var.access_logs == true ? ["include_block"] : []
