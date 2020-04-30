@@ -1,3 +1,8 @@
+variable "apply_resource" {
+  description = "use to conditionally apply resource from the calling module"
+  default     = true
+}
+
 variable "common_tags" {
   description = "tags used across the project"
 }
@@ -64,3 +69,7 @@ variable "frontend_url" {
   default     = ""
 }
 
+variable "force_destroy" {
+  description = "destroys S3 bucket on terraform destroy, even if there are files inside the bucket"
+  default     = true
+}
