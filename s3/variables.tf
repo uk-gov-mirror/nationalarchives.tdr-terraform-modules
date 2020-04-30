@@ -28,6 +28,10 @@ variable "versioning" {
   default = true
 }
 
+variable "version_lifecycle" {
+  default = false
+}
+
 variable "block_public_acls" {
   default = true
 }
