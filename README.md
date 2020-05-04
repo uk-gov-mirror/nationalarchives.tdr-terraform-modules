@@ -28,5 +28,6 @@ module "guardduty-s3" {
 * Route 53
 * Security Hub
 * Simple Email Service (SES)
+* Simple Notification Service (SNS)
 * Simple Storage Service (S3)
 * Web Application Firewall (WAF) - should be upgraded to WAFv2 when supported by Terraform

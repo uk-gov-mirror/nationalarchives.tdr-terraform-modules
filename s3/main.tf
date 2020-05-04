@@ -39,6 +39,16 @@ resource "aws_s3_bucket_policy" "log_bucket" {
   policy = templatefile("./tdr-terraform-modules/s3/templates/secure_transport.json.tpl", { bucket_name = aws_s3_bucket.log_bucket.*.id[0] })
 }
 
+resource "aws_s3_bucket_notification" "log_bucket_notification" {
+  count = var.access_logs == true && var.apply_resource == true && var.sns_notification_logs? 1 : 0
+  bucket = aws_s3_bucket.log_bucket.*.id[0]
+
+  topic {
+    topic_arn     = local.sns_topic_arn
+    events        = ["s3:ObjectCreated:*"]
+  }
+}
+
 resource "aws_s3_bucket" "bucket" {
   count         = var.apply_resource == true ? 1 : 0
   bucket        = local.bucket_name
@@ -108,4 +118,14 @@ resource "aws_s3_bucket_public_access_block" "bucket" {
   ignore_public_acls      = var.ignore_public_acls
   restrict_public_buckets = var.restrict_public_buckets
   depends_on              = [aws_s3_bucket_policy.bucket]
+}
+
+resource "aws_s3_bucket_notification" "bucket_notification" {
+  count = var.apply_resource == true && var.sns_notification? 1 : 0
+  bucket = aws_s3_bucket.bucket.*.id[0]
+
+  topic {
+    topic_arn     = local.sns_topic_arn
+    events        = ["s3:ObjectCreated:*"]
+  }
 }

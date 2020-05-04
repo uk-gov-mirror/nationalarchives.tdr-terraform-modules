@@ -77,3 +77,23 @@ variable "force_destroy" {
   description = "destroys S3 bucket on terraform destroy, even if there are files inside the bucket"
   default     = true
 }
+
+variable "sns_topic_arn" {
+  description = "SNS topic ARN for log data aggregation"
+  default     = ""
+}
+
+variable "sns_notification" {
+  description = "Notify SNS on upload to main S3 bucket"
+  default     = false
+}
+
+variable "sns_notification_logs" {
+  description = "Notify SNS on upload to S3 log bucket"
+  default     = true
+}
+
+variable "sns_topic_region" {
+  description = "SNS topic region"
+  default     = "eu-west-2"
+}
