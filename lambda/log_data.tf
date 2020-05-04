@@ -30,12 +30,12 @@ resource "aws_iam_role_policy_attachment" "log_data_policy_attach" {
 
 resource "aws_lambda_function" "log_data_lambda" {
   count            = var.apply_resource == true && var.lambda_log_data == true ? 1 : 0
-  filename         = "./tdr-terraform-modules/lambda/functions/log-data-mTJMLcmzoN3CdEAb.zip"
+  filename         = "./tdr-terraform-modules/lambda/functions/log-data-Yu49chGwI34qPzJh.zip"
   function_name    = "${var.project}-log-data-${local.environment}"
   description      = "Aggregate log data to a target S3 bucket"
   role             = aws_iam_role.log_data_assume_role.*.arn[0]
   handler          = "lambda_function.lambda_handler"
-  source_code_hash = filebase64sha256("./tdr-terraform-modules/lambda/functions/log-data-mTJMLcmzoN3CdEAb.zip")
+  source_code_hash = filebase64sha256("./tdr-terraform-modules/lambda/functions/log-data-Yu49chGwI34qPzJh.zip")
   runtime          = "python3.7"
   timeout          = 30
   publish          = true

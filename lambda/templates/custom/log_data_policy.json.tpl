@@ -5,7 +5,9 @@
       "Sid": "GetLogs",
       "Effect": "Allow",
       "Action": [
-        "s3:GetObject"
+        "s3:GetBucketLocation",
+        "s3:GetObject",
+        "s3:ListBucket"
       ],
       "Resource": "*"
     },
@@ -15,7 +17,7 @@
       "Action": [
         "s3:PutObject"
       ],
-      "Resource": "arn:aws:s3:::tdr-log-data-mgmt"
+      "Resource": "arn:aws:s3:::tdr-log-data-mgmt/*"
     }
   ]
 }
