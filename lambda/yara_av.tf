@@ -6,10 +6,6 @@ resource "aws_lambda_function" "lambda_function" {
   runtime       = "python3.7"
   s3_bucket     = "tdr-backend-checks-${var.environment}"
   s3_key        = "yara-av.zip"
-  vpc_config {
-    security_group_ids = [aws_security_group.lambda_security_group.*.id[0]]
-    subnet_ids         = var.lambda_subnets
-  }
   timeout     = 20
   memory_size = 128
   tags        = var.common_tags
@@ -21,15 +17,10 @@ resource "aws_lambda_function" "lambda_function" {
   }
 }
 
-resource "aws_security_group" "lambda_security_group" {
-  count  = local.count_av_yara
-  name   = "yara-av-security-group"
-  vpc_id = var.vpc_id
-}
-
 resource "aws_sqs_queue" "lambda_failure_queue" {
   count = local.count_av_yara
   name  = "backend-check-failure-queue"
+
 }
 
 resource "aws_lambda_function_event_invoke_config" "lambda_async_config" {
