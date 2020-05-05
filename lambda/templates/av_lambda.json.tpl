@@ -47,7 +47,11 @@
       "Action": [
         "sqs:SendMessage"
       ],
-      "Resource": "${sqs_arn}"
+      "Resource": [
+        "arn:aws:sqs:eu-west-2:${account_id}:tdr-api-update-${environment}",
+        "${sqs_arn}"
+      ]
+
     }
   ]
 }
