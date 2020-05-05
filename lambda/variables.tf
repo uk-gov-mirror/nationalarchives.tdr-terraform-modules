@@ -1,12 +1,18 @@
-variable "environment" {}
+variable "environment" {
+  default = "intg"
+}
 
 variable "common_tags" {}
 
-variable "lambda_subnets" {}
+variable "lambda_subnets" {
+  default = []
+}
 
 variable "project" {}
 
-variable "vpc_id" {}
+variable "vpc_id" {
+  default = ""
+}
 
 variable "apply_resource" {
   description = "use to conditionally apply resource from the calling module"
