@@ -2,24 +2,18 @@ variable "environment" {}
 
 variable "common_tags" {}
 
-variable "project" {}
-
-variable "function" {}
-
-variable "policy" {}
-
-variable "runtime" {}
-
-variable "handler" {}
-
 variable "lambda_subnets" {}
 
-variable "timeout" {
-  default = 3
-}
-
-variable "memory_size" {
-  default = 128
-}
+variable "project" {}
 
 variable "vpc_id" {}
+
+variable "apply_resource" {
+  description = "use to conditionally apply resource from the calling module"
+  default     = true
+}
+
+variable "lambda_yara_av" {
+  description = "deploy Lambda function to run yara av checks on files"
+  default     = false
+}
