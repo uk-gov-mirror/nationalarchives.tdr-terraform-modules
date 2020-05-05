@@ -1,13 +1,13 @@
 resource "aws_iam_policy" "log_data_lambda_base_policy" {
   count  = var.apply_resource == true && var.lambda_log_data == true ? 1 : 0
   name   = "${upper(var.project)}LogDataLambdaBase${title(local.environment)}"
-  policy = templatefile("./tdr-terraform-modules/lambda/templates/common/lambda_base_policy.json.tpl", {})
+  policy = templatefile("./tdr-terraform-modules/lambda/templates/lambda_base_policy.json.tpl", {})
 }
 
 resource "aws_iam_role" "log_data_assume_role" {
   count              = var.apply_resource == true && var.lambda_log_data == true ? 1 : 0
   name               = "${upper(var.project)}LogDataAssumeRole${title(local.environment)}"
-  assume_role_policy = templatefile("./tdr-terraform-modules/lambda/templates/common/assume_role_policy.json.tpl", {})
+  assume_role_policy = templatefile("./tdr-terraform-modules/lambda/templates/lambda_assume_role.json.tpl", {})
 }
 
 resource "aws_iam_role_policy_attachment" "log_data_base_policy_attach" {
@@ -19,7 +19,7 @@ resource "aws_iam_role_policy_attachment" "log_data_base_policy_attach" {
 resource "aws_iam_policy" "log_data_policy" {
   count  = var.apply_resource == true && var.lambda_log_data == true ? 1 : 0
   name   = "${upper(var.project)}LogData${title(local.environment)}"
-  policy = templatefile("./tdr-terraform-modules/lambda/templates/custom/log_data_policy.json.tpl", {})
+  policy = templatefile("./tdr-terraform-modules/lambda/templates/log_data_policy.json.tpl", {})
 }
 
 resource "aws_iam_role_policy_attachment" "log_data_policy_attach" {
