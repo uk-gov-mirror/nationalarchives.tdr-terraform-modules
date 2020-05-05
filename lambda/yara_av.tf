@@ -1,5 +1,5 @@
 resource "aws_lambda_function" "lambda_function" {
-  count = local.count
+  count         = local.count
   function_name = "${var.project}-yara-av-${var.environment}"
   handler       = "matcher.matcher_lambda_handler"
   role          = aws_iam_role.lambda_iam_role.*.arn[0]
@@ -21,18 +21,18 @@ resource "aws_lambda_function" "lambda_function" {
 }
 
 resource "aws_security_group" "lambda_security_group" {
-  count = local.count
+  count  = local.count
   name   = "yara-av-security-group"
   vpc_id = var.vpc_id
 }
 
 resource "aws_sqs_queue" "lambda_failure_queue" {
   count = local.count
-  name = "backend-check-failure-queue"
+  name  = "backend-check-failure-queue"
 }
 
 resource "aws_lambda_function_event_invoke_config" "lambda_async_config" {
-  count = local.count
+  count         = local.count
   function_name = aws_lambda_function.lambda_function.*.function_name[0]
   destination_config {
     on_failure {
@@ -44,24 +44,24 @@ resource "aws_lambda_function_event_invoke_config" "lambda_async_config" {
 
 resource "aws_cloudwatch_log_group" "lambda_log_group" {
   count = local.count
-  name = "/aws/lambda/${aws_lambda_function.lambda_function.*.function_name[0]}"
-  tags = var.common_tags
+  name  = "/aws/lambda/${aws_lambda_function.lambda_function.*.function_name[0]}"
+  tags  = var.common_tags
 }
 
 resource "aws_iam_policy" "lambda_policy" {
-  count = local.count
-  policy = templatefile("${path.module}/templates/av_lambda.json.tpl", { environment = var.environment, account_id = data.aws_caller_identity.current.account_id, sqs_arn = aws_sqs_queue.lambda_failure_queue.*.arn[0]})
+  count  = local.count
+  policy = templatefile("${path.module}/templates/av_lambda.json.tpl", { environment = var.environment, account_id = data.aws_caller_identity.current.account_id, sqs_arn = aws_sqs_queue.lambda_failure_queue.*.arn[0] })
   name   = "${upper(var.project)}YaraAvPolicy"
 }
 
 resource "aws_iam_role" "lambda_iam_role" {
-  count = local.count
+  count              = local.count
   assume_role_policy = templatefile("${path.module}/templates/lambda_assume_role.json.tpl", {})
   name               = "${upper(var.project)}YaraAvRole"
 }
 
 resource "aws_iam_role_policy_attachment" "lambda_role_policy" {
-  count = local.count
+  count      = local.count
   policy_arn = aws_iam_policy.lambda_policy.*.arn[0]
   role       = aws_iam_role.lambda_iam_role.*.name[0]
 }
