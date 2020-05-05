@@ -28,14 +28,20 @@ resource "aws_iam_role_policy_attachment" "log_data_policy_attach" {
   policy_arn = aws_iam_policy.log_data_policy.*.arn[0]
 }
 
+data "archive_file" "log_data_lambda" {
+  type = "zip"
+  source_file = "./tdr-terraform-modules/lambda/functions/log-data/lambda_function.py"
+  output_path = "/tmp/log-data-lambda.zip"
+}
+
 resource "aws_lambda_function" "log_data_lambda" {
   count            = var.apply_resource == true && var.lambda_log_data == true ? 1 : 0
-  filename         = "./tdr-terraform-modules/lambda/functions/log-data-Yu49chGwI34qPzJh.zip"
+  filename         = data.archive_file.log_data_lambda.output_path
   function_name    = "${var.project}-log-data-${local.environment}"
   description      = "Aggregate log data to a target S3 bucket"
   role             = aws_iam_role.log_data_assume_role.*.arn[0]
   handler          = "lambda_function.lambda_handler"
-  source_code_hash = filebase64sha256("./tdr-terraform-modules/lambda/functions/log-data-Yu49chGwI34qPzJh.zip")
+  source_code_hash = data.archive_file.log_data_lambda.output_base64sha256
   runtime          = "python3.7"
   timeout          = 30
   publish          = true
@@ -54,10 +60,7 @@ resource "aws_lambda_function" "log_data_lambda" {
   }
 
   lifecycle {
-    ignore_changes = [
-      "filename",
-      "last_modified",
-    ]
+    ignore_changes = ["last_modified"]
   }
 }
 
