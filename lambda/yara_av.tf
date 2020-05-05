@@ -16,7 +16,7 @@ resource "aws_lambda_function" "lambda_function" {
   environment {
     variables = {
       ENVIRONMENT = var.environment
-      SQS_URL     = "https://sqs.${var.region}.amazonaws.com/${data.aws_caller_identity.current.account_id}/${aws_sqs_queue.lambda_failure_queue.*.name[0]}"
+      SQS_URL     = "https://sqs.${var.region}.amazonaws.com/${data.aws_caller_identity.current.account_id}/tdr-api-update-${var.environment}"
     }
   }
 }
