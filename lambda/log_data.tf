@@ -29,7 +29,7 @@ resource "aws_iam_role_policy_attachment" "log_data_policy_attach" {
 }
 
 data "archive_file" "log_data_lambda" {
-  type = "zip"
+  type        = "zip"
   source_file = "./tdr-terraform-modules/lambda/functions/log-data/lambda_function.py"
   output_path = "/tmp/log-data-lambda.zip"
 }
@@ -78,4 +78,24 @@ resource "aws_lambda_permission" "log_data" {
   function_name = aws_lambda_function.log_data_lambda.*.arn[0]
   principal     = "sns.amazonaws.com"
   source_arn    = var.log_data_sns_topic
+}
+
+resource "aws_iam_role" "log_data_cross_account_role" {
+  count              = local.count_log_data_mgmt
+  name               = "TDRLogDataCrossAccountRole${title(local.environment)}"
+  description        = "Cross account role for Log Data lambda to the ${title(local.environment)} environment"
+  assume_role_policy = templatefile("./tdr-terraform-modules/lambda/templates/log_data_cross_account_role.json.tpl", { account_id = data.aws_caller_identity.current.account_id, external_account_1 = data.aws_ssm_parameter.intg_account_number.*.value[0], external_account_2 = data.aws_ssm_parameter.staging_account_number.*.value[0], external_account_3 = data.aws_ssm_parameter.prod_account_number.*.value[0] })
+
+  tags = merge(
+    var.common_tags,
+    map(
+      "Name", "Log Data Cross Account Role",
+    )
+  )
+}
+
+resource "aws_iam_role_policy_attachment" "log_data_cross_account_policy_attach" {
+  count      = local.count_log_data_mgmt
+  role       = aws_iam_role.log_data_cross_account_role.*.name[0]
+  policy_arn = aws_iam_policy.log_data_policy.*.arn[0]
 }

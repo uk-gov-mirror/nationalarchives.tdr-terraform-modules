@@ -22,11 +22,7 @@
       "Action": "s3:*",
       "Effect": "Allow",
       "Principal": {
-        "AWS": [
-          "arn:aws:iam::${external_account_1}:root",
-          "arn:aws:iam::${external_account_2}:root",
-          "arn:aws:iam::${external_account_3}:root"
-        ]
+        "AWS": "arn:aws:iam::${account_id}:role/TDRLogDataCrossAccountRoleMgmt"
       },
       "Resource": [
         "arn:aws:s3:::${bucket_name}",
