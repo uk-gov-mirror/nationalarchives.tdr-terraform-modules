@@ -1,7 +1,3 @@
-variable "environment" {
-  default = "intg"
-}
-
 variable "common_tags" {}
 
 variable "project" {}
@@ -19,3 +15,4 @@ variable "lambda_yara_av" {
 variable "region" {
   default = "eu-west-2"
 }
+
