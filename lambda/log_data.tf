@@ -1,29 +1,29 @@
 resource "aws_iam_policy" "log_data_lambda_base_policy" {
-  count  = var.apply_resource == true && var.lambda_log_data == true ? 1 : 0
+  count  = local.count_log_data
   name   = "${upper(var.project)}LogDataLambdaBase${title(local.environment)}"
-  policy = templatefile("./tdr-terraform-modules/lambda/templates/lambda_base_policy.json.tpl", {})
+  policy = templatefile("./tdr-terraform-modules/lambda/templates/lambda_base.json.tpl", {})
 }
 
 resource "aws_iam_role" "log_data_assume_role" {
-  count              = var.apply_resource == true && var.lambda_log_data == true ? 1 : 0
+  count              = local.count_log_data
   name               = "${upper(var.project)}LogDataAssumeRole${title(local.environment)}"
   assume_role_policy = templatefile("./tdr-terraform-modules/lambda/templates/lambda_assume_role.json.tpl", {})
 }
 
 resource "aws_iam_role_policy_attachment" "log_data_base_policy_attach" {
-  count      = var.apply_resource == true && var.lambda_log_data == true ? 1 : 0
+  count      = local.count_log_data
   role       = aws_iam_role.log_data_assume_role.*.name[0]
   policy_arn = aws_iam_policy.log_data_lambda_base_policy.*.arn[0]
 }
 
 resource "aws_iam_policy" "log_data_policy" {
-  count  = var.apply_resource == true && var.lambda_log_data == true ? 1 : 0
+  count  = local.count_log_data
   name   = "${upper(var.project)}LogData${title(local.environment)}"
-  policy = templatefile("./tdr-terraform-modules/lambda/templates/log_data_policy.json.tpl", {})
+  policy = templatefile("./tdr-terraform-modules/lambda/templates/log_data.json.tpl", {})
 }
 
 resource "aws_iam_role_policy_attachment" "log_data_policy_attach" {
-  count      = var.apply_resource == true && var.lambda_log_data == true ? 1 : 0
+  count      = local.count_log_data
   role       = aws_iam_role.log_data_assume_role.*.name[0]
   policy_arn = aws_iam_policy.log_data_policy.*.arn[0]
 }
@@ -35,7 +35,7 @@ data "archive_file" "log_data_lambda" {
 }
 
 resource "aws_lambda_function" "log_data_lambda" {
-  count            = var.apply_resource == true && var.lambda_log_data == true ? 1 : 0
+  count            = local.count_log_data
   filename         = data.archive_file.log_data_lambda.output_path
   function_name    = "${var.project}-log-data-${local.environment}"
   description      = "Aggregate log data to a target S3 bucket"
@@ -65,14 +65,14 @@ resource "aws_lambda_function" "log_data_lambda" {
 }
 
 resource "aws_sns_topic_subscription" "log_data" {
-  count     = var.apply_resource == true && var.lambda_log_data == true ? 1 : 0
+  count     = local.count_log_data
   topic_arn = var.log_data_sns_topic
   protocol  = "lambda"
   endpoint  = aws_lambda_function.log_data_lambda.*.arn[0]
 }
 
 resource "aws_lambda_permission" "log_data" {
-  count         = var.apply_resource == true && var.lambda_log_data == true ? 1 : 0
+  count         = local.count_log_data
   statement_id  = "AllowExecutionFromSNS"
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.log_data_lambda.*.arn[0]
