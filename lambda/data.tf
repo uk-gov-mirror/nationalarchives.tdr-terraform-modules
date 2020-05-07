@@ -1,5 +1,10 @@
 data "aws_caller_identity" "current" {}
 
+data "aws_ssm_parameter" "mgmt_account_number" {
+  count = var.project == "tdr" ? 1 : 0
+  name  = "/mgmt/management_account"
+}
+
 data "aws_ssm_parameter" "intg_account_number" {
   count = var.project == "tdr" && local.environment == "mgmt" ? 1 : 0
   name  = "/mgmt/intg_account"

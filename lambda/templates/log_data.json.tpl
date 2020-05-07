@@ -18,6 +18,14 @@
         "s3:PutObject"
       ],
       "Resource": "arn:aws:s3:::tdr-log-data-mgmt/*"
+    },
+    {
+      "Sid": "AssumeRole",
+      "Effect": "Allow",
+      "Action": [
+        "sts:AssumeRole"
+      ],
+      "Resource": "arn:aws:iam::${mgmt_account_id}:role/TDRLogDataCrossAccountRoleMgmt"
     }
   ]
 }

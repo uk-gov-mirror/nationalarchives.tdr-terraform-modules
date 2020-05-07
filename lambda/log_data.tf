@@ -19,7 +19,7 @@ resource "aws_iam_role_policy_attachment" "log_data_base_policy_attach" {
 resource "aws_iam_policy" "log_data_policy" {
   count  = local.count_log_data
   name   = "${upper(var.project)}LogData${title(local.environment)}"
-  policy = templatefile("./tdr-terraform-modules/lambda/templates/log_data.json.tpl", {})
+  policy = templatefile("./tdr-terraform-modules/lambda/templates/log_data.json.tpl", { mgmt_account_id = data.aws_ssm_parameter.mgmt_account_number.*.value[0] })
 }
 
 resource "aws_iam_role_policy_attachment" "log_data_policy_attach" {
