@@ -1,15 +1,15 @@
 output "s3_bucket_id" {
-  value = aws_s3_bucket.bucket.*.id[0]
+  value = local.s3_bucket_id
 }
 
 output "s3_bucket_arn" {
-  value = aws_s3_bucket.bucket.*.arn[0]
+  value = local.sns_topic_arn
 }
 
 output "s3_bucket_domain_name" {
-  value = aws_s3_bucket.bucket.*.bucket_domain_name[0]
+  value = local.s3_bucket_domain_name
 }
 
 output "s3_bucket_regional_domain_name" {
-  value = aws_s3_bucket.bucket.*.bucket_regional_domain_name[0]
+  value = local.s3_bucket_regional_domain_name
 }
