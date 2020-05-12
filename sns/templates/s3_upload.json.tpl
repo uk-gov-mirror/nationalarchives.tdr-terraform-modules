@@ -12,7 +12,7 @@
       }
     },
     {
-      "Sid": "sqs_backend_queue_subscribe",
+      "Sid": "sqs_subscribe",
       "Effect": "Allow",
       "Principal": {
         "AWS":"*"
