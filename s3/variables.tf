@@ -78,22 +78,32 @@ variable "force_destroy" {
   default     = true
 }
 
-variable "sns_topic_arn" {
-  description = "SNS topic ARN for log data aggregation"
-  default     = ""
-}
-
 variable "sns_notification" {
   description = "Notify SNS on upload to main S3 bucket"
   default     = false
 }
 
-variable "sns_notification_logs" {
+variable "sns_topic_region" {
+  description = "SNS topic region for upload to main S3 bucket"
+  default     = "eu-west-2"
+}
+
+variable "sns_topic_arn" {
+  description = "SNS topic ARN for upload to main S3 bucket"
+  default     = ""
+}
+
+variable "log_data_sns_topic_arn" {
+  description = "SNS topic ARN for log data aggregation"
+  default     = ""
+}
+
+variable "log_data_sns_notification" {
   description = "Notify SNS on upload to S3 log bucket"
   default     = true
 }
 
-variable "sns_topic_region" {
-  description = "SNS topic region"
+variable "log_data_sns_topic_region" {
+  description = "Region for log data SNS topic"
   default     = "eu-west-2"
 }
