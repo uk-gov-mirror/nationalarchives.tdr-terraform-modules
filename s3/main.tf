@@ -107,7 +107,7 @@ resource "aws_s3_bucket" "bucket" {
 resource "aws_s3_bucket_policy" "bucket" {
   count  = var.apply_resource == true ? 1 : 0
   bucket = aws_s3_bucket.bucket.*.id[0]
-  policy = local.environment == "mgmt" && var.bucket_policy == "log-data" ? templatefile("./tdr-terraform-modules/s3/templates/${var.bucket_policy}.json.tpl", { bucket_name = aws_s3_bucket.bucket.*.id[0], account_id = data.aws_caller_identity.current.account_id }) : templatefile("./tdr-terraform-modules/s3/templates/${var.bucket_policy}.json.tpl", { bucket_name = aws_s3_bucket.bucket.*.id[0] })
+  policy = local.environment == "mgmt" && var.bucket_policy == "log-data" ? templatefile("./tdr-terraform-modules/s3/templates/${var.bucket_policy}.json.tpl", { bucket_name = aws_s3_bucket.bucket.*.id[0], account_id = data.aws_caller_identity.current.account_id, external_account_1 = data.aws_ssm_parameter.intg_account_number.*.value[0], external_account_2 = data.aws_ssm_parameter.staging_account_number.*.value[0], external_account_3 = data.aws_ssm_parameter.prod_account_number.*.value[0] }) : templatefile("./tdr-terraform-modules/s3/templates/${var.bucket_policy}.json.tpl", { bucket_name = aws_s3_bucket.bucket.*.id[0] })
 }
 
 resource "aws_s3_bucket_public_access_block" "bucket" {
