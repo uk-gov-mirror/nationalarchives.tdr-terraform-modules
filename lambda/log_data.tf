@@ -55,7 +55,7 @@ resource "aws_lambda_function" "log_data_lambda" {
 
   environment {
     variables = {
-      TARGET_S3_BUCKET      = var.target_s3_bucket
+      TARGET_S3_BUCKET = var.target_s3_bucket
     }
   }
 

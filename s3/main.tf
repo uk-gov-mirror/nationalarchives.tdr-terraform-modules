@@ -40,12 +40,12 @@ resource "aws_s3_bucket_policy" "log_bucket" {
 }
 
 resource "aws_s3_bucket_notification" "log_bucket_notification" {
-  count = var.access_logs == true && var.apply_resource == true && var.log_data_sns_notification? 1 : 0
+  count  = var.access_logs == true && var.apply_resource == true && var.log_data_sns_notification ? 1 : 0
   bucket = aws_s3_bucket.log_bucket.*.id[0]
 
   topic {
-    topic_arn     = local.log_data_sns_topic_arn
-    events        = ["s3:ObjectCreated:*"]
+    topic_arn = local.log_data_sns_topic_arn
+    events    = ["s3:ObjectCreated:*"]
   }
 }
 
@@ -69,7 +69,7 @@ resource "aws_s3_bucket" "bucket" {
   dynamic "lifecycle_rule" {
     for_each = var.version_lifecycle == true ? ["include_block"] : []
     content {
-      id = "delete-old-versions"
+      id      = "delete-old-versions"
       enabled = true
 
       noncurrent_version_expiration {
@@ -121,11 +121,11 @@ resource "aws_s3_bucket_public_access_block" "bucket" {
 }
 
 resource "aws_s3_bucket_notification" "bucket_notification" {
-  count = var.apply_resource == true && var.sns_notification? 1 : 0
+  count  = var.apply_resource == true && var.sns_notification ? 1 : 0
   bucket = aws_s3_bucket.bucket.*.id[0]
 
   topic {
-    topic_arn     = local.sns_topic_arn
-    events        = ["s3:ObjectCreated:*"]
+    topic_arn = local.sns_topic_arn
+    events    = ["s3:ObjectCreated:*"]
   }
 }
