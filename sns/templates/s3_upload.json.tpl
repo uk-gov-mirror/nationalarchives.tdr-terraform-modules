@@ -2,7 +2,7 @@
   "Version":"2012-10-17",
   "Statement":[
     {
-      "sid": "s3-upload-publish",
+      "Sid": "s3-upload-publish",
       "Effect": "Allow",
       "Principal": {"AWS":"*"},
       "Action": "SNS:Publish",
