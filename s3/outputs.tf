@@ -3,7 +3,7 @@ output "s3_bucket_id" {
 }
 
 output "s3_bucket_arn" {
-  value = local.sns_topic_arn
+  value = local.s3_bucket_arn
 }
 
 output "s3_bucket_domain_name" {
