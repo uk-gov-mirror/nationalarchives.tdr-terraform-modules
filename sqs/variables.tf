@@ -20,3 +20,8 @@ variable "sns_topic_arns" {
   type        = list(string)
   default     = []
 }
+
+variable "apply_resource" {
+  description = "use to conditionally apply resource from the calling module"
+  default     = true
+}
