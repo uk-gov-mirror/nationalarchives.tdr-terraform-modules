@@ -8,9 +8,15 @@ variable "common_tags" {
 }
 
 variable "project" {
-  description = "abbreviation for the project, e.g. tdr, forms the first part of the sqs name"
+  description = "abbreviation for the project, e.g. tdr, forms the first part of the resource name"
 }
 
 variable "function" {
   description = "forms the second part of the resource name, eg. upload"
+}
+
+variable "sns_topic_arns" {
+  description = "list of SNS topics the SQS subscribes to"
+  type        = list(string)
+  default     = []
 }

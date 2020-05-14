@@ -8,3 +8,10 @@ resource "aws_sqs_queue" "sqs_queue" {
     )
   )
 }
+
+resource "aws_sns_topic_subscription" "sqs_topic_subscription" {
+  for_each  = toset(var.sns_topic_arns)
+  topic_arn = each.key
+  protocol  = "sqs"
+  endpoint  = aws_sqs_queue.sqs_queue.arn
+}
