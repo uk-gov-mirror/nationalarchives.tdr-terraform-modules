@@ -25,3 +25,8 @@ variable "apply_resource" {
   description = "use to conditionally apply resource from the calling module"
   default     = true
 }
+
+variable "sqs_policy" {
+  description = "allows a custom SQS policy to be set"
+  default     = "default"
+}
