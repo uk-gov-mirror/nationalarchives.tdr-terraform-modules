@@ -3,5 +3,7 @@ locals {
   environment         = local.workspace == "default" ? "mgmt" : local.workspace
   count_av_yara       = var.apply_resource == true && var.lambda_yara_av == true ? 1 : 0
   count_log_data      = var.apply_resource == true && var.lambda_log_data == true ? 1 : 0
+  count_api_update_av = var.apply_resource && var.lambda_api_update_av == true ? 1 : 0
   count_log_data_mgmt = var.apply_resource == true && var.lambda_log_data == true && local.environment == "mgmt" ? 1 : 0
+
 }
