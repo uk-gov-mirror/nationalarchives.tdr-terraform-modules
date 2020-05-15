@@ -8,19 +8,22 @@
         "logs:PutLogEvents"
       ],
       "Resource": [
-        "arn:aws:logs:eu-west-2:${account_id}:log-group:/aws/lambda/api-update-${environment}/*"
+        "arn:aws:logs:eu-west-2:${account_id}:log-group:/aws/lambda/api-update-antivirus-${environment}/*"
       ]
     },
     {
       "Effect": "Allow",
       "Action": [
-        "sqs:SendMessage"
+        "sqs:SendMessage",
+        "sqs:ReceiveMessage",
+        "sqs:DeleteMessage",
+        "sqs:GetQueueAttributes"
       ],
       "Resource": [
-        "arn:aws:sqs:eu-west-2:${account_id}:tdr-api-update-${environment}",
+        "${input_sqs_arn}",
         "${sqs_arn}"
-      ]
 
+      ]
     }
   ]
 }

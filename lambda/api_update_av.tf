@@ -34,6 +34,12 @@ resource "aws_lambda_function_event_invoke_config" "lambda_api_update_async_conf
   maximum_retry_attempts = 2
 }
 
+resource "aws_lambda_event_source_mapping" "api_update_av_sqs_queue_mapping" {
+  count = local.count_api_update_av
+  event_source_arn = local.api_update_antivirus_queue
+  function_name    = aws_lambda_function.lambda_api_update_function.*.arn[0]
+}
+
 resource "aws_sqs_queue" "lambda_api_update_failure_queue" {
   count = local.count_api_update_av
   name  = "backend-check-failure-queue-api-update-av"
@@ -48,7 +54,7 @@ resource "aws_cloudwatch_log_group" "lambda_api_update_log_group" {
 
 resource "aws_iam_policy" "lambda_api_update_policy" {
   count  = local.count_api_update_av
-  policy = templatefile("${path.module}/templates/api_update.json.tpl", { environment = local.environment, account_id = data.aws_caller_identity.current.account_id, sqs_arn = aws_sqs_queue.lambda_api_update_failure_queue.*.arn[0] })
+  policy = templatefile("${path.module}/templates/api_update.json.tpl", { environment = local.environment, account_id = data.aws_caller_identity.current.account_id, sqs_arn = aws_sqs_queue.lambda_api_update_failure_queue.*.arn[0], input_sqs_arn = local.api_update_antivirus_queue })
   name   = "${upper(var.project)}ApiUpdateAvPolicy"
 }
 
