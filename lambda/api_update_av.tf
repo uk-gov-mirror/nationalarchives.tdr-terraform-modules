@@ -65,7 +65,7 @@ resource "aws_iam_policy" "lambda_api_update_policy" {
 resource "aws_iam_role" "lambda_api_update_iam_role" {
   count              = local.count_api_update_av
   assume_role_policy = templatefile("${path.module}/templates/lambda_assume_role.json.tpl", {})
-  name               = "${upper(var.project)}YaraApiUpdateRole"
+  name               = "${upper(var.project)}ApiUpdateRole"
 }
 
 resource "aws_iam_role_policy_attachment" "lambda_api_update_role_policy" {
