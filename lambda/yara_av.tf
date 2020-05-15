@@ -6,9 +6,9 @@ resource "aws_lambda_function" "lambda_function" {
   runtime       = "python3.7"
   s3_bucket     = "tdr-backend-checks-${local.environment}"
   s3_key        = "yara-av.zip"
-  timeout     = 20
-  memory_size = 128
-  tags        = var.common_tags
+  timeout       = 20
+  memory_size   = 128
+  tags          = var.common_tags
   environment {
     variables = {
       ENVIRONMENT = local.environment

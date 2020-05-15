@@ -121,7 +121,7 @@ resource "aws_s3_bucket_public_access_block" "bucket" {
 }
 
 resource "aws_s3_bucket_notification" "bucket_notification" {
-  count  = var.apply_resource == true && var.sns_notification && var.sns_topic_arn != ""? 1 : 0
+  count  = var.apply_resource == true && var.sns_notification && var.sns_topic_arn != "" ? 1 : 0
   bucket = aws_s3_bucket.bucket.*.id[0]
 
   topic {
