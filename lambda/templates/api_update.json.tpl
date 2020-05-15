@@ -8,7 +8,8 @@
         "logs:PutLogEvents"
       ],
       "Resource": [
-        "arn:aws:logs:eu-west-2:${account_id}:log-group:/aws/lambda/tdr-api-update-antivirus-${environment}/*"
+        "arn:aws:logs:eu-west-2:${account_id}:log-group:/aws/lambda/tdr-api-update-antivirus-${environment}",
+        "arn:aws:logs:eu-west-2:${account_id}:log-group:/aws/lambda/tdr-api-update-antivirus-intg:log-stream:*"
       ]
     },
     {
