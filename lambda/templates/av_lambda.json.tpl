@@ -8,7 +8,8 @@
         "logs:PutLogEvents"
       ],
       "Resource": [
-        "arn:aws:logs:eu-west-2:${account_id}:log-group:/aws/lambda/yara-av-${environment}/*"
+        "arn:aws:logs:eu-west-2:${account_id}:log-group:/aws/lambda/tdr-yara-av-${environment}",
+        "arn:aws:logs:eu-west-2:${account_id}:log-group:/aws/lambda/tdr-yara-av-${environment}:log-stream:*"
       ]
     },
     {
@@ -33,23 +34,15 @@
     {
       "Effect": "Allow",
       "Action": [
-        "ec2:DeleteNetworkInterface",
-        "ec2:DescribeInstances",
-        "ec2:CreateNetworkInterface",
-        "ec2:AttachNetworkInterface",
-        "ec2:DescribeNetworkInterfaces",
-        "autoscaling:CompleteLifecycleAction"
-      ],
-      "Resource": "*"
-    },
-    {
-      "Effect": "Allow",
-      "Action": [
-        "sqs:SendMessage"
+        "sqs:SendMessage",
+        "sqs:ReceiveMessage",
+        "sqs:DeleteMessage",
+        "sqs:GetQueueAttributes"
       ],
       "Resource": [
         "arn:aws:sqs:eu-west-2:${account_id}:tdr-api-update-${environment}",
-        "${sqs_arn}"
+        "${sqs_arn}",
+        "${input_sqs_queue}"
       ]
 
     }
