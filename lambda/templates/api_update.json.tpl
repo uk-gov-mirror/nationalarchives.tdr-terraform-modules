@@ -9,7 +9,7 @@
       ],
       "Resource": [
         "arn:aws:logs:eu-west-2:${account_id}:log-group:/aws/lambda/tdr-api-update-antivirus-${environment}",
-        "arn:aws:logs:eu-west-2:${account_id}:log-group:/aws/lambda/tdr-api-update-antivirus-intg:log-stream:*"
+        "arn:aws:logs:eu-west-2:${account_id}:log-group:/aws/lambda/tdr-api-update-antivirus-${environment}:log-stream:*"
       ]
     },
     {
@@ -23,7 +23,6 @@
       "Resource": [
         "${input_sqs_arn}",
         "${sqs_arn}"
-
       ]
     }
   ]
