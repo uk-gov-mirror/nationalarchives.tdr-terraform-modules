@@ -60,7 +60,7 @@ resource "aws_lambda_function" "log_data_lambda" {
   }
 
   lifecycle {
-    ignore_changes = ["last_modified"]
+    ignore_changes = [last_modified]
   }
 }
 

@@ -87,11 +87,11 @@ resource "aws_s3_bucket" "bucket" {
   }
 
   dynamic "cors_rule" {
-    for_each = var.cors == true ? ["include-cors"] : []
+    for_each = length(var.cors_urls) > 0 ? ["include-cors"] : []
     content {
       allowed_headers = ["*"]
       allowed_methods = ["PUT", "POST", "GET"]
-      allowed_origins = [var.frontend_url]
+      allowed_origins = var.cors_urls
       expose_headers  = ["ETag"]
     }
   }
