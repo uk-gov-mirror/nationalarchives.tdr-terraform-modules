@@ -21,6 +21,11 @@ variable "lambda_log_data" {
   default     = false
 }
 
+variable "lambda_api_update_av" {
+  description = "depoly Lambda function to update the api for av checks"
+  default     = false
+}
+
 variable "target_s3_bucket" {
   description = "Target S3 bucket ARN used for the Lambda log data function"
   default     = ""
@@ -28,5 +33,15 @@ variable "target_s3_bucket" {
 
 variable "log_data_sns_topic" {
   description = "SNS topic ARN used for the Lambda log data function"
+  default     = ""
+}
+
+variable "auth_url" {
+  description = "The url of the keycloak server"
+  default     = ""
+}
+
+variable "api_url" {
+  description = "The url of the graphql api"
   default     = ""
 }
