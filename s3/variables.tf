@@ -63,14 +63,10 @@ variable "kms_key_id" {
   default     = ""
 }
 
-variable "cors" {
-  description = "adds allowed origins for the stage front end to the bucket to allow uploads from the browser"
-  default     = false
-}
-
-variable "frontend_url" {
-  description = "the url of the frontend. This is only needed if adding cors support so it defaults to empty string"
-  default     = ""
+variable "cors_urls" {
+  description = "frontend URLs that are allowed to make cross-origin request to the bucket"
+  type        = list(string)
+  default     = []
 }
 
 variable "force_destroy" {
