@@ -15,10 +15,12 @@
     {
       "Effect": "Allow",
       "Action": [
-        "s3:GetObject"
+        "s3:GetObject",
+        "s3:ListBucket"
       ],
       "Resource" : [
-        "arn:aws:s3:::tdr-upload-files-dirty-${environment}/*"
+        "arn:aws:s3:::tdr-upload-files-dirty-${environment}/*",
+        "arn:aws:s3:::tdr-upload-files-dirty-${environment}"
       ]
     },
     {
@@ -40,7 +42,7 @@
         "sqs:GetQueueAttributes"
       ],
       "Resource": [
-        "arn:aws:sqs:eu-west-2:${account_id}:tdr-api-update-${environment}",
+        "${update_queue}",
         "${sqs_arn}",
         "${input_sqs_queue}"
       ]

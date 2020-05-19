@@ -12,7 +12,7 @@ resource "aws_lambda_function" "lambda_function" {
   environment {
     variables = {
       ENVIRONMENT = local.environment
-      SQS_URL     = "https://sqs.${var.region}.amazonaws.com/${data.aws_caller_identity.current.account_id}/tdr-api-update-antivirus-${local.environment}"
+      SQS_URL     = "https://sqs.${var.region}.amazonaws.com/${data.aws_caller_identity.current.account_id}/${local.antivirus_update_queue_name}"
     }
   }
 }
@@ -52,7 +52,7 @@ resource "aws_cloudwatch_log_group" "lambda_log_group" {
 
 resource "aws_iam_policy" "lambda_policy" {
   count  = local.count_av_yara
-  policy = templatefile("${path.module}/templates/av_lambda.json.tpl", { environment = local.environment, account_id = data.aws_caller_identity.current.account_id, input_sqs_queue = local.antivirus_queue, sqs_arn = aws_sqs_queue.lambda_failure_queue.*.arn[0] })
+  policy = templatefile("${path.module}/templates/av_lambda.json.tpl", { environment = local.environment, account_id = data.aws_caller_identity.current.account_id, update_queue = local.api_update_antivirus_queue, input_sqs_queue = local.antivirus_queue, sqs_arn = aws_sqs_queue.lambda_failure_queue.*.arn[0] })
   name   = "${upper(var.project)}YaraAvPolicy"
 }
 
