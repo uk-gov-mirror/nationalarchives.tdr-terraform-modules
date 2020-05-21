@@ -19,10 +19,6 @@ resource "aws_lambda_function" "lambda_api_update_function" {
   }
 }
 
-data "aws_ssm_parameter" "keycloak_backend_checks_client_secret" {
-  name = "/${local.environment}/keycloak/backend_checks_client/secret"
-}
-
 resource "aws_lambda_function_event_invoke_config" "lambda_api_update_async_config" {
   count         = local.count_api_update_av
   function_name = aws_lambda_function.lambda_api_update_function.*.function_name[0]

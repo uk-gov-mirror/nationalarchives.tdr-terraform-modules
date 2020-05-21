@@ -13,4 +13,4 @@ def lambda_handler(event, context):
     copy_source = {'Bucket':source_bucket, 'Key':key}
 
     print('Copying %s from bucket %s to bucket %s ...' % (key, source_bucket, target_bucket))
-    s3.copy_object(Bucket=target_bucket, Key=key, CopySource=copy_source)
+    s3.copy_object(Bucket=target_bucket, Key=key, CopySource=copy_source, ACL='bucket-owner-full-control')
