@@ -14,7 +14,7 @@ resource "aws_lambda_function" "lambda_api_update_function" {
       API_URL       = "${var.api_url}/graphql"
       AUTH_URL      = var.auth_url
       CLIENT_ID     = "tdr-backend-checks"
-      CLIENT_SECRET = data.aws_ssm_parameter.keycloak_backend_checks_client_secret.value
+      CLIENT_SECRET = var.keycloak_backend_checks_client_secret
     }
   }
 }

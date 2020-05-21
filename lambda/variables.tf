@@ -45,3 +45,8 @@ variable "api_url" {
   description = "The url of the graphql api"
   default     = ""
 }
+
+variable "keycloak_backend_checks_client_secret" {
+  description = "Keycloak backend checks client secret"
+  default = ""
+}
