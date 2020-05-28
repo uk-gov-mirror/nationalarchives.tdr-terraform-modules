@@ -26,11 +26,12 @@ resource "aws_s3_bucket" "log_bucket" {
 }
 
 resource "aws_s3_bucket_public_access_block" "log_bucket" {
-  count  = var.access_logs == true && var.apply_resource == true ? 1 : 0
-  bucket = aws_s3_bucket.log_bucket.*.id[0]
-
-  block_public_acls   = true
-  block_public_policy = true
+  count                   = var.access_logs == true && var.apply_resource == true ? 1 : 0
+  bucket                  = aws_s3_bucket.log_bucket.*.id[0]
+  block_public_acls       = true
+  block_public_policy     = true
+  ignore_public_acls      = true
+  restrict_public_buckets = true
 }
 
 resource "aws_s3_bucket_policy" "log_bucket" {
