@@ -19,3 +19,8 @@ variable "bucket" {
   description = "S3 bucket used by Athena to store saved queries and results"
   default     = ""
 }
+
+variable "queries" {
+  description = "comma separated list of queries"
+  default     = []
+}
