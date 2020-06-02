@@ -26,6 +26,7 @@ module "guardduty-s3" {
 * Config
 * GuardDuty
 * Key Management Service (KMS)
+* Kinesis Firehose
 * Route 53
 * Security Hub
 * Simple Email Service (SES)
