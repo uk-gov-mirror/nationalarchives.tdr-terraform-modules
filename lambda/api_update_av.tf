@@ -4,7 +4,7 @@ resource "aws_lambda_function" "lambda_api_update_function" {
   handler       = "uk.gov.nationalarchives.api.update.antivirus.AntivirusUpdate::update"
   role          = aws_iam_role.lambda_api_update_iam_role.*.arn[0]
   runtime       = "java8"
-  s3_bucket     = "tdr-backend-checks-${local.environment}"
+  s3_bucket     = "tdr-backend-code-mgmt"
   s3_key        = "antivirus.jar"
   timeout       = 20
   memory_size   = 512
@@ -15,6 +15,7 @@ resource "aws_lambda_function" "lambda_api_update_function" {
       AUTH_URL      = var.auth_url
       CLIENT_ID     = "tdr-backend-checks"
       CLIENT_SECRET = var.keycloak_backend_checks_client_secret
+      QUEUE_URL     = local.api_update_antivirus_queue_url
     }
   }
 }
@@ -34,10 +35,6 @@ resource "aws_lambda_event_source_mapping" "api_update_av_sqs_queue_mapping" {
   count            = local.count_api_update_av
   event_source_arn = local.api_update_antivirus_queue
   function_name    = aws_lambda_function.lambda_api_update_function.*.arn[0]
-  // The mapping is updated to point to a new lambda version each time the lambda is deployed. This prevents terraform from resetting it when it runs.
-  lifecycle {
-    ignore_changes = [function_name]
-  }
 }
 
 resource "aws_sqs_queue" "lambda_api_update_failure_queue" {
