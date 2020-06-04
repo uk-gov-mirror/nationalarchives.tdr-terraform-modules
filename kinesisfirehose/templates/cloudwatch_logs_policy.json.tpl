@@ -23,7 +23,7 @@
       "Sid": "PassRole",
       "Effect": "Allow",
       "Action": "iam:PassRole",
-      "Resource": "${cloudwatch_logs_role_arn}"
-}
+    "Resource": "${cloudwatch_logs_role_arn}"
+    }
   ]
 }
