@@ -12,7 +12,7 @@ variable "project" {
 }
 
 variable "function" {
-  description = "forms the second part of the bucket name, eg. upload"
+  description = "forms the second part of the resource name, eg. upload"
 }
 
 variable "bucket" {
