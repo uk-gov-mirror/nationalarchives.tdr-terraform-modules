@@ -16,6 +16,11 @@ variable "lambda_yara_av" {
   default     = false
 }
 
+variable "lambda_checksum" {
+  description = "deploy Lambda function to run the checksum calculation"
+  default     = false
+}
+
 variable "lambda_log_data" {
   description = "deploy Lambda function to copy S3 from one bucket to another via SNS notifications"
   default     = false
