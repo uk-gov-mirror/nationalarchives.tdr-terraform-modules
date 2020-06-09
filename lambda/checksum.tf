@@ -4,15 +4,15 @@ resource "aws_lambda_function" "checksum_lambda_function" {
   handler       = "uk.gov.nationalarchives.checksum.ChecksumCalculator::update"
   role          = aws_iam_role.checksum_lambda_iam_role.*.arn[0]
   runtime       = "java8"
-  filename       = "${path.module}/functions/checksum.jar"
+  filename      = "${path.module}/functions/checksum.jar"
   timeout       = 20
   memory_size   = 1024
   tags          = var.common_tags
   environment {
     variables = {
-      ENVIRONMENT = local.environment
-      INPUT_QUEUE = local.checksum_queue_url
-      OUTPUT_QUEUE = local.api_update_checksum_queue_url
+      ENVIRONMENT      = local.environment
+      INPUT_QUEUE      = local.checksum_queue_url
+      OUTPUT_QUEUE     = local.api_update_checksum_queue_url
       CHUNK_SIZE_IN_MB = 50
     }
   }
