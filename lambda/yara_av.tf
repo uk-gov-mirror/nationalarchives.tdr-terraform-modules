@@ -20,7 +20,6 @@ resource "aws_lambda_function" "lambda_function" {
 resource "aws_sqs_queue" "lambda_failure_queue" {
   count = local.count_av_yara
   name  = "backend-check-failure-queue"
-
 }
 
 resource "aws_lambda_function_event_invoke_config" "lambda_async_config" {
