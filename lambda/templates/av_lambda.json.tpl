@@ -43,7 +43,6 @@
       ],
       "Resource": [
         "${update_queue}",
-        "${sqs_arn}",
         "${input_sqs_queue}"
       ]
 
