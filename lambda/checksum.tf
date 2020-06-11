@@ -5,7 +5,7 @@ resource "aws_lambda_function" "checksum_lambda_function" {
   role          = aws_iam_role.checksum_lambda_iam_role.*.arn[0]
   runtime       = "java8"
   filename      = "${path.module}/functions/checksum.jar"
-  timeout       = 20
+  timeout       = 180
   memory_size   = 1024
   tags          = var.common_tags
   environment {
