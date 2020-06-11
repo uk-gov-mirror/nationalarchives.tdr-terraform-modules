@@ -18,22 +18,6 @@ resource "aws_lambda_function" "checksum_lambda_function" {
   }
 }
 
-resource "aws_lambda_function_event_invoke_config" "checksum_lambda_async_config" {
-  count         = local.count_checksum
-  function_name = aws_lambda_function.checksum_lambda_function.*.function_name[0]
-  destination_config {
-    on_failure {
-      destination = aws_sqs_queue.checksum_lambda_failure_queue.*.arn[0]
-    }
-  }
-  maximum_retry_attempts = 2
-}
-
-resource "aws_sqs_queue" "checksum_lambda_failure_queue" {
-  count = local.count_checksum
-  name  = "checksum-failure-queue"
-}
-
 resource "aws_lambda_event_source_mapping" "checksum_sqs_queue_mapping" {
   count            = local.count_checksum
   event_source_arn = local.checksum_queue
@@ -48,7 +32,7 @@ resource "aws_cloudwatch_log_group" "checksum_lambda_log_group" {
 
 resource "aws_iam_policy" "checksum_lambda_policy" {
   count  = local.count_checksum
-  policy = templatefile("${path.module}/templates/checksum_lambda.json.tpl", { environment = local.environment, account_id = data.aws_caller_identity.current.account_id, update_queue = local.api_update_checksum_queue, input_sqs_queue = local.checksum_queue, sqs_arn = aws_sqs_queue.checksum_lambda_failure_queue.*.arn[0] })
+  policy = templatefile("${path.module}/templates/checksum_lambda.json.tpl", { environment = local.environment, account_id = data.aws_caller_identity.current.account_id, update_queue = local.api_update_checksum_queue, input_sqs_queue = local.checksum_queue })
   name   = "${upper(var.project)}ChecksumPolicy"
 }
 

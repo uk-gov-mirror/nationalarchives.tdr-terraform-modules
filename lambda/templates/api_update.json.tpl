@@ -21,8 +21,7 @@
         "sqs:GetQueueAttributes"
       ],
       "Resource": [
-        "${input_sqs_arn}",
-        "${sqs_arn}"
+        "${input_sqs_arn}"
       ]
     }
   ]

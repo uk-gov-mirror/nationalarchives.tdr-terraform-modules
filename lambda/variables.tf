@@ -53,5 +53,5 @@ variable "api_url" {
 
 variable "keycloak_backend_checks_client_secret" {
   description = "Keycloak backend checks client secret"
-  default = ""
+  default     = ""
 }

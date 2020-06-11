@@ -30,3 +30,13 @@ variable "sqs_policy" {
   description = "allows a custom SQS policy to be set"
   default     = "default"
 }
+
+variable "dead_letter_queue" {
+  description = "The dead letter queue for failed messages to be sent to"
+  default     = ""
+}
+
+variable "redrive_maximum_receives" {
+  description = "The maximum number of receives if using a redrive policy"
+  default     = 0
+}
