@@ -12,7 +12,7 @@ resource "aws_lambda_function" "checksum_lambda_function" {
     variables = {
       ENVIRONMENT      = local.environment
       INPUT_QUEUE      = local.checksum_queue_url
-      OUTPUT_QUEUE     = local.api_update_checksum_queue_url
+      OUTPUT_QUEUE     = local.api_update_queue_url
       CHUNK_SIZE_IN_MB = 50
     }
   }
@@ -32,7 +32,7 @@ resource "aws_cloudwatch_log_group" "checksum_lambda_log_group" {
 
 resource "aws_iam_policy" "checksum_lambda_policy" {
   count  = local.count_checksum
-  policy = templatefile("${path.module}/templates/checksum_lambda.json.tpl", { environment = local.environment, account_id = data.aws_caller_identity.current.account_id, update_queue = local.api_update_checksum_queue, input_sqs_queue = local.checksum_queue })
+  policy = templatefile("${path.module}/templates/checksum_lambda.json.tpl", { environment = local.environment, account_id = data.aws_caller_identity.current.account_id, update_queue = local.api_update_queue, input_sqs_queue = local.checksum_queue })
   name   = "${upper(var.project)}ChecksumPolicy"
 }
 
