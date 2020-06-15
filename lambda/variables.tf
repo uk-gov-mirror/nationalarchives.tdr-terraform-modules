@@ -26,8 +26,8 @@ variable "lambda_log_data" {
   default     = false
 }
 
-variable "lambda_api_update_av" {
-  description = "depoly Lambda function to update the api for av checks"
+variable "lambda_api_update" {
+  description = "depoly Lambda function to update the api"
   default     = false
 }
 

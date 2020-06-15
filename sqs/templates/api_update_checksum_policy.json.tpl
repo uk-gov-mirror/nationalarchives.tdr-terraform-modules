@@ -9,8 +9,11 @@
       "Action": "SQS:SendMessage",
       "Resource": "arn:aws:sqs:${region}:${account_id}:${sqs_name}",
       "Condition": {
-        "ArnEquals": {
-          "aws:SourceArn": "arn:aws:lambda:${region}:${account_id}:function:tdr-checksum-${environment}"
+        "ForAnyValue:ArnEquals": {
+          "aws:SourceArn": [
+            "arn:aws:lambda:${region}:${account_id}:function:tdr-checksum-${environment}",
+            "arn:aws:lambda:${region}:${account_id}:function:tdr-yara-av-${environment}"
+          ]
         }
       }
     }
