@@ -48,3 +48,4 @@ resource "aws_iam_role_policy_attachment" "lambda_api_update_role_policy" {
   policy_arn = aws_iam_policy.lambda_api_update_policy.*.arn[0]
   role       = aws_iam_role.lambda_api_update_iam_role.*.name[0]
 }
+
