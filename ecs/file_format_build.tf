@@ -19,7 +19,6 @@ resource "aws_ecs_task_definition" "file_format_build_task_definition" {
       }
       transit_encryption = "ENABLED"
     }
-
   }
 }
 

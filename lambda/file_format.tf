@@ -97,7 +97,6 @@ resource "aws_security_group" "ecs_run_efs" {
   )
 }
 
-
 resource "aws_security_group" "allow_efs_lambda" {
   count       = local.count_file_format
   name        = "allow-efs"
