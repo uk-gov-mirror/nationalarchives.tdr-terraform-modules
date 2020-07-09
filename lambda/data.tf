@@ -26,7 +26,7 @@ data "aws_ssm_parameter" "backend_checks_client_secret" {
 
 data "aws_vpc" "current" {
   tags = {
-    Name = "tdr-vpc-intg"
+    Name = "tdr-vpc-${local.environment}"
   }
 }
 
