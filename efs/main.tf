@@ -30,5 +30,5 @@ resource "aws_efs_access_point" "access_point" {
 
 resource "aws_efs_file_system_policy" "file_system_policy" {
   file_system_id = aws_efs_file_system.file_system.id
-  policy         = templatefile("${path.module}/templates/${var.policy}.json.tpl", {file_system_id = aws_efs_file_system.file_system.id, account_id = data.aws_caller_identity.current.account_id, access_point_arn = aws_efs_access_point.access_point.arn })
+  policy         = templatefile("${path.module}/templates/${var.policy}.json.tpl", {file_system_arn = aws_efs_file_system.file_system.arn })
 }

@@ -11,7 +11,8 @@
       "Action": [
         "elasticfilesystem:ClientMount",
         "elasticfilesystem:ClientWrite"
-      ]
+      ],
+      "Resource": "${file_system_arn}"
     }
   ]
 }
