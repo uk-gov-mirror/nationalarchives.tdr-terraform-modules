@@ -14,7 +14,7 @@ resource "aws_lambda_function" "file_format_lambda_function" {
       INPUT_QUEUE   = local.file_format_queue_url
       OUTPUT_QUEUE  = local.api_update_queue_url
       AUTH_URL      = var.auth_url
-      API_URL       = var.api_url
+      API_URL       = "${var.api_url}/graphql"
       CLIENT_ID     = "tdr-backend-checks"
       CLIENT_SECRET = data.aws_ssm_parameter.backend_checks_client_secret[0].value
     }
@@ -30,6 +30,10 @@ resource "aws_lambda_function" "file_format_lambda_function" {
   vpc_config {
     subnet_ids         = aws_subnet.file_format_private.*.id
     security_group_ids = [aws_security_group.allow_efs_lambda[count.index].id]
+  }
+
+  lifecycle {
+    ignore_changes = [filename]
   }
 }
 
