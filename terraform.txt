@@ -1,0 +1,18 @@
+2020/07/08 08:27:11 [INFO] Terraform version: 0.12.28  
+2020/07/08 08:27:11 [INFO] Go runtime version: go1.12.13
+2020/07/08 08:27:11 [INFO] CLI args: []string{"/usr/local/bin/terraform", "apply", "-var", "tdr_account_number=229554778675"}
+2020/07/08 08:27:11 [DEBUG] Attempting to open CLI config file: /home/sam/.terraformrc
+2020/07/08 08:27:11 [DEBUG] File doesn't exist, but doesn't need to. Ignoring.
+2020/07/08 08:27:11 [INFO] CLI command args: []string{"apply", "-var", "tdr_account_number=229554778675"}
+2020/07/08 08:27:11 [TRACE] Meta.Backend: no config given or present on disk, so returning nil config
+2020/07/08 08:27:11 [TRACE] Meta.Backend: backend has not previously been initialized in this working directory
+2020/07/08 08:27:11 [DEBUG] New state was assigned lineage "6f404952-cc06-1651-43c9-ba7727c16a88"
+2020/07/08 08:27:11 [TRACE] Meta.Backend: using default local state only (no backend configuration, and no existing initialized backend)
+2020/07/08 08:27:11 [TRACE] Meta.Backend: instantiated backend of type <nil>
+2020/07/08 08:27:11 [DEBUG] checking for provider in "."
+2020/07/08 08:27:11 [DEBUG] checking for provider in "/usr/local/bin"
+2020/07/08 08:27:11 [DEBUG] checking for provisioner in "."
+2020/07/08 08:27:11 [DEBUG] checking for provisioner in "/usr/local/bin"
+2020/07/08 08:27:11 [INFO] Failed to read plugin lock file .terraform/plugins/linux_amd64/lock.json: open .terraform/plugins/linux_amd64/lock.json: no such file or directory
+2020/07/08 08:27:11 [TRACE] Meta.Backend: backend <nil> does not support operations, so wrapping it in a local backend
+2020/07/08 08:27:11 [INFO] backend/local: starting Apply operation

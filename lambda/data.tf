@@ -19,3 +19,27 @@ data "aws_ssm_parameter" "prod_account_number" {
   count = var.project == "tdr" && local.environment == "mgmt" ? 1 : 0
   name  = "/mgmt/prod_account"
 }
+data "aws_ssm_parameter" "backend_checks_client_secret" {
+  count = var.project == "tdr" && var.lambda_file_format ? 1 : 0
+  name  = "/${local.environment}/keycloak/backend_checks_client/secret"
+}
+
+data "aws_vpc" "current" {
+  tags = {
+    Name = "tdr-vpc-intg"
+  }
+}
+
+data "aws_availability_zones" "available" {}
+
+data "aws_nat_gateway" "main_zero" {
+  tags = map("Name", "nat-gateway-0-tdr-${local.environment}")
+}
+
+data "aws_nat_gateway" "main_one" {
+  tags = map("Name", "nat-gateway-1-tdr-${local.environment}")
+}
+
+data "aws_security_group" "efs_group" {
+  tags = map("Name", "allow-ecs-mount-efs")
+}

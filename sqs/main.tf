@@ -1,7 +1,8 @@
 resource "aws_sqs_queue" "sqs_queue" {
-  count  = var.apply_resource == true ? 1 : 0
-  name   = local.sqs_name
-  policy = templatefile("./tdr-terraform-modules/sqs/templates/${var.sqs_policy}_policy.json.tpl", { region = var.region, environment = local.environment, account_id = data.aws_caller_identity.current.account_id, sqs_name = local.sqs_name })
+  count                      = var.apply_resource == true ? 1 : 0
+  name                       = local.sqs_name
+  visibility_timeout_seconds = var.visibility_timeout
+  policy                     = templatefile("./tdr-terraform-modules/sqs/templates/${var.sqs_policy}_policy.json.tpl", { region = var.region, environment = local.environment, account_id = data.aws_caller_identity.current.account_id, sqs_name = local.sqs_name })
   redrive_policy = var.dead_letter_queue != "" ? jsonencode({
     deadLetterTargetArn = var.dead_letter_queue
     maxReceiveCount     = 3

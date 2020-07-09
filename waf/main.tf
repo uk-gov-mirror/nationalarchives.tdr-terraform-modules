@@ -10,6 +10,9 @@ resource "aws_wafregional_ipset" "trusted" {
       value = ip.value
     }
   }
+  lifecycle {
+    ignore_changes = [ip_set_descriptor]
+  }
 }
 
 resource "aws_wafregional_byte_match_set" "restricted_uri" {

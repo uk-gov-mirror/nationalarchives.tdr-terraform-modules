@@ -40,3 +40,7 @@ variable "redrive_maximum_receives" {
   description = "The maximum number of receives if using a redrive policy"
   default     = 0
 }
+
+variable "visibility_timeout" {
+  default = 30
+}
