@@ -39,7 +39,3 @@ data "aws_nat_gateway" "main_zero" {
 data "aws_nat_gateway" "main_one" {
   tags = map("Name", "nat-gateway-1-tdr-${local.environment}")
 }
-
-data "aws_security_group" "efs_group" {
-  tags = map("Name", "allow-ecs-mount-efs")
-}

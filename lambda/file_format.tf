@@ -62,7 +62,7 @@ resource "aws_security_group" "mount_target_sg" {
     from_port       = 2049
     to_port         = 2049
     protocol        = "tcp"
-    security_groups = [data.aws_security_group.efs_group.id, aws_security_group.allow_efs_lambda[count.index].id]
+    security_groups = [aws_security_group.ecs_run_efs[count.index].id, aws_security_group.allow_efs_lambda[count.index].id]
   }
 
   egress {
@@ -77,6 +77,26 @@ resource "aws_security_group" "mount_target_sg" {
     map("Name", "mount-target-outbound-only")
   )
 }
+
+resource "aws_security_group" "ecs_run_efs" {
+  count       = local.count_file_format
+  name        = "allow-ecs-mount-efs"
+  description = "Allow ECS to mount EFS volume"
+  vpc_id      = data.aws_vpc.current.id
+
+  egress {
+    protocol    = "-1"
+    from_port   = 0
+    to_port     = 0
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = merge(
+  var.common_tags,
+  map("Name", "allow-ecs-mount-efs")
+  )
+}
+
 
 resource "aws_security_group" "allow_efs_lambda" {
   count       = local.count_file_format
