@@ -92,8 +92,8 @@ resource "aws_security_group" "ecs_run_efs" {
   }
 
   tags = merge(
-  var.common_tags,
-  map("Name", "allow-ecs-mount-efs")
+    var.common_tags,
+    map("Name", "allow-ecs-mount-efs")
   )
 }
 
@@ -169,8 +169,8 @@ resource "aws_route_table" "file_format_private" {
   }
 
   tags = merge(
-  var.common_tags,
-  map("Name", "route-table-${count.index}-tdr-${local.environment}")
+    var.common_tags,
+    map("Name", "route-table-${count.index}-tdr-${local.environment}")
   )
 }
 
