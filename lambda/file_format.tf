@@ -112,7 +112,7 @@ resource "aws_security_group" "allow_efs_lambda" {
 
   tags = merge(
     var.common_tags,
-    map("Name", "file-format-lambda-allow-efs")
+    map("Name", "${var.project}-file-format-lambda-allow-efs")
   )
 }
 

@@ -10,3 +10,5 @@ variable "common_tags" {}
 variable "file_format_build" {
   default = false
 }
+
+variable "project" {}

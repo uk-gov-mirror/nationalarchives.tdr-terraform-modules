@@ -19,6 +19,7 @@ data "aws_ssm_parameter" "prod_account_number" {
   count = var.project == "tdr" && local.environment == "mgmt" ? 1 : 0
   name  = "/mgmt/prod_account"
 }
+
 data "aws_ssm_parameter" "backend_checks_client_secret" {
   count = var.project == "tdr" && var.lambda_file_format ? 1 : 0
   name  = "/${local.environment}/keycloak/backend_checks_client/secret"
@@ -26,7 +27,7 @@ data "aws_ssm_parameter" "backend_checks_client_secret" {
 
 data "aws_vpc" "current" {
   tags = {
-    Name = "tdr-vpc-${local.environment}"
+    Name = "${var.project}-vpc-${local.environment}"
   }
 }
 
