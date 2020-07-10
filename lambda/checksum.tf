@@ -16,6 +16,9 @@ resource "aws_lambda_function" "checksum_lambda_function" {
       CHUNK_SIZE_IN_MB = 50
     }
   }
+  lifecycle {
+    ignore_changes = [filename]
+  }
 }
 
 resource "aws_lambda_event_source_mapping" "checksum_sqs_queue_mapping" {

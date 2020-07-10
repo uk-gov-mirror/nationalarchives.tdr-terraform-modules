@@ -31,6 +31,11 @@ variable "lambda_api_update" {
   default     = false
 }
 
+variable "lambda_file_format" {
+  description = "deploy lambda function to run the file format extraction"
+  default     = false
+}
+
 variable "target_s3_bucket" {
   description = "Target S3 bucket ARN used for the Lambda log data function"
   default     = ""
@@ -54,4 +59,18 @@ variable "api_url" {
 variable "keycloak_backend_checks_client_secret" {
   description = "Keycloak backend checks client secret"
   default     = ""
+}
+
+variable "file_format_efs_access_point" {
+  description = "The access point for the efs volume used by the file format checks"
+  default     = ""
+}
+
+variable "vpc_id" {
+  description = "The VPC ID"
+  default     = ""
+}
+
+variable "file_system" {
+  default = {}
 }

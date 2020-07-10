@@ -17,6 +17,9 @@ resource "aws_lambda_function" "lambda_api_update_function" {
       QUEUE_URL     = local.api_update_queue_url
     }
   }
+  lifecycle {
+    ignore_changes = [filename]
+  }
 }
 
 resource "aws_lambda_event_source_mapping" "api_update_sqs_queue_mapping" {
