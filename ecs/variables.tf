@@ -1,4 +1,4 @@
-variable "file_system" {
+variable "file_system_id" {
   default = {}
 }
 variable "access_point" {
