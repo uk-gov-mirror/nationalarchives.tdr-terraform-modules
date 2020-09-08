@@ -82,6 +82,13 @@ resource "aws_security_group" "allow_efs_lambda" {
   description = "Allow EFS inbound traffic"
   vpc_id      = data.aws_vpc.current.id
 
+  ingress {
+    from_port = 2049
+    protocol = "TCP"
+    to_port = 2049
+    self = true
+  }
+
   egress {
     protocol    = "-1"
     from_port   = 0
