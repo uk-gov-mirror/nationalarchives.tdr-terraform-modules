@@ -3,7 +3,7 @@ resource "aws_lambda_function" "file_format_lambda_function" {
   function_name = "${var.project}-file-format-${local.environment}"
   handler       = "uk.gov.nationalarchives.fileformat.Lambda::process"
   role          = aws_iam_role.file_format_lambda_iam_role.*.arn[0]
-  runtime       = "java8"
+  runtime       = "java11"
   filename      = "${path.module}/functions/file-format.jar"
   timeout       = 180
   memory_size   = 1024
