@@ -2,7 +2,7 @@
   "Version": "2008-10-17",
   "Statement": [
     {
-      "Sid": "AllowPushPull",
+      "Sid": "AllowPull",
       "Effect": "Allow",
       "Principal": {
         "AWS": [
