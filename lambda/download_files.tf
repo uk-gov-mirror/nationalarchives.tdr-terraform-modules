@@ -3,7 +3,7 @@ resource "aws_lambda_function" "download_files_lambda_function" {
   function_name = "${var.project}-download-files-${local.environment}"
   handler       = "uk.gov.nationalarchives.downloadfiles.Lambda::process"
   role          = aws_iam_role.download_files_lambda_iam_role.*.arn[0]
-  runtime       = "java8"
+  runtime       = "java11"
   filename      = "${path.module}/functions/download-files.jar"
   timeout       = 180
   memory_size   = 1024
