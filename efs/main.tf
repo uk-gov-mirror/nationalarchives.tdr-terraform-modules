@@ -82,13 +82,6 @@ resource "aws_security_group" "allow_efs_lambda" {
   description = "Allow EFS inbound traffic"
   vpc_id      = data.aws_vpc.current.id
 
-  ingress {
-    from_port = 2049
-    protocol = "TCP"
-    to_port = 2049
-    self = true
-  }
-
   egress {
     protocol    = "-1"
     from_port   = 0
@@ -138,11 +131,11 @@ resource "aws_route_table_association" "private" {
 resource "aws_efs_mount_target" "mount_target_az_zero" {
   file_system_id  = aws_efs_file_system.file_system.id
   subnet_id       = aws_subnet.efs_private.*.id[0]
-  security_groups = [aws_security_group.allow_efs_lambda.id]
+  security_groups = [aws_security_group.mount_target_sg.id]
 }
 
 resource "aws_efs_mount_target" "mount_target_az_one" {
   file_system_id  = aws_efs_file_system.file_system.id
   subnet_id       = aws_subnet.efs_private.*.id[1]
-  security_groups = [aws_security_group.allow_efs_lambda.id]
+  security_groups = [aws_security_group.mount_target_sg.id]
 }
