@@ -81,3 +81,22 @@ resource "aws_cloudwatch_log_group" "file_format_build_log_group" {
   name              = "/ecs/file-format-build-${local.environment}"
   retention_in_days = 30
 }
+
+resource "aws_security_group" "ecs_run_efs" {
+  count       = local.count_file_format_build
+  name        = "allow-ecs-mount-efs"
+  description = "Allow ECS to mount EFS volume"
+  vpc_id      = data.aws_vpc.current.id
+
+  egress {
+    protocol    = "-1"
+    from_port   = 0
+    to_port     = 0
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = merge(
+    var.common_tags,
+    map("Name", "allow-ecs-mount-efs")
+  )
+}

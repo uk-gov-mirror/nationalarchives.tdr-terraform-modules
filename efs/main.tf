@@ -43,7 +43,7 @@ resource "aws_security_group" "mount_target_sg" {
     from_port       = 2049
     to_port         = 2049
     protocol        = "tcp"
-    security_groups = [aws_security_group.ecs_run_efs.id, aws_security_group.allow_efs_lambda.id]
+    security_groups = flatten(var.mount_target_security_groups)
   }
 
   egress {
@@ -56,42 +56,6 @@ resource "aws_security_group" "mount_target_sg" {
   tags = merge(
     var.common_tags,
     map("Name", "mount-target-outbound-only")
-  )
-}
-
-resource "aws_security_group" "ecs_run_efs" {
-  name        = "allow-ecs-mount-efs"
-  description = "Allow ECS to mount EFS volume"
-  vpc_id      = data.aws_vpc.current.id
-
-  egress {
-    protocol    = "-1"
-    from_port   = 0
-    to_port     = 0
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  tags = merge(
-    var.common_tags,
-    map("Name", "allow-ecs-mount-efs")
-  )
-}
-
-resource "aws_security_group" "allow_efs_lambda" {
-  name        = "allow-efs"
-  description = "Allow EFS inbound traffic"
-  vpc_id      = data.aws_vpc.current.id
-
-  egress {
-    protocol    = "-1"
-    from_port   = 0
-    to_port     = 0
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  tags = merge(
-    var.common_tags,
-    map("Name", "${var.project}-lambda-allow-efs")
   )
 }
 

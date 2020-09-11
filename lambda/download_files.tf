@@ -27,7 +27,7 @@ resource "aws_lambda_function" "download_files_lambda_function" {
 
   vpc_config {
     subnet_ids         = [data.aws_subnet.efs_private_subnet_zero.id, data.aws_subnet.efs_private_subnet_one.id]
-    security_group_ids = [data.aws_security_group.efs_lambda_security_group.id]
+    security_group_ids = aws_security_group.allow_efs_lambda_download_files.*.id
   }
 
   lifecycle {
@@ -64,4 +64,23 @@ resource "aws_iam_role_policy_attachment" "download_files_lambda_role_policy" {
   count      = local.count_download_files
   policy_arn = aws_iam_policy.download_files_lambda_policy.*.arn[0]
   role       = aws_iam_role.download_files_lambda_iam_role.*.name[0]
+}
+
+resource "aws_security_group" "allow_efs_lambda_download_files" {
+  count       = local.count_download_files
+  name        = "allow-efs-download-files"
+  description = "Allow EFS inbound traffic"
+  vpc_id      = data.aws_vpc.current.id
+
+  egress {
+    protocol    = "-1"
+    from_port   = 0
+    to_port     = 0
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = merge(
+    var.common_tags,
+    map("Name", "${var.project}-lambda-allow-efs-download-files")
+  )
 }

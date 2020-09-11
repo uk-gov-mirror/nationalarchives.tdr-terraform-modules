@@ -54,7 +54,3 @@ data "aws_subnet" "efs_private_subnet_one" {
     Name = "tdr-efs-private-subnet-1-${local.environment}"
   }
 }
-
-data "aws_security_group" "efs_lambda_security_group" {
-  name = "allow-efs"
-}
