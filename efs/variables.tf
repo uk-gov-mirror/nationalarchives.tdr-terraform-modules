@@ -10,5 +10,5 @@ variable "policy" {
 
 variable "mount_target_security_groups" {
   description = "Security groups which are allowed to access the mount target"
-  type        = list(list(string))
+  type        = list(string)
 }

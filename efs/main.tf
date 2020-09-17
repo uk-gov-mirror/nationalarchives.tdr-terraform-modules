@@ -43,7 +43,7 @@ resource "aws_security_group" "mount_target_sg" {
     from_port       = 2049
     to_port         = 2049
     protocol        = "tcp"
-    security_groups = flatten(var.mount_target_security_groups)
+    security_groups = var.mount_target_security_groups
   }
 
   egress {
