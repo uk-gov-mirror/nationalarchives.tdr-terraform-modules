@@ -26,24 +26,28 @@ data "aws_subnet_ids" "private" {
 }
 
 resource "random_password" "grafana_password" {
+  count   = local.count_grafana_build
   length  = 16
   special = false
 }
 
 resource "aws_ssm_parameter" "grafana_admin_password" {
+  count = local.count_grafana_build
   name  = "/${local.environment}/grafana/admin/password"
   type  = "SecureString"
-  value = random_password.grafana_password.result
+  value = random_password.grafana_password[count.index].result
 }
 
 resource "aws_ssm_parameter" "grafana_admin_user" {
+  count = local.count_grafana_build
   name  = "/${local.environment}/grafana/admin/user"
   type  = "SecureString"
   value = "${var.project}-grafana-admin-${local.environment}"
 }
 
 resource "aws_ecs_cluster" "grafana_ecs" {
-  name = "grafana-${local.environment}"
+  count = local.count_grafana_build
+  name  = "grafana-${local.environment}"
 
   tags = merge(
     var.common_tags,
@@ -62,8 +66,8 @@ resource "aws_ecs_task_definition" "grafana_task" {
   container_definitions = templatefile(
     "${path.module}/templates/grafana_build.json.tpl",
     {
-      admin_user          = aws_ssm_parameter.grafana_admin_user.name
-      admin_user_password = aws_ssm_parameter.grafana_admin_password.name
+      admin_user          = aws_ssm_parameter.grafana_admin_user[count.index].name
+      admin_user_password = aws_ssm_parameter.grafana_admin_password[count.index].name
       app_image           = "grafana/grafana:latest"
       app_port            = local.app_port
       app_environment     = local.environment
@@ -83,7 +87,7 @@ resource "aws_ecs_task_definition" "grafana_task" {
 resource "aws_ecs_service" "grafana_service" {
   count                             = local.count_grafana_build
   name                              = "grafana-service-${local.environment}"
-  cluster                           = aws_ecs_cluster.grafana_ecs.id
+  cluster                           = aws_ecs_cluster.grafana_ecs[count.index].id
   task_definition                   = aws_ecs_task_definition.grafana_task[count.index].arn
   desired_count                     = 1
   launch_type                       = "FARGATE"
