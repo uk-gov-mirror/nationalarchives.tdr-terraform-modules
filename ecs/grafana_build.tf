@@ -2,6 +2,29 @@ locals {
   app_port = 3000
 }
 
+data "aws_vpc" "grafana_current" {
+  count = local.count_grafana_build
+  tags = {
+    Name = "${var.project}-grafana-vpc-${local.environment}"
+  }
+}
+
+data "aws_security_group" "ecs_task_security_group" {
+  count  = local.count_grafana_build
+  vpc_id = data.aws_vpc.grafana_current[count.index].id
+  tags = {
+    Name = "${var.project}-${var.app_name}-ecs-task-security-group-mgmt"
+  }
+}
+
+data "aws_subnet_ids" "private" {
+  count  = local.count_grafana_build
+  vpc_id = data.aws_vpc.grafana_current[count.index].id
+  tags = {
+    Name = "${var.project}-${var.app_name}-private-subnet-*-${local.environment}"
+  }
+}
+
 resource "random_password" "grafana_password" {
   length  = 16
   special = false
@@ -67,8 +90,8 @@ resource "aws_ecs_service" "grafana_service" {
   health_check_grace_period_seconds = "360"
 
   network_configuration {
-    security_groups  = [data.aws_security_group.ecs_task_security_group.id]
-    subnets          = data.aws_subnet_ids.private.ids
+    security_groups  = [data.aws_security_group.ecs_task_security_group[count.index].id]
+    subnets          = data.aws_subnet_ids.private[count.index].ids
     assign_public_ip = false
   }
 

@@ -33,7 +33,3 @@ variable "grafana_build" {
 }
 
 variable "project" {}
-
-variable "vpc_tag_name" {
-  default = ""
-}
