@@ -2,18 +2,6 @@ locals {
   app_port = 3000
 }
 
-data "aws_ssm_parameter" "intg_account_id" {
-  name = "/${local.environment}/intg_account"
-}
-
-data "aws_ssm_parameter" "prod_account_id" {
-  name = "/${local.environment}/prod_account"
-}
-
-data "aws_ssm_parameter" "staging_account_id" {
-  name = "/${local.environment}/staging_account"
-}
-
 resource "random_password" "grafana_password" {
   length  = 16
   special = false
@@ -130,20 +118,6 @@ resource "aws_iam_policy" "ecs_logs_policy" {
   )
 }
 
-resource "aws_iam_policy" "assume_grafana_env_monitoring_roles" {
-  count = local.count_grafana_build
-  name  = "${local.project_prefix}GrafanaEnvMonitoringAssumeRoles"
-  policy = templatefile(
-    "${path.module}/templates/grafana_assume_env_monitoring_roles_policy.json.tpl",
-    {
-      intg_account_id    = data.aws_ssm_parameter.intg_account_id.value,
-      prod_account_id    = data.aws_ssm_parameter.prod_account_id.value,
-      project_prefix     = local.project_prefix
-      staging_account_id = data.aws_ssm_parameter.staging_account_id.value
-    }
-  )
-}
-
 resource "aws_iam_role_policy_attachment" "ecs_logs" {
   count      = local.count_grafana_build
   role       = aws_iam_role.grafana_ecs_execution[count.index].name
@@ -154,12 +128,6 @@ resource "aws_iam_role_policy_attachment" "grafana_ecs_execution_ssm" {
   count      = local.count_grafana_build
   role       = aws_iam_role.grafana_ecs_execution[count.index].name
   policy_arn = "arn:aws:iam::aws:policy/AmazonSSMReadOnlyAccess"
-}
-
-resource "aws_iam_role_policy_attachment" "grafana_env_monitoring" {
-  count      = local.count_grafana_build
-  role       = aws_iam_role.grafana_ecs_task[count.index].name
-  policy_arn = aws_iam_policy.assume_grafana_env_monitoring_roles[count.index].arn
 }
 
 resource "aws_cloudwatch_log_group" "grafana_build_log_group" {

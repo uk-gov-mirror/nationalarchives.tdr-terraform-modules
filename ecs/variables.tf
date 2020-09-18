@@ -25,7 +25,7 @@ variable "file_system" {
 }
 
 variable "file_system_id" {
-  default = {}
+  default = ""
 }
 
 variable "grafana_build" {
