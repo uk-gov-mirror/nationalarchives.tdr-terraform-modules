@@ -21,7 +21,7 @@ data "aws_ssm_parameter" "prod_account_number" {
 }
 
 data "aws_ssm_parameter" "backend_checks_client_secret" {
-  count = var.project == "tdr" && var.lambda_file_format ? 1 : 0
+  count = var.project == "tdr" && var.use_efs ? 1 : 0
   name  = "/${local.environment}/keycloak/backend_checks_client/secret"
 }
 
@@ -39,4 +39,18 @@ data "aws_nat_gateway" "main_zero" {
 
 data "aws_nat_gateway" "main_one" {
   tags = map("Name", "nat-gateway-1-tdr-${local.environment}")
+}
+
+data "aws_subnet" "efs_private_subnet_zero" {
+  vpc_id = var.vpc_id
+  tags = {
+    Name = "tdr-efs-private-subnet-0-${local.environment}"
+  }
+}
+
+data "aws_subnet" "efs_private_subnet_one" {
+  vpc_id = var.vpc_id
+  tags = {
+    Name = "tdr-efs-private-subnet-1-${local.environment}"
+  }
 }
