@@ -6,3 +6,9 @@ resource "aws_ecr_repository" "ecr_repository" {
     scan_on_push = true
   }
 }
+
+resource "aws_ecr_repository_policy" "ecr_repository_policy" {
+  count      = var.policy_name == "" ? 0 : 1
+  policy     = templatefile("./tdr-terraform-modules/ecr/templates/${var.policy_name}.json.tpl", var.policy_variables)
+  repository = aws_ecr_repository.ecr_repository.name
+}

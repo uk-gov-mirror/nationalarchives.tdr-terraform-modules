@@ -36,6 +36,11 @@ variable "lambda_file_format" {
   default     = false
 }
 
+variable "lambda_download_files" {
+  description = "deploy lambda function to download files to EFS"
+  default     = false
+}
+
 variable "target_s3_bucket" {
   description = "Target S3 bucket ARN used for the Lambda log data function"
   default     = ""
@@ -71,6 +76,19 @@ variable "vpc_id" {
   default     = ""
 }
 
-variable "file_system" {
-  default = {}
+variable "file_system_id" {
+  default = ""
+}
+
+variable "s3_sns_topic" {
+  default = ""
+}
+
+variable "use_efs" {
+  default = false
+}
+
+variable "mount_target_ids" {
+  default = []
+  type    = list(string)
 }

@@ -11,7 +11,7 @@ resource "aws_ecs_task_definition" "file_format_build_task_definition" {
   volume {
     name = "fileformatbuild"
     efs_volume_configuration {
-      file_system_id = var.file_system.id
+      file_system_id = var.file_system_id
       root_directory = "/"
       authorization_config {
         iam             = "ENABLED"
@@ -61,7 +61,7 @@ resource "aws_iam_policy" "file_format_ecs_task_policy" {
 resource "aws_iam_policy" "file_format_ecs_execution_policy" {
   count  = local.count_file_format_build
   name   = "${upper(var.project)}FileFormatECSExecutionPolicy${title(local.environment)}"
-  policy = templatefile("${path.module}/templates/file_format_execution_policy.json.tpl", { log_group_arn = aws_cloudwatch_log_group.file_format_build_log_group[count.index].arn, file_system_arn = var.file_system.arn })
+  policy = templatefile("${path.module}/templates/file_format_execution_policy.json.tpl", { log_group_arn = aws_cloudwatch_log_group.file_format_build_log_group[count.index].arn, file_system_arn = data.aws_efs_file_system.efs_file_system.arn, management_account_number = data.aws_ssm_parameter.mgmt_account_number.value })
 }
 
 resource "aws_iam_role_policy_attachment" "file_format_task_policy_attachment" {
@@ -80,4 +80,23 @@ resource "aws_cloudwatch_log_group" "file_format_build_log_group" {
   count             = local.count_file_format_build
   name              = "/ecs/file-format-build-${local.environment}"
   retention_in_days = 30
+}
+
+resource "aws_security_group" "ecs_run_efs" {
+  count       = local.count_file_format_build
+  name        = "allow-ecs-mount-efs"
+  description = "Allow ECS to mount EFS volume"
+  vpc_id      = data.aws_vpc.current.id
+
+  egress {
+    protocol    = "-1"
+    from_port   = 0
+    to_port     = 0
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = merge(
+    var.common_tags,
+    map("Name", "allow-ecs-mount-efs")
+  )
 }
