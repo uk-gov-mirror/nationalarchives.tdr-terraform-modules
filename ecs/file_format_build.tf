@@ -1,6 +1,6 @@
 resource "aws_ecs_task_definition" "file_format_build_task_definition" {
   count                    = local.count_file_format_build
-  container_definitions    = templatefile("${path.module}/templates/file_format_build.json.tpl", { log_group_name = aws_cloudwatch_log_group.file_format_build_log_group[count.index].name, app_environment = local.environment })
+  container_definitions    = templatefile("${path.module}/templates/file_format_build.json.tpl", { log_group_name = aws_cloudwatch_log_group.file_format_build_log_group[count.index].name, app_environment = local.environment, management_account = data.aws_ssm_parameter.mgmt_account_number.value })
   family                   = "file-format-build-${local.environment}"
   task_role_arn            = aws_iam_role.fileformat_ecs_task[count.index].arn
   execution_role_arn       = aws_iam_role.fileformat_ecs_execution[count.index].arn
