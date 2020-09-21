@@ -5,7 +5,7 @@ locals {
 data "aws_vpc" "grafana_current" {
   count = local.count_grafana_build
   tags = {
-    Name = "${var.project}-grafana-vpc-${local.environment}"
+    Name = "${var.project}-${var.app_name}-vpc-${local.environment}"
   }
 }
 
@@ -13,7 +13,7 @@ data "aws_security_group" "ecs_task_security_group" {
   count  = local.count_grafana_build
   vpc_id = data.aws_vpc.grafana_current[count.index].id
   tags = {
-    Name = "${var.project}-${var.app_name}-ecs-task-security-group-mgmt"
+    Name = "${var.project}-${var.app_name}-ecs-task-security-group-${local.environment}"
   }
 }
 
@@ -33,31 +33,31 @@ resource "random_password" "grafana_password" {
 
 resource "aws_ssm_parameter" "grafana_admin_password" {
   count = local.count_grafana_build
-  name  = "/${local.environment}/grafana/admin/password"
+  name  = "/${local.environment}/${var.app_name}/admin/password"
   type  = "SecureString"
   value = random_password.grafana_password[count.index].result
 }
 
 resource "aws_ssm_parameter" "grafana_admin_user" {
   count = local.count_grafana_build
-  name  = "/${local.environment}/grafana/admin/user"
+  name  = "/${local.environment}/${var.app_name}/admin/user"
   type  = "SecureString"
-  value = "${var.project}-grafana-admin-${local.environment}"
+  value = "${var.project}-${var.app_name}-admin-${local.environment}"
 }
 
 resource "aws_ecs_cluster" "grafana_ecs" {
   count = local.count_grafana_build
-  name  = "grafana-${local.environment}"
+  name  = "${var.app_name}-${local.environment}"
 
   tags = merge(
     var.common_tags,
-    map("Name", "${var.project}-grafana-${local.environment}")
+    map("Name", "${var.project}-${var.app_name}-${local.environment}")
   )
 }
 
 resource "aws_ecs_task_definition" "grafana_task" {
   count                    = local.count_grafana_build
-  family                   = "grafana-build-${local.environment}"
+  family                   = "${var.app_name}-build-${local.environment}"
   execution_role_arn       = aws_iam_role.grafana_ecs_execution[count.index].arn
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
@@ -80,13 +80,13 @@ resource "aws_ecs_task_definition" "grafana_task" {
 
   tags = merge(
     var.common_tags,
-    map("Name", "grafana-task-definition-${local.environment}")
+    map("Name", "${var.app_name}-task-definition-${local.environment}")
   )
 }
 
 resource "aws_ecs_service" "grafana_service" {
   count                             = local.count_grafana_build
-  name                              = "grafana-service-${local.environment}"
+  name                              = "${var.app_name}-service-${local.environment}"
   cluster                           = aws_ecs_cluster.grafana_ecs[count.index].id
   task_definition                   = aws_ecs_task_definition.grafana_task[count.index].arn
   desired_count                     = 1
@@ -116,7 +116,7 @@ resource "aws_iam_role" "grafana_ecs_execution" {
   tags = merge(
     var.common_tags,
     map(
-      "Name", "grafana-ecs-execution-iam-role-${local.environment}",
+      "Name", "${var.app_name}-ecs-execution-iam-role-${local.environment}",
     )
   )
 }
@@ -129,7 +129,7 @@ resource "aws_iam_role" "grafana_ecs_task" {
   tags = merge(
     var.common_tags,
     map(
-      "Name", "grafana-ecs-task-iam-role-${local.environment}",
+      "Name", "${var.app_name}-ecs-task-iam-role-${local.environment}",
     )
   )
 }
@@ -159,6 +159,6 @@ resource "aws_iam_role_policy_attachment" "grafana_ecs_execution_ssm" {
 
 resource "aws_cloudwatch_log_group" "grafana_build_log_group" {
   count             = local.count_grafana_build
-  name              = "/ecs/grafana-build-${local.environment}"
+  name              = "/ecs/${var.app_name}-build-${local.environment}"
   retention_in_days = 30
 }
