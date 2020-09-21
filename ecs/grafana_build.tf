@@ -5,7 +5,7 @@ locals {
 data "aws_vpc" "grafana_current" {
   count = local.count_grafana_build
   tags = {
-    Name = "${var.project}-${var.app_name}-vpc-${local.environment}"
+    Name = var.vpc_name_tag
   }
 }
 
