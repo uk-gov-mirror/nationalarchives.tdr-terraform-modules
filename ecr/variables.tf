@@ -1,3 +1,5 @@
+variable "common_tags" {}
+
 variable "tag_mutability" {
   default = "MUTABLE"
 }
