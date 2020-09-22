@@ -16,9 +16,8 @@ variable "aws_region" {
 
 variable "common_tags" {}
 
-variable "depends_on_vpc" {
-  description = "Vpc for ECS task. Ensures Vpc exists before creating ECS task"
-  type = any
+variable "ecs_task_security_group_id" {
+  default = ""
 }
 
 variable "file_format_build" {
@@ -39,6 +38,10 @@ variable "grafana_build" {
 
 variable "project" {}
 
-variable "vpc_name_tag" {
+variable vpc_id {
   default = ""
+}
+
+variable "vpc_private_subnet_ids" {
+  default = []
 }
