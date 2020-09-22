@@ -16,6 +16,11 @@ variable "aws_region" {
 
 variable "common_tags" {}
 
+variable "depends_on_vpc" {
+  description = "Vpc for ECS task. Ensures Vpc exists before creating ECS task"
+  type = any
+}
+
 variable "file_format_build" {
   default = false
 }

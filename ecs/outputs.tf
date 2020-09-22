@@ -3,5 +3,5 @@ output "file_format_build_sg_id" {
 }
 
 output "grafana_ecs_task_role_name" {
-  value = aws_iam_role.grafana_ecs_execution.*.name
+  value = aws_iam_role.grafana_ecs_task.*.name
 }

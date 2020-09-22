@@ -7,6 +7,7 @@ data "aws_vpc" "grafana_current" {
   tags = {
     Name = var.vpc_name_tag
   }
+  depends_on = [var.depends_on_vpc]
 }
 
 data "aws_security_group" "ecs_task_security_group" {
@@ -15,6 +16,7 @@ data "aws_security_group" "ecs_task_security_group" {
   tags = {
     Name = "${var.project}-${var.app_name}-ecs-task-security-group-${local.environment}"
   }
+  depends_on = [var.depends_on_vpc]
 }
 
 data "aws_subnet_ids" "private" {
@@ -23,6 +25,7 @@ data "aws_subnet_ids" "private" {
   tags = {
     Name = "${var.project}-${var.app_name}-private-subnet-*-${local.environment}"
   }
+  depends_on = [var.depends_on_vpc]
 }
 
 resource "random_password" "grafana_password" {
