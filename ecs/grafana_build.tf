@@ -2,6 +2,21 @@ locals {
   app_port = 3000
 }
 
+data "aws_ssm_parameter" "database_url" {
+  count = local.count_grafana_build
+  name  = "/${local.environment}/grafana/database/url"
+}
+
+data "aws_ssm_parameter" "database_user" {
+  count = local.count_grafana_build
+  name  = "/${local.environment}/grafana/database/username"
+}
+
+data "aws_ssm_parameter" "database_password" {
+  count = local.count_grafana_build
+  name  = "/${local.environment}/grafana/database/password"
+}
+
 resource "random_password" "grafana_password" {
   count   = local.count_grafana_build
   length  = 16
@@ -43,14 +58,18 @@ resource "aws_ecs_task_definition" "grafana_task" {
   container_definitions = templatefile(
     "${path.module}/templates/grafana_build.json.tpl",
     {
-      admin_user          = aws_ssm_parameter.grafana_admin_user[count.index].name
-      admin_user_password = aws_ssm_parameter.grafana_admin_password[count.index].name
-      app_image           = "grafana/grafana:latest"
-      app_port            = local.app_port
-      app_environment     = local.environment
-      aws_region          = var.aws_region
-      log_group_name      = aws_cloudwatch_log_group.grafana_build_log_group[count.index].name
-      project             = var.project
+      admin_user             = aws_ssm_parameter.grafana_admin_user[count.index].name
+      admin_user_password    = aws_ssm_parameter.grafana_admin_password[count.index].name
+      app_image              = "grafana/grafana:latest"
+      app_port               = local.app_port
+      app_environment        = local.environment
+      aws_region             = var.aws_region
+      database_host_path     = data.aws_ssm_parameter.database_url[count.index].name
+      database_user_path     = data.aws_ssm_parameter.database_user[count.index].name
+      database_password_path = data.aws_ssm_parameter.database_password[count.index].name
+      database_type          = var.grafana_database_type
+      log_group_name         = aws_cloudwatch_log_group.grafana_build_log_group[count.index].name
+      project                = var.project
     }
   )
   task_role_arn = aws_iam_role.grafana_ecs_task[count.index].arn

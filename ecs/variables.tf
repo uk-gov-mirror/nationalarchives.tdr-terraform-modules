@@ -32,6 +32,10 @@ variable "grafana_build" {
   default = false
 }
 
+variable "grafana_database_type" {
+  default = "postgres"
+}
+
 variable "project" {}
 
 variable "vpc_private_subnet_ids" {
