@@ -24,10 +24,6 @@ variable "file_format_build" {
   default = false
 }
 
-variable "file_system" {
-  default = {}
-}
-
 variable "file_system_id" {
   default = ""
 }
@@ -37,10 +33,6 @@ variable "grafana_build" {
 }
 
 variable "project" {}
-
-variable vpc_id {
-  default = ""
-}
 
 variable "vpc_private_subnet_ids" {
   default = []
