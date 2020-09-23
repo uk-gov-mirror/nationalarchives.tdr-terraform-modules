@@ -1,7 +1,7 @@
 [
   {
     "name": "fileformatbuild",
-    "image": "nationalarchives/file-format-build:${app_environment}",
+    "image": "${management_account}.dkr.ecr.eu-west-2.amazonaws.com/file-format-build:${app_environment}",
     "networkMode": "awsvpc",
     "mountPoints": [
       {

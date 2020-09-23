@@ -2,12 +2,12 @@
   "Version": "2008-10-17",
   "Statement": [
     {
-      "Sid": "AllowPull",
+      "Sid": "AllowPullConsignmentAPI",
       "Effect": "Allow",
       "Principal": {
         "AWS": [
-          "arn:aws:iam::${intg_account}:role/TDRFileFormatECSExecutionRoleIntg",
-          "arn:aws:iam::${staging_account}:role/TDRFileFormatECSExecutionRoleStaging"
+          "arn:aws:iam::${intg_account}:role/keycloak_ecs_execution_role_intg",
+          "arn:aws:iam::${staging_account}:role/keycloak_ecs_execution_role_staging"
         ]
       },
       "Action": [
