@@ -1,0 +1,8 @@
+{
+  "source": [
+    "aws.ecr"
+  ],
+  "detail-type": [
+    "ECR Image Scan"
+  ]
+}
