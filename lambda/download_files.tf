@@ -21,8 +21,8 @@ resource "aws_lambda_function" "download_files_lambda_function" {
   }
   file_system_config {
     # EFS file system access point ARN
-    arn              = var.file_format_efs_access_point.arn
-    local_mount_path = "/mnt/fileformat"
+    arn              = var.backend_checks_efs_access_point.arn
+    local_mount_path = var.backend_checks_efs_root_directory_path
   }
 
   vpc_config {

@@ -10,15 +10,16 @@ resource "aws_lambda_function" "file_format_lambda_function" {
   tags          = var.common_tags
   environment {
     variables = {
-      ENVIRONMENT  = local.environment
-      INPUT_QUEUE  = local.file_format_queue_url
-      OUTPUT_QUEUE = local.api_update_queue_url
+      ENVIRONMENT    = local.environment
+      INPUT_QUEUE    = local.file_format_queue_url
+      OUTPUT_QUEUE   = local.api_update_queue_url
+      ROOT_DIRECTORY = var.backend_checks_efs_root_directory_path
     }
   }
   file_system_config {
     # EFS file system access point ARN
-    arn              = var.file_format_efs_access_point.arn
-    local_mount_path = "/mnt/fileformat"
+    arn              = var.backend_checks_efs_access_point.arn
+    local_mount_path = var.backend_checks_efs_root_directory_path
   }
 
   vpc_config {
