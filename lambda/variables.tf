@@ -73,7 +73,7 @@ variable "backend_checks_efs_access_point" {
 
 variable "backend_checks_efs_root_directory_path" {
   description = "The root directory of the efs volume used by the backend checks"
-  default     = "/mnt"
+  default     = ""
 }
 
 variable "vpc_id" {
