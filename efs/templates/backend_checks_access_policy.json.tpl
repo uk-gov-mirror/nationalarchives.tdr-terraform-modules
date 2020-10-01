@@ -1,9 +1,9 @@
 {
   "Version": "2012-10-17",
-  "Id": "efs-policy-file-format",
+  "Id": "efs-policy-backend-checks",
   "Statement": [
     {
-      "Sid": "efs-statement-file-format",
+      "Sid": "efs-statement-backend-checks",
       "Effect": "Allow",
       "Principal": {
         "AWS": "*"
