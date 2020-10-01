@@ -17,6 +17,7 @@ resource "aws_lambda_function" "download_files_lambda_function" {
       API_URL           = "${var.api_url}/graphql"
       CLIENT_ID         = "tdr-backend-checks"
       CLIENT_SECRET     = data.aws_ssm_parameter.backend_checks_client_secret[0].value
+      ROOT_DIRECTORY    = var.backend_checks_efs_root_directory_path
     }
   }
   file_system_config {
