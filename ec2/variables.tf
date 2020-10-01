@@ -28,3 +28,7 @@ variable "security_group_id" {
 variable "kms_arn" {}
 
 variable "subnet_id" {}
+
+variable "public_key" {
+  default = ""
+}
