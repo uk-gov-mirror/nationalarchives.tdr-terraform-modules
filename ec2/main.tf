@@ -2,7 +2,7 @@ resource "aws_instance" "instance" {
   ami                    = var.ami_id
   instance_type          = "t2.micro"
   iam_instance_profile   = aws_iam_instance_profile.instance_profile.name
-  subnet_id              = data.aws_subnet.public_subnet.id
+  subnet_id              = var.subnet_id
   user_data = var.user_data != "" ? templatefile("${path.module}/templates/${var.user_data}.sh.tpl", var.user_data_variables) : ""
   vpc_security_group_ids = [var.security_group_id]
   ebs_block_device {
