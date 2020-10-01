@@ -1,9 +1,20 @@
 resource "aws_instance" "instance" {
-  ami                    = var.encrypted_ami_id
+  ami                    = var.ami_id
   instance_type          = "t2.micro"
-  iam_instance_profile   = local.iam_role_count == 1 ? aws_iam_instance_profile.instance_profile[0].name : ""
+  iam_instance_profile   = aws_iam_instance_profile.instance_profile.name
   subnet_id              = data.aws_subnet.public_subnet.id
   user_data = var.user_data != "" ? templatefile("${path.module}/templates/${var.user_data}.sh.tpl", var.user_data_variables) : ""
+  vpc_security_group_ids = [var.security_group_id]
+  ebs_block_device {
+    device_name = "/dev/xvda"
+    encrypted = true
+    kms_key_id = var.kms_arn
+  }
+
+  lifecycle {
+    ignore_changes = [ebs_block_device]
+  }
+
   tags = merge(
   var.common_tags,
   map(
@@ -13,13 +24,11 @@ resource "aws_instance" "instance" {
 }
 
 resource "aws_iam_instance_profile" "instance_profile" {
-  count = local.iam_role_count
   name = var.name
-  role = aws_iam_role.ec2_role[count.index].name
+  role = aws_iam_role.ec2_role.name
 }
 
 resource "aws_iam_role" "ec2_role" {
-  count = local.iam_role_count
   name               = "${title(var.name)}EC2Role${title(var.environment)}"
   assume_role_policy = templatefile("${path.module}/templates/ec2_assume_role.json.tpl", {})
   tags = merge(
@@ -30,14 +39,7 @@ resource "aws_iam_role" "ec2_role" {
   )
 }
 
-resource "aws_iam_policy" "ec2_policy" {
-  name               = "${title(var.name)}EC2Policy${title(var.environment)}"
-  count = local.iam_role_count
-  policy = templatefile("${path.module}/templates/${var.iam_policy}.json.tpl", var.policy_variables)
-}
-
 resource "aws_iam_role_policy_attachment" "ec2_role_policy_attachment" {
-  count = local.iam_role_count
-  policy_arn = aws_iam_policy.ec2_policy[count.index].arn
-  role = aws_iam_role.ec2_role[count.index].name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
+  role = aws_iam_role.ec2_role.name
 }
