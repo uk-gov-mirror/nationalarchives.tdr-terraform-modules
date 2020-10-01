@@ -66,8 +66,13 @@ variable "keycloak_backend_checks_client_secret" {
   default     = ""
 }
 
-variable "file_format_efs_access_point" {
-  description = "The access point for the efs volume used by the file format checks"
+variable "backend_checks_efs_access_point" {
+  description = "The access point for the efs volume used by the backend checks"
+  default     = ""
+}
+
+variable "backend_checks_efs_root_directory_path" {
+  description = "The root directory of the efs volume used by the backend checks"
   default     = ""
 }
 
