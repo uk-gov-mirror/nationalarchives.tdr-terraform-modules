@@ -34,9 +34,18 @@ resource "aws_cloudwatch_log_group" "lambda_log_group" {
 }
 
 resource "aws_iam_policy" "lambda_policy" {
-  count  = local.count_av_yara
-  policy = templatefile("${path.module}/templates/av_lambda.json.tpl", { environment = local.environment, account_id = data.aws_caller_identity.current.account_id, update_queue = local.api_update_queue, input_sqs_queue = local.antivirus_queue })
-  name   = "${upper(var.project)}YaraAvPolicy"
+  count = local.count_av_yara
+  policy = templatefile(
+    "${path.module}/templates/av_lambda.json.tpl",
+    {
+      environment     = local.environment,
+      account_id      = data.aws_caller_identity.current.account_id,
+      update_queue    = local.api_update_queue,
+      input_sqs_queue = local.antivirus_queue,
+      file_system_id  = var.file_system_id
+    }
+  )
+  name = "${upper(var.project)}YaraAvPolicy"
 }
 
 resource "aws_iam_role" "lambda_iam_role" {

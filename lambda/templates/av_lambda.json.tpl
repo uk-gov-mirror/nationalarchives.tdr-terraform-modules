@@ -46,6 +46,14 @@
         "${input_sqs_queue}"
       ]
 
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "elasticfilesystem:ClientMount",
+        "elasticfilesystem:DescribeMountTargets"
+      ],
+      "Resource" : "arn:aws:elasticfilesystem:eu-west-2:${account_id}:file-system/${file_system_id}"
     }
   ]
 }
