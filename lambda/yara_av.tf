@@ -13,7 +13,8 @@ resource "aws_lambda_function" "lambda_function" {
     variables = {
       ENVIRONMENT    = local.environment
       ROOT_DIRECTORY = var.backend_checks_efs_root_directory_path
-      SQS_URL        = "https://sqs.${var.region}.amazonaws.com/${data.aws_caller_identity.current.account_id}/${local.api_update_queue_name}"
+      INPUT_QUEUE    = local.antivirus_queue_url
+      OUTPUT_QUEUE   = local.api_update_queue_url
     }
   }
 }
