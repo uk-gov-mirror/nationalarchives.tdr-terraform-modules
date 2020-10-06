@@ -1,5 +1,5 @@
 variable "name" {
-  description = "The name to use for the instance and the iam role and policy if using"
+  description = "The name to use for the instance and the IAM role and policy if using"
 }
 
 variable "environment" {}
