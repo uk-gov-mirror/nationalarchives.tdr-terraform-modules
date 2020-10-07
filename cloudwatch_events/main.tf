@@ -6,12 +6,12 @@ resource "aws_cloudwatch_event_rule" "ecr_image_scan" {
 
 resource "aws_cloudwatch_event_target" "sqs_event_target" {
   count = local.count_sqs_event_target
-  rule = aws_cloudwatch_event_rule.ecr_image_scan.name
-  arn  = var.log_group_event_target_arn
+  rule  = aws_cloudwatch_event_rule.ecr_image_scan.name
+  arn   = var.log_group_event_target_arn
 }
 
 resource "aws_cloudwatch_event_target" "lambda_event_target" {
   count = local.count_lambda_event_target
-  rule = aws_cloudwatch_event_rule.ecr_image_scan.name
-  arn  = var.lambda_event_target_arn[count.index]
+  rule  = aws_cloudwatch_event_rule.ecr_image_scan.name
+  arn   = var.lambda_event_target_arn[count.index]
 }

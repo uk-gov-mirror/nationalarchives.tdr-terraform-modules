@@ -10,7 +10,7 @@ resource "aws_lambda_function" "ecr_scan_notifications_lambda_function" {
   tags          = var.common_tags
   environment {
     variables = {
-      SLACK_WEBHOOK    = data.aws_ssm_parameter.ecr_notification_slack_webook[count.index].value
+      SLACK_WEBHOOK = data.aws_ssm_parameter.ecr_notification_slack_webook[count.index].value
     }
   }
 
@@ -21,7 +21,7 @@ resource "aws_lambda_function" "ecr_scan_notifications_lambda_function" {
 
 data aws_ssm_parameter "ecr_notification_slack_webook" {
   count = local.count_ecr_scan_notifications
-  name = "/${local.environment}/slack/ecr/webhook"
+  name  = "/${local.environment}/slack/ecr/webhook"
 }
 
 resource "aws_cloudwatch_log_group" "ecr_scan_notifications_lambda_log_group" {
