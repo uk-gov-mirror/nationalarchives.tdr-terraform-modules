@@ -13,6 +13,7 @@ locals {
   api_update_queue         = "arn:aws:sqs:${var.region}:${data.aws_caller_identity.current.account_id}:${local.api_update_queue_name}"
   api_update_queue_url     = "https://sqs.${var.region}.amazonaws.com/${data.aws_caller_identity.current.account_id}/${local.api_update_queue_name}"
   antivirus_queue          = "arn:aws:sqs:${var.region}:${data.aws_caller_identity.current.account_id}:tdr-antivirus-${local.environment}"
+  antivirus_queue_url      = "https://sqs.${var.region}.amazonaws.com/${data.aws_caller_identity.current.account_id}/tdr-antivirus-${local.environment}"
   checksum_queue           = "arn:aws:sqs:${var.region}:${data.aws_caller_identity.current.account_id}:tdr-checksum-${local.environment}"
   checksum_queue_url       = "https://sqs.${var.region}.amazonaws.com/${data.aws_caller_identity.current.account_id}/tdr-checksum-${local.environment}"
   download_files_queue     = "arn:aws:sqs:${var.region}:${data.aws_caller_identity.current.account_id}:tdr-download-files-${local.environment}"
