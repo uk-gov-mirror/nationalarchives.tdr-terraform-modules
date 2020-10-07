@@ -41,6 +41,11 @@ variable "lambda_download_files" {
   default     = false
 }
 
+variable "lambda_ecr_scan_notifications" {
+  description = "deploy lambda function to send notifications from ECR scans"
+  default = false
+}
+
 variable "target_s3_bucket" {
   description = "Target S3 bucket ARN used for the Lambda log data function"
   default     = ""
