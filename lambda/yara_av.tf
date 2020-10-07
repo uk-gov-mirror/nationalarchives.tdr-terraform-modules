@@ -79,7 +79,7 @@ resource "aws_iam_role_policy_attachment" "lambda_role_policy" {
 
 resource "aws_security_group" "allow_efs_lambda_av" {
   count       = local.count_av_yara
-  name        = "allow-efs"
+  name        = "allow-efs-lambda-antivirus"
   description = "Allow EFS inbound traffic"
   vpc_id      = data.aws_vpc.current.id
 
