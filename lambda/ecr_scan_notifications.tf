@@ -32,7 +32,7 @@ resource "aws_cloudwatch_log_group" "ecr_scan_notifications_lambda_log_group" {
 
 resource "aws_iam_policy" "ecr_scan_notifications_lambda_policy" {
   count  = local.count_ecr_scan_notifications
-  policy = templatefile("${path.module}/templates/ecr_scan_notifications_lambda.json.tpl", { account_id = data.aws_caller_identity.current.account_id })
+  policy = templatefile("${path.module}/templates/ecr_scan_notifications_lambda.json.tpl", { account_id = data.aws_caller_identity.current.account_id, environment = local.environment })
   name   = "${upper(var.project)}EcrScanNotificationsLambdaPolicy${title(local.environment)}"
 }
 
