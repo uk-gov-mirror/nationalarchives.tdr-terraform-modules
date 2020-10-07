@@ -17,6 +17,21 @@ resource "aws_lambda_function" "lambda_function" {
       OUTPUT_QUEUE   = local.api_update_queue_url
     }
   }
+
+  file_system_config {
+    # EFS file system access point ARN
+    arn              = var.backend_checks_efs_access_point.arn
+    local_mount_path = var.backend_checks_efs_root_directory_path
+  }
+
+  vpc_config {
+    subnet_ids         = [data.aws_subnet.efs_private_subnet_zero.id, data.aws_subnet.efs_private_subnet_one.id]
+    security_group_ids = aws_security_group.allow_efs_lambda_av.*.id
+  }
+
+  lifecycle {
+    ignore_changes = [filename]
+  }
 }
 
 resource "aws_lambda_event_source_mapping" "av_sqs_queue_mapping" {
@@ -60,4 +75,23 @@ resource "aws_iam_role_policy_attachment" "lambda_role_policy" {
   count      = local.count_av_yara
   policy_arn = aws_iam_policy.lambda_policy.*.arn[0]
   role       = aws_iam_role.lambda_iam_role.*.name[0]
+}
+
+resource "aws_security_group" "allow_efs_lambda_av" {
+  count       = local.count_av_yara
+  name        = "allow-efs"
+  description = "Allow EFS inbound traffic"
+  vpc_id      = data.aws_vpc.current.id
+
+  egress {
+    protocol    = "-1"
+    from_port   = 0
+    to_port     = 0
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = merge(
+    var.common_tags,
+    map("Name", "${var.project}-lambda-allow-efs-av-files")
+  )
 }
