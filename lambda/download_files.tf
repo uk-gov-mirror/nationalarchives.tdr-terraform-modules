@@ -12,6 +12,7 @@ resource "aws_lambda_function" "download_files_lambda_function" {
     variables = {
       ENVIRONMENT       = local.environment
       INPUT_QUEUE       = local.download_files_queue_url
+      ANTIVIRUS_QUEUE   = local.antivirus_queue_url
       FILE_FORMAT_QUEUE = local.file_format_queue_url
       AUTH_URL          = var.auth_url
       API_URL           = "${var.api_url}/graphql"
