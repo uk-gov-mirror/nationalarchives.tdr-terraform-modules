@@ -50,6 +50,16 @@
     {
       "Effect": "Allow",
       "Action": [
+        "ec2:CreateNetworkInterface",
+        "ec2:DescribeNetworkInterfaces",
+        "ec2:DeleteNetworkInterface",
+        "elasticfilesystem:ClientWrite"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
         "elasticfilesystem:ClientMount",
         "elasticfilesystem:DescribeMountTargets"
       ],
