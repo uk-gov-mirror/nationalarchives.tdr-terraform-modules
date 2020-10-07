@@ -33,14 +33,6 @@ data "aws_vpc" "current" {
 
 data "aws_availability_zones" "available" {}
 
-data "aws_nat_gateway" "main_zero" {
-  tags = map("Name", "nat-gateway-0-tdr-${local.environment}")
-}
-
-data "aws_nat_gateway" "main_one" {
-  tags = map("Name", "nat-gateway-1-tdr-${local.environment}")
-}
-
 data "aws_subnet" "efs_private_subnet_zero" {
   vpc_id = var.vpc_id
   tags = {
