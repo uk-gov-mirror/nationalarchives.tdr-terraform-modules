@@ -25,7 +25,7 @@ resource "aws_lambda_function" "lambda_function" {
   }
 
   vpc_config {
-    subnet_ids         = [data.aws_subnet.efs_private_subnet_zero.id, data.aws_subnet.efs_private_subnet_one.id]
+    subnet_ids         = flatten([data.aws_subnet.efs_private_subnet_zero.*.id, data.aws_subnet.efs_private_subnet_one.*.id])
     security_group_ids = aws_security_group.allow_efs_lambda_av.*.id
   }
 
@@ -81,7 +81,7 @@ resource "aws_security_group" "allow_efs_lambda_av" {
   count       = local.count_av_yara
   name        = "allow-efs-lambda-antivirus"
   description = "Allow EFS inbound traffic"
-  vpc_id      = data.aws_vpc.current.id
+  vpc_id      = data.aws_vpc.current[count.index].id
 
   egress {
     protocol    = "-1"

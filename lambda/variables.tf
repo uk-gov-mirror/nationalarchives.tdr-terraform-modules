@@ -32,12 +32,17 @@ variable "lambda_api_update" {
 }
 
 variable "lambda_file_format" {
-  description = "deploy lambda function to run the file format extraction"
+  description = "deploy Lambda function to run the file format extraction"
   default     = false
 }
 
 variable "lambda_download_files" {
-  description = "deploy lambda function to download files to EFS"
+  description = "deploy Lambda function to download files to EFS"
+  default     = false
+}
+
+variable "lambda_ecr_scan_notifications" {
+  description = "deploy Lambda function to send notifications from ECR scans"
   default     = false
 }
 
