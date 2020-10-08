@@ -69,7 +69,7 @@ resource "aws_iam_role_policy_attachment" "sns_topic_policy_attach" {
 resource "aws_iam_role_policy_attachment" "config_policy_attach" {
   count      = local.region == var.primary_region ? 1 : 0
   role       = aws_iam_role.config_role.*.name[0]
-  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSConfigRole"
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AWS_ConfigRole"
 }
 
 resource "aws_config_delivery_channel" "config_channel" {
