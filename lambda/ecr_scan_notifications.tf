@@ -11,7 +11,7 @@ resource "aws_lambda_function" "ecr_scan_notifications_lambda_function" {
   environment {
     variables = {
       SLACK_WEBHOOK = data.aws_ssm_parameter.ecr_notification_slack_webook[count.index].value
-      TO_EMAIL = "aws_tdr_management@nationalarchives.gov.uk"
+      TO_EMAIL      = "aws_tdr_management@nationalarchives.gov.uk"
     }
   }
 
