@@ -24,7 +24,6 @@
         "${update_queue}",
         "${input_sqs_queue}"
       ]
-
     },
     {
       "Effect": "Allow",
