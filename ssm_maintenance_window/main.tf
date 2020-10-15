@@ -10,9 +10,9 @@ resource "aws_ssm_maintenance_window" "maintenance_window" {
 
 resource "aws_ssm_maintenance_window_target" "maintenance_window_target" {
   resource_type = "INSTANCE"
-  window_id = aws_ssm_maintenance_window.maintenance_window.id
+  window_id     = aws_ssm_maintenance_window.maintenance_window.id
   targets {
-    key = "InstanceIds"
+    key    = "InstanceIds"
     values = [data.aws_instance.target_instance.id]
   }
 }

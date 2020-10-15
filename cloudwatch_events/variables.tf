@@ -13,7 +13,7 @@ variable "rule_description" {
   default = ""
 }
 variable "event_variables" {
-  type = map(string)
-  default = {}
+  type        = map(string)
+  default     = {}
   description = "A map of variables to pass to specific event patterns"
 }
