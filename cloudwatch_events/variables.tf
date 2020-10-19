@@ -8,3 +8,13 @@ variable "lambda_event_target_arn" {
   type        = list(string)
   default     = []
 }
+variable "rule_name" {}
+variable "rule_description" {
+  default = ""
+}
+variable "event_variables" {
+  type        = map(string)
+  default     = {}
+  description = "A map of variables to pass to specific event patterns"
+}
+
