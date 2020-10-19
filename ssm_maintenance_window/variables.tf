@@ -12,3 +12,4 @@ variable "instance_name" {
 variable "command" {
   description = "The command to execute in the task executed by the maintenance window"
 }
+

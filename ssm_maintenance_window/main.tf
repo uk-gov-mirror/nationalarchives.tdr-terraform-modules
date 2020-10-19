@@ -1,6 +1,5 @@
 data aws_caller_identity "current" {}
 
-
 resource "aws_ssm_maintenance_window" "maintenance_window" {
   name     = var.name
   schedule = var.schedule
@@ -40,3 +39,4 @@ resource "aws_ssm_maintenance_window_task" "maintenance_window_task" {
     }
   }
 }
+

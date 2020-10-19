@@ -4,3 +4,4 @@ data aws_instance "target_instance" {
     values = [var.instance_name]
   }
 }
+

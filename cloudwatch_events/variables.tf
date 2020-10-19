@@ -17,3 +17,4 @@ variable "event_variables" {
   default     = {}
   description = "A map of variables to pass to specific event patterns"
 }
+
