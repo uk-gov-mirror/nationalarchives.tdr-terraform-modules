@@ -15,9 +15,10 @@ resource "aws_lambda_function" "ecr_scan_lambda_function" {
 }
 
 resource "aws_lambda_permission" "lambda_allow_event" {
+  count         = local.count_ecr_scan
   statement_id  = "AllowExecutionFromCloudWatch"
   action        = "lambda:InvokeFunction"
-  function_name = aws_lambda_function.ecr_scan_lambda_function.function_name
+  function_name = aws_lambda_function.ecr_scan_lambda_function[count.index].function_name
   principal     = "events.amazonaws.com"
   source_arn    = var.periodic_ecr_image_scan_event_arn
 }
