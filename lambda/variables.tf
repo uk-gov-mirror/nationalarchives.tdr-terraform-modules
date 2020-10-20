@@ -48,7 +48,7 @@ variable "lambda_ecr_scan_notifications" {
 
 variable "lambda_ecr_scan" {
   description = "deploy Lambda function to run ECR image scans"
-  default = false
+  default     = false
 }
 
 variable "target_s3_bucket" {
