@@ -48,3 +48,12 @@ resource "aws_iam_role_policy_attachment" "ecr_scan_notifications_lambda_role_po
   policy_arn = aws_iam_policy.ecr_scan_notifications_lambda_policy.*.arn[0]
   role       = aws_iam_role.ecr_scan_notifications_lambda_iam_role.*.name[0]
 }
+
+resource "aws_lambda_permission" "lambda_permissions" {
+  for_each = var.event_rule_arns
+  statement_id  = "AllowExecutionFromEvents${split("/", each.key)[1]}"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.ecr_scan_notifications_lambda_function.*.arn[0]
+  principal     = "events.amazonaws.com"
+  source_arn    = each.value
+}

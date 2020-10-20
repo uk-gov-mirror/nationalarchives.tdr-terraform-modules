@@ -107,3 +107,8 @@ variable "mount_target_ids" {
   default = []
   type    = list(string)
 }
+
+variable "event_rule_arns" {
+  type = set(string)
+  default = []
+}
