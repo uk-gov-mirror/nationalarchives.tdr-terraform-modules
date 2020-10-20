@@ -109,6 +109,10 @@ variable "mount_target_ids" {
 }
 
 variable "event_rule_arns" {
-  type = set(string)
+  type    = set(string)
   default = []
+}
+
+variable "periodic_ecr_image_scan_event_arn" {
+  default = ""
 }
