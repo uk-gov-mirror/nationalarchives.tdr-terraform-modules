@@ -1,4 +1,7 @@
-variable "event_pattern" {}
+variable "event_pattern" {
+  default     = ""
+  description = "The event pattern for the rule. Cannot be used with schedule"
+}
 variable "log_group_event_target_arn" {
   description = "A Cloudwatch log group ARN to attach to the event"
   default     = ""
@@ -18,3 +21,7 @@ variable "event_variables" {
   description = "A map of variables to pass to specific event patterns"
 }
 
+variable "schedule" {
+  description = "The schedule for the event rule. Cannot be used with event pattern"
+  default     = ""
+}
