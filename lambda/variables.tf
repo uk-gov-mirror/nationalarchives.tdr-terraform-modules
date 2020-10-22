@@ -46,6 +46,11 @@ variable "lambda_ecr_scan_notifications" {
   default     = false
 }
 
+variable "lambda_ecr_scan" {
+  description = "deploy Lambda function to run ECR image scans"
+  default     = false
+}
+
 variable "target_s3_bucket" {
   description = "Target S3 bucket ARN used for the Lambda log data function"
   default     = ""
@@ -101,4 +106,13 @@ variable "use_efs" {
 variable "mount_target_ids" {
   default = []
   type    = list(string)
+}
+
+variable "event_rule_arns" {
+  type    = set(string)
+  default = []
+}
+
+variable "periodic_ecr_image_scan_event_arn" {
+  default = ""
 }
