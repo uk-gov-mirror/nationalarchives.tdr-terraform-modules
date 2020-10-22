@@ -4,10 +4,10 @@
     {
       "Effect": "Allow",
       "Action": [
-        "ecr:StartImageScan",
         "ecr:DescribeImages",
         "ecr:DescribeRepositories",
-        "ecr:ListImages"
+        "ecr:ListImages",
+        "ecr:StartImageScan"
       ],
       "Resource": "arn:aws:ecr:eu-west-2:${account_id}:repository/*"
     },

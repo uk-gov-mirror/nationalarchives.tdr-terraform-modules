@@ -50,7 +50,7 @@ resource "aws_iam_role_policy_attachment" "ecr_scan_notifications_lambda_role_po
 }
 
 resource "aws_lambda_permission" "lambda_permissions" {
-  for_each = var.event_rule_arns
+  for_each      = var.event_rule_arns
   statement_id  = "AllowExecutionFromEvents${split("/", each.key)[1]}"
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.ecr_scan_notifications_lambda_function.*.arn[0]
