@@ -9,7 +9,7 @@ resource "aws_config_configuration_recorder" "config_recorder" {
 }
 
 resource "aws_sns_topic" "config_topic" {
-  name  = "${var.project}-config-${local.environment}-${local.region}"
+  name = "${var.project}-config-${local.environment}-${local.region}"
   tags = merge(
     var.common_tags,
     map(
