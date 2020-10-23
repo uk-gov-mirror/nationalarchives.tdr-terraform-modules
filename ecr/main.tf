@@ -13,3 +13,8 @@ resource "aws_ecr_repository_policy" "ecr_repository_policy" {
   policy     = templatefile("./tdr-terraform-modules/ecr/templates/${var.policy_name}.json.tpl", var.policy_variables)
   repository = aws_ecr_repository.ecr_repository.name
 }
+
+resource "aws_ecr_lifecycle_policy" "remove_untagged_images" {
+  policy = templatefile("${path.module}/templates/expire_untagged_images.json.tpl", {})
+  repository = aws_ecr_repository.ecr_repository.name
+}
