@@ -7,7 +7,7 @@
         "tagStatus": "untagged",
         "countType": "sinceImagePushed",
         "countUnit": "days",
-        "countNumber": 1
+        "countNumber": 7
       },
       "action": {
         "type": "expire"
