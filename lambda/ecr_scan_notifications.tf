@@ -22,7 +22,7 @@ resource "aws_lambda_function" "ecr_scan_notifications_lambda_function" {
 
 data aws_ssm_parameter "notification_email_prefix" {
   count = local.count_ecr_scan_notifications
-  name = "/${local.environment}/notification/email/prefix"
+  name  = "/${local.environment}/notification/email/prefix"
 }
 
 data aws_ssm_parameter "ecr_notification_slack_webook" {
