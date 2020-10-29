@@ -11,13 +11,18 @@ resource "aws_lambda_function" "ecr_scan_notifications_lambda_function" {
   environment {
     variables = {
       SLACK_WEBHOOK = data.aws_ssm_parameter.ecr_notification_slack_webook[count.index].value
-      TO_EMAIL      = "tdr-secops@nationalarchives.gov.uk"
+      TO_EMAIL      = "${data.aws_ssm_parameter.notification_email_prefix[count.index].value}@nationalarchives.gov.uk"
     }
   }
 
   lifecycle {
     ignore_changes = [filename]
   }
+}
+
+data aws_ssm_parameter "notification_email_prefix" {
+  count = local.count_ecr_scan_notifications
+  name = "/${local.environment}/notification/email/prefix"
 }
 
 data aws_ssm_parameter "ecr_notification_slack_webook" {
@@ -33,7 +38,7 @@ resource "aws_cloudwatch_log_group" "ecr_scan_notifications_lambda_log_group" {
 
 resource "aws_iam_policy" "ecr_scan_notifications_lambda_policy" {
   count  = local.count_ecr_scan_notifications
-  policy = templatefile("${path.module}/templates/ecr_scan_notifications_lambda.json.tpl", { account_id = data.aws_caller_identity.current.account_id, environment = local.environment })
+  policy = templatefile("${path.module}/templates/ecr_scan_notifications_lambda.json.tpl", { account_id = data.aws_caller_identity.current.account_id, environment = local.environment, email = "${data.aws_ssm_parameter.notification_email_prefix[count.index].value}@nationalarchives.gov.uk" })
   name   = "${upper(var.project)}EcrScanNotificationsLambdaPolicy${title(local.environment)}"
 }
 
