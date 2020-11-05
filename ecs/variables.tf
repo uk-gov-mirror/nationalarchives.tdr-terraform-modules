@@ -32,6 +32,10 @@ variable "grafana_build" {
   default = false
 }
 
+variable "consignment_export" {
+  default = false
+}
+
 variable "grafana_database_type" {
   default = "postgres"
 }
