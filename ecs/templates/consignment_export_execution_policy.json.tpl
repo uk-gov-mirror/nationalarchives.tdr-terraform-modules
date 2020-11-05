@@ -27,7 +27,7 @@
         "ecr:BatchGetImage",
         "ecr:GetDownloadUrlForLayer"
       ],
-      "Resource": "arn:aws:ecr:eu-west-2:${management_account_number}:repository/file-format-build"
+      "Resource": "arn:aws:ecr:eu-west-2:${management_account_number}:repository/consignment-export"
     },
     {
       "Effect": "Allow",
