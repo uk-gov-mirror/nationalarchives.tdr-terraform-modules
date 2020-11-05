@@ -20,7 +20,7 @@
         "Overrides": {
           "ContainerOverrides": [
             {
-              "Name": "${task_name}",
+              "Name": "consignmentexport",
               "Environment": [
                 {
                   "Name": "CONSIGNMENT_ID",

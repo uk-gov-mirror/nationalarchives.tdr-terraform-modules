@@ -17,3 +17,11 @@ output "consignment_export_task_arn" {
 output "consignment_export_cluster_arn" {
   value = local.consignment_export_cluster_arn
 }
+
+output "consignment_export_task_role_arn" {
+  value = var.consignment_export == true ? aws_iam_role.consignment_export_ecs_task.*.arn[0] : ""
+}
+
+output "consignment_export_execution_role_arn" {
+  value = var.consignment_export == true ? aws_iam_role.consignment_export_ecs_execution.*.arn[0] : ""
+}

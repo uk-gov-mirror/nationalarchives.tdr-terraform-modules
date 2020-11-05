@@ -1,6 +1,6 @@
 [
   {
-    "name": "fileformatbuild",
+    "name": "consignmentexport",
     "image": "${management_account}.dkr.ecr.eu-west-2.amazonaws.com/consignment-export:${app_environment}",
     "networkMode": "awsvpc",
     "mountPoints": [

@@ -32,6 +32,16 @@
     {
       "Effect": "Allow",
       "Action": [
+        "iam:PassRole"
+      ],
+      "Resource": [
+        "${task_role}",
+        "${execution_role}"
+      ]
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
         "logs:CreateLogDelivery",
         "logs:GetLogDelivery",
         "logs:UpdateLogDelivery",
