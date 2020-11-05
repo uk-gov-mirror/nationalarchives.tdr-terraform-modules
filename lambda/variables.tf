@@ -51,6 +51,11 @@ variable "lambda_ecr_scan" {
   default     = false
 }
 
+variable "lambda_export_authoriser" {
+  description = "deploy Lambda function for the export api authoriser"
+  default     = false
+}
+
 variable "target_s3_bucket" {
   description = "Target S3 bucket ARN used for the Lambda log data function"
   default     = ""

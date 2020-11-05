@@ -38,7 +38,7 @@ data "aws_subnet" "efs_private_subnet_zero" {
   count  = local.count_efs
   vpc_id = var.vpc_id
   tags = {
-    Name = "tdr-efs-private-subnet-0-${local.environment}"
+    Name = "tdr-efs-private-subnet-backend-checks-efs-0-${local.environment}"
   }
 }
 
@@ -46,6 +46,6 @@ data "aws_subnet" "efs_private_subnet_one" {
   count  = local.count_efs
   vpc_id = var.vpc_id
   tags = {
-    Name = "tdr-efs-private-subnet-1-${local.environment}"
+    Name = "tdr-efs-private-subnet-backend-checks-efs-1-${local.environment}"
   }
 }

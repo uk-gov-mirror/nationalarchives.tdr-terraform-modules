@@ -5,7 +5,7 @@ resource "aws_lambda_function" "file_format_lambda_function" {
   role          = aws_iam_role.file_format_lambda_iam_role.*.arn[0]
   runtime       = "java11"
   filename      = "${path.module}/functions/file-format.jar"
-  timeout       = 180
+  timeout       = 900
   memory_size   = 1024
   tags          = var.common_tags
   environment {
