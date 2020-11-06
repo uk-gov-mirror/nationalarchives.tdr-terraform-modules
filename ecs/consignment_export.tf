@@ -6,17 +6,17 @@ data "aws_vpc" "consignment_export_current" {
 }
 
 resource "aws_ecs_task_definition" "consignment_export_task_definition" {
-  count                    = local.count_consignment_export
-  container_definitions    = templatefile(
-  "${path.module}/templates/consignment_export.json.tpl", {
-    log_group_name = aws_cloudwatch_log_group.consignment_export_log_group[count.index].name,
-    app_environment = local.environment,
-    management_account = data.aws_ssm_parameter.mgmt_account_number.value,
-    backend_client_secret_path = var.backend_client_secret_path
-    clean_bucket = var.clean_bucket
-    output_bucket = var.output_bucket
-    api_url = "${var.api_url}/graphql"
-    auth_url = var.auth_url
+  count = local.count_consignment_export
+  container_definitions = templatefile(
+    "${path.module}/templates/consignment_export.json.tpl", {
+      log_group_name             = aws_cloudwatch_log_group.consignment_export_log_group[count.index].name,
+      app_environment            = local.environment,
+      management_account         = data.aws_ssm_parameter.mgmt_account_number.value,
+      backend_client_secret_path = var.backend_client_secret_path
+      clean_bucket               = var.clean_bucket
+      output_bucket              = var.output_bucket
+      api_url                    = "${var.api_url}/graphql"
+      auth_url                   = var.auth_url
   })
   family                   = "consignment-export-${local.environment}"
   task_role_arn            = aws_iam_role.consignment_export_ecs_task[count.index].arn
@@ -78,7 +78,7 @@ resource "aws_iam_policy" "consignment_export_ecs_task_policy" {
 resource "aws_iam_policy" "consignment_export_ecs_execution_policy" {
   count  = local.count_consignment_export
   name   = "${upper(var.project)}ConsignmentExportECSExecutionPolicy${title(local.environment)}"
-  policy = templatefile("${path.module}/templates/consignment_export_execution_policy.json.tpl", { log_group_arn = aws_cloudwatch_log_group.consignment_export_log_group[count.index].arn, file_system_arn = data.aws_efs_file_system.efs_file_system.arn, management_account_number = data.aws_ssm_parameter.mgmt_account_number.value})
+  policy = templatefile("${path.module}/templates/consignment_export_execution_policy.json.tpl", { log_group_arn = aws_cloudwatch_log_group.consignment_export_log_group[count.index].arn, file_system_arn = data.aws_efs_file_system.efs_file_system.arn, management_account_number = data.aws_ssm_parameter.mgmt_account_number.value })
 }
 
 resource "aws_iam_role_policy_attachment" "consignment_export_task_policy_attachment" {

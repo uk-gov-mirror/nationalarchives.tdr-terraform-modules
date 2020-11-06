@@ -10,7 +10,7 @@ resource "aws_lambda_function" "export_api_authoriser_lambda_function" {
   tags          = var.common_tags
   environment {
     variables = {
-      API_URL       = "${var.api_url}/graphql"
+      API_URL = "${var.api_url}/graphql"
     }
   }
 
@@ -32,15 +32,15 @@ resource "aws_iam_role" "export_api_authoriser_lambda_iam_role" {
 }
 
 resource "aws_iam_policy" "export_authoriser_policy" {
-  count = local.count_export_api_authoriser
-  name               = "${upper(var.project)}ExportApiAuthoriserLambdaPolicy${title(local.environment)}"
-  policy = templatefile("${path.module}/templates/export_authoriser_policy.json.tpl", {account_id = data.aws_caller_identity.current.account_id, environment = local.environment })
+  count  = local.count_export_api_authoriser
+  name   = "${upper(var.project)}ExportApiAuthoriserLambdaPolicy${title(local.environment)}"
+  policy = templatefile("${path.module}/templates/export_authoriser_policy.json.tpl", { account_id = data.aws_caller_identity.current.account_id, environment = local.environment })
 }
 
 resource "aws_iam_role_policy_attachment" "export_authoriser_attachment" {
-  count = local.count_export_api_authoriser
+  count      = local.count_export_api_authoriser
   policy_arn = aws_iam_policy.export_authoriser_policy[count.index].arn
-  role = aws_iam_role.export_api_authoriser_lambda_iam_role[count.index].id
+  role       = aws_iam_role.export_api_authoriser_lambda_iam_role[count.index].id
 }
 
 data "aws_api_gateway_rest_api" "export_rest_api" {
