@@ -7,12 +7,12 @@
   "basePath" : "/${environment}",
   "schemes" : [ "https" ],
   "paths" : {
-    "/stepfunctions/{body+}" : {
+    "/export/{consignmentId+}" : {
       "post" : {
         "consumes" : [ "application/json" ],
         "produces" : [ "application/json" ],
         "parameters" : [ {
-          "name" : "body",
+          "name" : "consignmentId",
           "in" : "path",
           "required" : true,
           "type" : "string"
@@ -41,12 +41,12 @@
             "integration.request.header.Content-Type" : "'application/x-amz-json-1.1'"
           },
           "requestTemplates" : {
-            "application/json" : "{\"input\": \"$util.escapeJavaScript($input.json('$'))\",\"stateMachineArn\": \"${state_machine_arn}\"}"
+            "application/json" : "{\"input\": \"{\\\"consignmentId\\\": \\\"$input.params('consignmentId')\\\"}\",\"stateMachineArn\": \"${state_machine_arn}\"}"
           },
           "passthroughBehavior" : "when_no_templates",
           "httpMethod" : "POST",
           "cacheNamespace" : "pddmb7",
-          "cacheKeyParameters" : [ "method.request.path.body" ],
+          "cacheKeyParameters" : [ "method.request.path.consignmentId" ],
           "type" : "aws"
         }
       }

@@ -4,7 +4,7 @@ resource "aws_api_gateway_rest_api" "rest_api" {
   tags = var.common_tags
 }
 
-resource "aws_api_gateway_account" "demo" {
+resource "aws_api_gateway_account" "rest_api_account" {
   cloudwatch_role_arn = aws_iam_role.rest_api_cloudwatch_role.arn
 }
 
@@ -26,7 +26,6 @@ resource "aws_iam_role_policy_attachment" "cloudwatch_policy_attachment" {
 resource "aws_api_gateway_deployment" "api_deployment" {
   rest_api_id = aws_api_gateway_rest_api.rest_api.id
   stage_name  = var.environment
-
   lifecycle {
     create_before_destroy = true
   }
