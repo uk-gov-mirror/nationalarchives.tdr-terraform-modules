@@ -5,6 +5,7 @@ resource "aws_ssm_maintenance_window" "maintenance_window" {
   schedule = var.schedule
   duration = var.duration
   cutoff   = var.cutoff
+  tags     = var.common_tags
 }
 
 resource "aws_ssm_maintenance_window_target" "maintenance_window_target" {
@@ -39,4 +40,3 @@ resource "aws_ssm_maintenance_window_task" "maintenance_window_task" {
     }
   }
 }
-
