@@ -15,6 +15,6 @@ data "aws_ssm_parameter" "prod_account_number" {
   name  = "/mgmt/prod_account"
 }
 
-data "aws_ssm_parameter" "tna_organisation_root_account_number" {
-  name = "/mgmt/tna_organisation_root_account"
+data "aws_ssm_parameter" "aws_elb_account_number" {
+  name = "/mgmt/aws_elb_account"
 }
