@@ -12,4 +12,8 @@ variable "instance_name" {
 variable "command" {
   description = "The command to execute in the task executed by the maintenance window"
 }
-
+variable "common_tags" {
+  description = "tags used across the project"
+  type        = map(string)
+  default     = {}
+}
