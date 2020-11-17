@@ -6,3 +6,6 @@ variable "template" {}
 variable "name" {}
 variable "environment" {}
 variable "common_tags" {}
+variable "dns_name" {}
+variable "certificate_arn" {}
+variable "zone_id" {}

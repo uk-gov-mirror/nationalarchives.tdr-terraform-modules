@@ -50,3 +50,20 @@ resource "aws_iam_role_policy_attachment" "rest_api_policy_attachment" {
   policy_arn = aws_iam_policy.rest_api_policy.arn
   role       = aws_iam_role.rest_api_role.name
 }
+
+resource "aws_api_gateway_domain_name" "gateway_domain_name" {
+  certificate_arn = var.certificate_arn
+  domain_name     = var.dns_name
+}
+
+resource "aws_route53_record" "example" {
+  name    = aws_api_gateway_domain_name.gateway_domain_name.domain_name
+  type    = "A"
+  zone_id = var.zone_id
+
+  alias {
+    evaluate_target_health = true
+    name                   = aws_api_gateway_domain_name.gateway_domain_name.cloudfront_domain_name
+    zone_id                = aws_api_gateway_domain_name.gateway_domain_name.cloudfront_zone_id
+  }
+}
