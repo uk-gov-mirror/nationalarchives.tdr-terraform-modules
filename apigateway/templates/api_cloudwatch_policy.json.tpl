@@ -8,9 +8,9 @@
         "logs:CreateLogStream",
         "logs:DescribeLogGroups",
         "logs:DescribeLogStreams",
-        "logs:PutLogEvents",
+        "logs:FilterLogEvents",
         "logs:GetLogEvents",
-        "logs:FilterLogEvents"
+        "logs:PutLogEvents"
       ],
       "Resource": "*"
     }
