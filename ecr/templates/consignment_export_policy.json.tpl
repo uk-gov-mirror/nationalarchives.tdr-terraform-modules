@@ -6,7 +6,8 @@
       "Effect": "Allow",
       "Principal": {
         "AWS": [
-          "arn:aws:iam::${intg_account}:role/TDRConsignmentExportECSExecutionRoleIntg"
+          "arn:aws:iam::${intg_account}:role/TDRConsignmentExportECSExecutionRoleIntg",
+          "arn:aws:iam::${staging_account}:role/TDRConsignmentExportECSExecutionRoleStaging"
         ]
       },
       "Action": [

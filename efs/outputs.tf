@@ -13,3 +13,4 @@ output "root_directory_path" {
 output "private_subnets" {
   value = aws_subnet.efs_private.*.id
 }
+

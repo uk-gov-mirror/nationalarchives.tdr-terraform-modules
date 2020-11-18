@@ -43,16 +43,11 @@ resource "aws_iam_role_policy_attachment" "export_authoriser_attachment" {
   role       = aws_iam_role.export_api_authoriser_lambda_iam_role[count.index].id
 }
 
-data "aws_api_gateway_rest_api" "export_rest_api" {
-  count = local.count_export_api_authoriser
-  name  = "ExportAPI"
-}
-
 resource "aws_lambda_permission" "export_api_lambda_permissions" {
   count         = local.count_export_api_authoriser
   statement_id  = "AllowExecutionFromApiGateway"
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.export_api_authoriser_lambda_function.*.arn[count.index]
   principal     = "apigateway.amazonaws.com"
-  source_arn    = "${data.aws_api_gateway_rest_api.export_rest_api.*.execution_arn[count.index]}/authorizers/*"
+  source_arn    = "${var.api_gateway_arn}/authorizers/*"
 }

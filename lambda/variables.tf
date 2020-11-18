@@ -121,3 +121,11 @@ variable "event_rule_arns" {
 variable "periodic_ecr_image_scan_event_arn" {
   default = ""
 }
+
+variable "private_subnet_ids" {
+  default = []
+}
+
+variable "api_gateway_arn" {
+  default = ""
+}
