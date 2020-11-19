@@ -47,7 +47,7 @@ resource "aws_lambda_permission" "export_api_lambda_permissions" {
   count         = local.count_export_api_authoriser
   statement_id  = "AllowExecutionFromApiGateway"
   action        = "lambda:InvokeFunction"
-  function_name = aws_lambda_function.export_api_authoriser_lambda_function.*.arn[count.index]
+  function_name = "${var.project}-export-api-authoriser-${local.environment}"
   principal     = "apigateway.amazonaws.com"
   source_arn    = "${var.api_gateway_arn}/authorizers/*"
 }
