@@ -5,7 +5,7 @@ resource "aws_lambda_function" "file_format_lambda_function" {
   role          = aws_iam_role.file_format_lambda_iam_role.*.arn[0]
   runtime       = "java11"
   filename      = "${path.module}/functions/file-format.jar"
-  timeout       = 180
+  timeout       = 900
   memory_size   = 1024
   tags          = var.common_tags
   environment {
@@ -23,7 +23,7 @@ resource "aws_lambda_function" "file_format_lambda_function" {
   }
 
   vpc_config {
-    subnet_ids         = flatten([data.aws_subnet.efs_private_subnet_zero.*.id, data.aws_subnet.efs_private_subnet_one.*.id])
+    subnet_ids         = var.private_subnet_ids
     security_group_ids = aws_security_group.allow_efs_lambda_file_format.*.id
   }
 

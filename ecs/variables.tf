@@ -32,6 +32,10 @@ variable "grafana_build" {
   default = false
 }
 
+variable "consignment_export" {
+  default = false
+}
+
 variable "grafana_database_type" {
   default = "postgres"
 }
@@ -40,4 +44,24 @@ variable "project" {}
 
 variable "vpc_private_subnet_ids" {
   default = []
+}
+
+variable "api_url" {
+  default = ""
+}
+
+variable "auth_url" {
+  default = ""
+}
+
+variable "clean_bucket" {
+  default = ""
+}
+
+variable "output_bucket" {
+  default = ""
+}
+
+variable "backend_client_secret_path" {
+  default = ""
 }

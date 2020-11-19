@@ -51,6 +51,11 @@ variable "lambda_ecr_scan" {
   default     = false
 }
 
+variable "lambda_export_authoriser" {
+  description = "deploy Lambda function for the export api authoriser"
+  default     = false
+}
+
 variable "target_s3_bucket" {
   description = "Target S3 bucket ARN used for the Lambda log data function"
   default     = ""
@@ -114,5 +119,13 @@ variable "event_rule_arns" {
 }
 
 variable "periodic_ecr_image_scan_event_arn" {
+  default = ""
+}
+
+variable "private_subnet_ids" {
+  default = []
+}
+
+variable "api_gateway_arn" {
   default = ""
 }
