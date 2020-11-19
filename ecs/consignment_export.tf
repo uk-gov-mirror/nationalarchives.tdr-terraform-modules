@@ -17,6 +17,7 @@ resource "aws_ecs_task_definition" "consignment_export_task_definition" {
       output_bucket              = var.output_bucket
       api_url                    = "${var.api_url}/graphql"
       auth_url                   = var.auth_url
+      region = var.aws_region
   })
   family                   = "consignment-export-${local.environment}"
   task_role_arn            = aws_iam_role.consignment_export_ecs_task[count.index].arn

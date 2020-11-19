@@ -13,17 +13,17 @@
     {
       "Effect": "Allow",
       "Action": [
-        "ecs:StopTask",
-        "ecs:DescribeTasks"
+        "ecs:DescribeTasks",
+        "ecs:StopTask"
       ],
       "Resource": "*"
     },
     {
       "Effect": "Allow",
       "Action": [
-        "events:PutTargets",
+        "events:DescribeRule",
         "events:PutRule",
-        "events:DescribeRule"
+        "events:PutTargets"
       ],
       "Resource": [
         "arn:aws:events:eu-west-2:${account_id}:rule/StepFunctionsGetEventsForECSTaskRule"
@@ -43,13 +43,13 @@
       "Effect": "Allow",
       "Action": [
         "logs:CreateLogDelivery",
-        "logs:GetLogDelivery",
-        "logs:UpdateLogDelivery",
         "logs:DeleteLogDelivery",
+        "logs:DescribeLogGroups",
+        "logs:DescribeResourcePolicies",
+        "logs:GetLogDelivery",
         "logs:ListLogDeliveries",
         "logs:PutResourcePolicy",
-        "logs:DescribeResourcePolicies",
-        "logs:DescribeLogGroups"
+        "logs:UpdateLogDelivery"
       ],
       "Resource": "*"
     }

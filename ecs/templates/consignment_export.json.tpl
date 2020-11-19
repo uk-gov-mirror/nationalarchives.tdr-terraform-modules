@@ -1,7 +1,7 @@
 [
   {
     "name": "consignmentexport",
-    "image": "${management_account}.dkr.ecr.eu-west-2.amazonaws.com/consignment-export:${app_environment}",
+    "image": "${management_account}.dkr.ecr.${region}.amazonaws.com/consignment-export:${app_environment}",
     "networkMode": "awsvpc",
     "secrets": [
       {
@@ -37,7 +37,7 @@
       "logDriver": "awslogs",
       "options": {
         "awslogs-group": "${log_group_name}",
-        "awslogs-region": "eu-west-2",
+        "awslogs-region": "${region}",
         "awslogs-stream-prefix": "ecs"
       }
     }

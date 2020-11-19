@@ -1,5 +1,5 @@
 variable "common_tags" {}
-variable "name" {}
+variable "step_function_name" {}
 variable "environment" {}
 variable "definition_variables" {
   default = {}
