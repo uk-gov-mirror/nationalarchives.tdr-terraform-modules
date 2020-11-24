@@ -16,7 +16,7 @@
       "Effect": "Allow",
       "Action": "ses:SendEmail",
       "Resource": [
-        "arn:aws:ses:eu-west-2:${account_id}:identity/aws_tdr_management@nationalarchives.gov.uk",
+        "arn:aws:ses:eu-west-2:${account_id}:identity/${email}",
         "arn:aws:ses:eu-west-2:${account_id}:identity/tdr-management.nationalarchives.gov.uk"
       ]
     }
