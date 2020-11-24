@@ -34,7 +34,7 @@ resource "aws_efs_file_system_policy" "file_system_policy" {
 }
 
 resource "aws_security_group" "mount_target_sg" {
-  name        = "mount-target-security-group"
+  name        = "${var.function}-mount-target-security-group"
   description = "Mount target security group"
   vpc_id      = data.aws_vpc.current.id
 
@@ -61,12 +61,12 @@ resource "aws_security_group" "mount_target_sg" {
 
 resource "aws_subnet" "efs_private" {
   count             = 2
-  cidr_block        = cidrsubnet(data.aws_vpc.current.cidr_block, 6, count.index + 4)
+  cidr_block        = cidrsubnet(data.aws_vpc.current.cidr_block, 6, count.index + var.netnum_offset)
   availability_zone = data.aws_availability_zones.available.names[count.index]
   vpc_id            = data.aws_vpc.current.id
   tags = merge(
     var.common_tags,
-    map("Name", "tdr-efs-private-subnet-${count.index}-${local.environment}")
+    map("Name", "tdr-efs-private-subnet-${var.function}-${count.index}-${local.environment}")
   )
 }
 

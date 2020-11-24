@@ -29,7 +29,7 @@ resource "aws_lambda_function" "download_files_lambda_function" {
   }
 
   vpc_config {
-    subnet_ids         = flatten([data.aws_subnet.efs_private_subnet_zero.*.id, data.aws_subnet.efs_private_subnet_one.*.id])
+    subnet_ids         = var.private_subnet_ids
     security_group_ids = aws_security_group.allow_efs_lambda_download_files.*.id
   }
 

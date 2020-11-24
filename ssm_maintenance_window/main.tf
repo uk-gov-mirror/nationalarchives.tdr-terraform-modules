@@ -5,6 +5,7 @@ resource "aws_ssm_maintenance_window" "maintenance_window" {
   schedule = var.schedule
   duration = var.duration
   cutoff   = var.cutoff
+  tags     = var.common_tags
 }
 
 resource "aws_ssm_maintenance_window_target" "maintenance_window_target" {
@@ -12,7 +13,7 @@ resource "aws_ssm_maintenance_window_target" "maintenance_window_target" {
   window_id     = aws_ssm_maintenance_window.maintenance_window.id
   targets {
     key    = "InstanceIds"
-    values = [data.aws_instance.target_instance.id]
+    values = [var.ec2_instance_id]
   }
 }
 
@@ -27,7 +28,7 @@ resource "aws_ssm_maintenance_window_task" "maintenance_window_task" {
 
   targets {
     key    = "InstanceIds"
-    values = [data.aws_instance.target_instance.id]
+    values = [var.ec2_instance_id]
   }
 
   task_invocation_parameters {
@@ -39,4 +40,3 @@ resource "aws_ssm_maintenance_window_task" "maintenance_window_task" {
     }
   }
 }
-
