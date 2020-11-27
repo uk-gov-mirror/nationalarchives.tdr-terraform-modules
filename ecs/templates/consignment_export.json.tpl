@@ -29,7 +29,7 @@
     ],
     "mountPoints": [
       {
-        "containerPath": "/tmp/export",
+        "containerPath": "/home/consignment-export/export",
         "sourceVolume": "consignmentexport"
       }
     ],
