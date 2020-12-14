@@ -17,3 +17,8 @@ output alb_target_group_id {
 output alb_arn {
   value = aws_alb.alb_module.arn
 }
+
+output alb_id {
+  value = aws_alb.alb_module.id
+}
+
