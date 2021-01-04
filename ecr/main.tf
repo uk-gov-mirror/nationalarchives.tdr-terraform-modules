@@ -5,7 +5,10 @@ resource "aws_ecr_repository" "ecr_repository" {
   image_scanning_configuration {
     scan_on_push = true
   }
-  tags = var.common_tags
+  tags = merge(
+    var.common_tags,
+    map("ImageSource", var.image_source_url)
+  )
 }
 
 resource "aws_ecr_repository_policy" "ecr_repository_policy" {
