@@ -7,7 +7,6 @@ variable "name" {}
 
 variable "image_source_url" {
   type        = string
-  default     = "unknown"
   description = "The URL of the Dockerfile or other source used to build the images in this repository"
 }
 
