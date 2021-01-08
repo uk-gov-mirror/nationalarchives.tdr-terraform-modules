@@ -79,6 +79,15 @@ resource "aws_s3_bucket" "bucket" {
     }
   }
 
+  dynamic "lifecycle_rule" {
+    for_each = var.abort_incomplete_uploads == true ? ["include_block"] : []
+    content {
+      id                                     = "abort-incomplete-uploads"
+      enabled                                = true
+      abort_incomplete_multipart_upload_days = 7
+    }
+  }
+
   dynamic "logging" {
     for_each = var.access_logs == true ? ["include_block"] : []
     content {
