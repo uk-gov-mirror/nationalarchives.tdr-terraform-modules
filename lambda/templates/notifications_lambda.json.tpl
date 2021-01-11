@@ -8,8 +8,8 @@
         "logs:PutLogEvents"
       ],
       "Resource": [
-        "arn:aws:logs:eu-west-2:${account_id}:log-group:/aws/lambda/tdr-ecr-scan-notifications-${environment}",
-        "arn:aws:logs:eu-west-2:${account_id}:log-group:/aws/lambda/tdr-ecr-scan-notifications-${environment}:log-stream:*"
+        "arn:aws:logs:eu-west-2:${account_id}:log-group:/aws/lambda/tdr-notifications-${environment}",
+        "arn:aws:logs:eu-west-2:${account_id}:log-group:/aws/lambda/tdr-notifications-${environment}:log-stream:*"
       ]
     },
     {

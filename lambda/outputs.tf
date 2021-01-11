@@ -15,7 +15,7 @@ output "checksum_lambda_sg_id" {
 }
 
 output "ecr_scan_notification_lambda_arn" {
-  value = aws_lambda_function.ecr_scan_notifications_lambda_function.*.arn
+  value = aws_lambda_function.notifications_lambda_function.*.arn
 }
 
 output "ecr_scan_lambda_arn" {
