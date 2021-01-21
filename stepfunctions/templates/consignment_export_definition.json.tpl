@@ -5,6 +5,14 @@
     "Run ECS task": {
       "Type": "Task",
       "Resource": "arn:aws:states:::ecs:runTask.sync",
+      "Catch": [
+        {
+          "ErrorEquals": [
+            "States.TaskFailed"
+          ],
+          "Next": "Handle escaped JSON from error cause"
+        }
+      ],
       "Parameters": {
         "LaunchType": "FARGATE",
         "Cluster": "${cluster_arn}",
@@ -30,6 +38,37 @@
             }
           ]
         }
+      },
+      "Next": "Task complete notification"
+    },
+    "Task complete notification": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::sns:publish",
+      "Parameters": {
+        "Message": {
+          "consignmentId.$": "$.Overrides.ContainerOverrides[0].Environment[0].Value",
+          "success": true
+        },
+        "TopicArn": "${sns_topic}"
+      },
+      "End": true
+    },
+    "Handle escaped JSON from error cause": {
+      "Type": "Pass",
+      "Parameters": {
+        "Cause.$": "States.StringToJson($.Cause)"
+      },
+      "Next": "Task failed notification"
+    },
+    "Task failed notification": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::sns:publish",
+      "Parameters": {
+        "Message": {
+          "consignmentId.$": "$.Cause.Overrides.ContainerOverrides[0].Environment[0].Value",
+          "success": false
+        },
+        "TopicArn": "${sns_topic}"
       },
       "End": true
     }

@@ -12,3 +12,6 @@ variable "policy_variables" {
   default = {}
   type    = map(string)
 }
+variable "notification_sns_topic" {
+  default = ""
+}

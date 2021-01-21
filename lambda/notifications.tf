@@ -62,3 +62,27 @@ resource "aws_lambda_permission" "lambda_permissions" {
   principal     = "events.amazonaws.com"
   source_arn    = each.value
 }
+
+resource "aws_lambda_permission" "lambda_permissions_sns" {
+  for_each      = var.sns_topic_arns
+  statement_id  = "AllowExecutionFromSNS${split(":", each.key)[5]}"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.notifications_lambda_function.*.arn[0]
+  principal     = "sns.amazonaws.com"
+  source_arn    = each.value
+}
+
+resource "aws_sns_topic_subscription" "intg_topic_subscription" {
+  count     = local.count_notifications
+  endpoint  = aws_lambda_function.notifications_lambda_function.*.arn[count.index]
+  protocol  = "lambda"
+  topic_arn = "arn:aws:sns:eu-west-2:${data.aws_ssm_parameter.intg_account_number.*.value[count.index]}:tdr-notifications-intg"
+}
+
+resource "aws_sns_topic_subscription" "staging_topic_subscription" {
+  count     = local.count_notifications
+  endpoint  = aws_lambda_function.notifications_lambda_function.*.arn[count.index]
+  protocol  = "lambda"
+  topic_arn = "arn:aws:sns:eu-west-2:${data.aws_ssm_parameter.staging_account_number.*.value[count.index]}:tdr-notifications-staging"
+}
+// Need to add a prod subscription when it exists

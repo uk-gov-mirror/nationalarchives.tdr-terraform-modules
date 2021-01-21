@@ -52,6 +52,13 @@
         "logs:UpdateLogDelivery"
       ],
       "Resource": "*"
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "sns:Publish"
+      ],
+      "Resource": "${sns_topic}"
     }
   ]
 }
