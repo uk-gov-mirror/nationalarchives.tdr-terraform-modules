@@ -118,6 +118,11 @@ variable "event_rule_arns" {
   default = []
 }
 
+variable "sns_topic_arns" {
+  type    = set(string)
+  default = []
+}
+
 variable "periodic_ecr_image_scan_event_arn" {
   default = ""
 }

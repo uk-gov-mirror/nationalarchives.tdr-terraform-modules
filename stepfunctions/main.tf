@@ -12,7 +12,7 @@ resource "aws_iam_role" "state_machine_role" {
 
 resource "aws_iam_policy" "state_machine_policy" {
   name   = "TDR${var.step_function_name}Policy${title(var.environment)}"
-  policy = templatefile("${path.module}/templates/${var.policy}_policy.json.tpl", merge(var.policy_variables, { account_id = data.aws_caller_identity.current.account_id }))
+  policy = templatefile("${path.module}/templates/${var.policy}_policy.json.tpl", merge(var.policy_variables, { account_id = data.aws_caller_identity.current.account_id, sns_topic = var.notification_sns_topic }))
 }
 
 resource "aws_iam_role_policy_attachment" "state_machine_attachment" {
