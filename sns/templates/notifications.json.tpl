@@ -1,9 +1,9 @@
 {
   "Version": "2012-10-17",
-  "Id": "default_policy",
+  "Id": "allow_account_access_to_topic_policy",
   "Statement": [
     {
-      "Sid": "default_statement",
+      "Sid": "allow_account_access_to_topic",
       "Effect": "Allow",
       "Principal": {
         "AWS": "*"
