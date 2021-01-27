@@ -1,5 +1,5 @@
 resource "aws_sfn_state_machine" "state_machine" {
-  definition = templatefile("${path.module}/templates/${var.definition}_definition.json.tpl", merge(var.definition_variables, { account_id = data.aws_caller_identity.current.account_id }))
+  definition = templatefile("${path.module}/templates/${var.definition}_definition.json.tpl", merge(var.definition_variables, { account_id = data.aws_caller_identity.current.account_id, environment = var.environment }))
   name       = "${upper(var.project)}${var.step_function_name}${title(var.environment)}"
   role_arn   = aws_iam_role.state_machine_role.arn
   tags       = var.common_tags
