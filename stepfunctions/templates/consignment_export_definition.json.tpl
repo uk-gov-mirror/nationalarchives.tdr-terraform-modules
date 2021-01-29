@@ -47,7 +47,8 @@
       "Parameters": {
         "Message": {
           "consignmentId.$": "$.Overrides.ContainerOverrides[0].Environment[0].Value",
-          "success": true
+          "success": true,
+          "environment": "${environment}"
         },
         "TopicArn": "${sns_topic}"
       },
@@ -66,7 +67,8 @@
       "Parameters": {
         "Message": {
           "consignmentId.$": "$.Cause.Overrides.ContainerOverrides[0].Environment[0].Value",
-          "success": false
+          "success": false,
+          "environment": "${environment}"
         },
         "TopicArn": "${sns_topic}"
       },
