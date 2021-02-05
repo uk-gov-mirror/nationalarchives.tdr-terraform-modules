@@ -4,7 +4,7 @@
   "States": {
     "Run ECS task": {
       "Type": "Task",
-      "Resource": "arn:aws:states:::ecs:runTask.sync",
+      "Resource": "arn:aws:states:::ecs:runTask.waitForTaskToken",
       "Catch": [
         {
           "ErrorEquals": [
@@ -33,6 +33,10 @@
                 {
                   "Name": "CONSIGNMENT_ID",
                   "Value.$": "$.consignmentId"
+                },
+                {
+                  "Name":"TASK_TOKEN_ENV_VARIABLE",
+                  "Value.$":"$$.Task.Token"
                 }
               ]
             }
