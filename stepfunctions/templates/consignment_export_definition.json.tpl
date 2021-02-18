@@ -52,7 +52,8 @@
         "Message": {
           "consignmentId.$": "$.Overrides.ContainerOverrides[0].Environment[0].Value",
           "success": true,
-          "environment": "${environment}"
+          "environment": "${environment}",
+          "exportOutput.$": "$"
         },
         "TopicArn": "${sns_topic}"
       },
