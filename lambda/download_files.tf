@@ -18,7 +18,7 @@ resource "aws_lambda_function" "download_files_lambda_function" {
       AUTH_URL          = var.auth_url
       API_URL           = "${var.api_url}/graphql"
       CLIENT_ID         = "tdr-backend-checks"
-      CLIENT_SECRET     = data.aws_ssm_parameter.backend_checks_client_secret[0].value
+      CLIENT_SECRET     = var.backend_checks_client_secret
       ROOT_DIRECTORY    = var.backend_checks_efs_root_directory_path
     }
   }
@@ -73,7 +73,7 @@ resource "aws_security_group" "allow_efs_lambda_download_files" {
   count       = local.count_download_files
   name        = "allow-efs-download-files"
   description = "Allow EFS inbound traffic"
-  vpc_id      = data.aws_vpc.current[count.index].id
+  vpc_id      = var.vpc_id
 
   egress {
     protocol    = "-1"

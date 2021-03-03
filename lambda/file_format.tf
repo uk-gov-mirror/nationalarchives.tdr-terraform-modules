@@ -68,7 +68,7 @@ resource "aws_security_group" "allow_efs_lambda_file_format" {
   count       = local.count_file_format
   name        = "allow-efs"
   description = "Allow EFS inbound traffic"
-  vpc_id      = data.aws_vpc.current[count.index].id
+  vpc_id      = var.vpc_id
 
   egress {
     protocol    = "-1"

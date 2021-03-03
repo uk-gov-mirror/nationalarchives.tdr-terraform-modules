@@ -134,3 +134,7 @@ variable "private_subnet_ids" {
 variable "api_gateway_arn" {
   default = ""
 }
+
+variable "backend_checks_client_secret" {
+  default = ""
+}
