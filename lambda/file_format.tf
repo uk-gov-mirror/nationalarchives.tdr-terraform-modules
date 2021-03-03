@@ -30,6 +30,8 @@ resource "aws_lambda_function" "file_format_lambda_function" {
   lifecycle {
     ignore_changes = [filename]
   }
+
+  depends_on = [var.backend_checks_efs_access_point]
 }
 
 resource "aws_lambda_event_source_mapping" "file_format_sqs_queue_mapping" {

@@ -31,6 +31,8 @@ resource "aws_lambda_function" "checksum_lambda_function" {
   lifecycle {
     ignore_changes = [filename]
   }
+
+  depends_on = [var.backend_checks_efs_access_point]
 }
 
 resource "aws_lambda_event_source_mapping" "checksum_sqs_queue_mapping" {
