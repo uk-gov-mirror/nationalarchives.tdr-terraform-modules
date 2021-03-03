@@ -1,16 +1,16 @@
 {
-  "Comment": "A state machine to run the Fargate task to export the consginment",
+  "Comment": "A state machine to run the Fargate task to export the consignment",
   "StartAt": "Run ECS task",
   "States": {
     "Run ECS task": {
       "Type": "Task",
-      "Resource": "arn:aws:states:::ecs:runTask.sync",
+      "Resource": "arn:aws:states:::ecs:runTask.waitForTaskToken",
       "Catch": [
         {
           "ErrorEquals": [
             "States.TaskFailed"
           ],
-          "Next": "Handle escaped JSON from error cause"
+          "Next": "Task failed notification"
         }
       ],
       "Parameters": {
@@ -33,6 +33,10 @@
                 {
                   "Name": "CONSIGNMENT_ID",
                   "Value.$": "$.consignmentId"
+                },
+                {
+                  "Name":"TASK_TOKEN_ENV_VARIABLE",
+                  "Value.$":"$$.Task.Token"
                 }
               ]
             }
@@ -48,18 +52,12 @@
         "Message": {
           "consignmentId.$": "$.Overrides.ContainerOverrides[0].Environment[0].Value",
           "success": true,
-          "environment": "${environment}"
+          "environment": "${environment}",
+          "successDetails.$": "$"
         },
         "TopicArn": "${sns_topic}"
       },
       "End": true
-    },
-    "Handle escaped JSON from error cause": {
-      "Type": "Pass",
-      "Parameters": {
-        "Cause.$": "States.StringToJson($.Cause)"
-      },
-      "Next": "Task failed notification"
     },
     "Task failed notification": {
       "Type": "Task",
@@ -68,11 +66,15 @@
         "Message": {
           "consignmentId.$": "$.Cause.Overrides.ContainerOverrides[0].Environment[0].Value",
           "success": false,
-          "environment": "${environment}"
+          "environment": "${environment}",
+          "failureCause.$": "$.Cause"
         },
         "TopicArn": "${sns_topic}"
       },
-      "End": true
+      "Next": "Fail State"
+    },
+    "Fail State": {
+       "Type": "Fail"
     }
   }
 }
