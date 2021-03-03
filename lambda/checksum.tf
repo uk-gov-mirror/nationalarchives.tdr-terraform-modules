@@ -32,7 +32,7 @@ resource "aws_lambda_function" "checksum_lambda_function" {
     ignore_changes = [filename]
   }
 
-  depends_on = [var.backend_checks_efs_access_point]
+  depends_on = [var.mount_target_zero, var.mount_target_one]
 }
 
 resource "aws_lambda_event_source_mapping" "checksum_sqs_queue_mapping" {

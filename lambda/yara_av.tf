@@ -31,6 +31,8 @@ resource "aws_lambda_function" "lambda_function" {
   lifecycle {
     ignore_changes = [filename]
   }
+
+  depends_on = [var.mount_target_zero, var.mount_target_one]
 }
 
 resource "aws_lambda_event_source_mapping" "av_sqs_queue_mapping" {
