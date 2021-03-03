@@ -65,3 +65,7 @@ variable "output_bucket" {
 variable "backend_client_secret_path" {
   default = ""
 }
+
+variable "vpc_id" {
+  default = ""
+}

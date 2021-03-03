@@ -18,3 +18,7 @@ variable "netnum_offset" {
   type        = number
   default     = 4
 }
+
+variable "nat_gateway_ids" {}
+variable "vpc_id" {}
+variable "vpc_cidr_block" {}

@@ -1,10 +1,3 @@
-data "aws_vpc" "ff_current" {
-  count = local.count_file_format_build
-  tags = {
-    Name = "tdr-vpc-${local.environment}"
-  }
-}
-
 resource "aws_ecs_task_definition" "file_format_build_task_definition" {
   count                    = local.count_file_format_build
   container_definitions    = templatefile("${path.module}/templates/file_format_build.json.tpl", { log_group_name = aws_cloudwatch_log_group.file_format_build_log_group[count.index].name, app_environment = local.environment, management_account = data.aws_ssm_parameter.mgmt_account_number.value })
@@ -93,7 +86,7 @@ resource "aws_security_group" "ecs_run_efs" {
   count       = local.count_file_format_build
   name        = "allow-ecs-mount-efs"
   description = "Allow ECS to mount EFS volume"
-  vpc_id      = data.aws_vpc.ff_current[count.index].id
+  vpc_id      = var.vpc_id
 
   egress {
     protocol    = "-1"
