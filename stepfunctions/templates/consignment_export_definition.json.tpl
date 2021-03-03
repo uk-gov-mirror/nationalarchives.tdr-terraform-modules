@@ -1,5 +1,5 @@
 {
-  "Comment": "A state machine to run the Fargate task to export the consginment",
+  "Comment": "A state machine to run the Fargate task to export the consignment",
   "StartAt": "Run ECS task",
   "States": {
     "Run ECS task": {
@@ -10,7 +10,7 @@
           "ErrorEquals": [
             "States.TaskFailed"
           ],
-          "Next": "Handle escaped JSON from error cause"
+          "Next": "Task failed notification"
         }
       ],
       "Parameters": {
@@ -53,18 +53,11 @@
           "consignmentId.$": "$.Overrides.ContainerOverrides[0].Environment[0].Value",
           "success": true,
           "environment": "${environment}",
-          "exportOutput.$": "$"
+          "successDetails.$": "$"
         },
         "TopicArn": "${sns_topic}"
       },
       "End": true
-    },
-    "Handle escaped JSON from error cause": {
-      "Type": "Pass",
-      "Parameters": {
-        "Cause.$": "States.StringToJson($.Cause)"
-      },
-      "Next": "Task failed notification"
     },
     "Task failed notification": {
       "Type": "Task",
@@ -73,11 +66,15 @@
         "Message": {
           "consignmentId.$": "$.Cause.Overrides.ContainerOverrides[0].Environment[0].Value",
           "success": false,
-          "environment": "${environment}"
+          "environment": "${environment}",
+          "failureCause.$": "$.Cause"
         },
         "TopicArn": "${sns_topic}"
       },
-      "End": true
+      "Next": "Fail State"
+    },
+    "Fail State": {
+       "Type": "Fail"
     }
   }
 }
