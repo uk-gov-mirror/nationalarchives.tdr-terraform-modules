@@ -85,6 +85,9 @@ resource "aws_s3_bucket" "bucket" {
       id                                     = "abort-incomplete-uploads"
       enabled                                = true
       abort_incomplete_multipart_upload_days = 7
+      expiration {
+        days = 7
+      }
     }
   }
 
