@@ -8,7 +8,7 @@
         "states:SendTaskFailure"
       ],
       "Resource": [
-        "arn:aws:states:${aws_region}:{account}:stateMachine:TDRConsignmentExport${titleEnvironment}"
+        "arn:aws:states:${aws_region}:${account}:stateMachine:TDRConsignmentExport${titleEnvironment}"
       ]
     },
     {
