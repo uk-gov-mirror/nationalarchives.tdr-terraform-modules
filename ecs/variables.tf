@@ -66,6 +66,4 @@ variable "backend_client_secret_path" {
   default = ""
 }
 
-variable "vpc_id" {
-  default = ""
-}
+variable "vpc_id" {}
