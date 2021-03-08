@@ -23,5 +23,5 @@ locals {
   download_files_queue_url    = "https://sqs.${var.region}.amazonaws.com/${data.aws_caller_identity.current.account_id}/tdr-download-files-${local.environment}"
   file_format_queue           = "arn:aws:sqs:${var.region}:${data.aws_caller_identity.current.account_id}:tdr-file-format-${local.environment}"
   file_format_queue_url       = "https://sqs.${var.region}.amazonaws.com/${data.aws_caller_identity.current.account_id}/tdr-file-format-${local.environment}"
-  export_api_authoriser_arn   = var.apply_resource == true && var.lambda_export_authoriser == true ? aws_lambda_function.export_api_authoriser_lambda_function.*.arn[0] : ""
+  export_api_authoriser_arn   = var.apply_resource == true && var.lambda_export_authoriser == true && length(aws_lambda_function.export_api_authoriser_lambda_function) > 0 ? aws_lambda_function.export_api_authoriser_lambda_function.*.arn[0] : ""
 }

@@ -5,7 +5,6 @@ resource "aws_ami_copy" "encrypted-ami" {
   source_ami_region = var.region
   encrypted         = "true"
   kms_key_id        = var.kms_key_id
-
   tags = merge(
     var.common_tags,
     map("Name", "${var.project}-${var.function}-${var.environment}")
