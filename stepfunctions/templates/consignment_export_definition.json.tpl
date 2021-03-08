@@ -50,7 +50,7 @@
       "Resource": "arn:aws:states:::sns:publish",
       "Parameters": {
         "Message": {
-          "consignmentId.$": "$.Overrides.ContainerOverrides[0].Environment[0].Value",
+          "consignmentId.$": "$$.Execution.Input.consignmentId",
           "success": true,
           "environment": "${environment}",
           "successDetails.$": "$"
@@ -64,7 +64,7 @@
       "Resource": "arn:aws:states:::sns:publish",
       "Parameters": {
         "Message": {
-          "consignmentId.$": "$.Cause.Overrides.ContainerOverrides[0].Environment[0].Value",
+          "consignmentId.$": "$$.Execution.Input.consignmentId",
           "success": false,
           "environment": "${environment}",
           "failureCause.$": "$.Cause"
