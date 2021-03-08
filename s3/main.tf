@@ -88,7 +88,8 @@ resource "aws_s3_bucket" "bucket" {
       enabled                                = true
       abort_incomplete_multipart_upload_days = 7
       expiration {
-        days = 7
+        days = 0
+        expired_object_delete_marker = false
       }
     }
   }
