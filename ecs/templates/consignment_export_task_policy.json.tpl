@@ -4,6 +4,16 @@
     {
       "Effect": "Allow",
       "Action": [
+        "states:SendTaskSuccess",
+        "states:SendTaskFailure"
+      ],
+      "Resource": [
+        "arn:aws:states:${aws_region}:${account}:stateMachine:TDRConsignmentExport${titleEnvironment}"
+      ]
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
         "elasticfilesystem:ClientWrite"
       ],
       "Resource": "*"

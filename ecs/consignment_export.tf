@@ -66,7 +66,7 @@ resource "aws_iam_role" "consignment_export_ecs_task" {
 resource "aws_iam_policy" "consignment_export_ecs_task_policy" {
   count  = local.count_consignment_export
   name   = "${upper(var.project)}ConsignmentExportECSTaskPolicy${title(local.environment)}"
-  policy = templatefile("${path.module}/templates/consignment_export_task_policy.json.tpl", { environment = local.environment })
+  policy = templatefile("${path.module}/templates/consignment_export_task_policy.json.tpl", { environment = local.environment, titleEnvironment = title(local.environment), aws_region = var.aws_region, account = data.aws_caller_identity.current.account_id })
 }
 
 resource "aws_iam_policy" "consignment_export_ecs_execution_policy" {
