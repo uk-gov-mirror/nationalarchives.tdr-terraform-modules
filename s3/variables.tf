@@ -28,10 +28,6 @@ variable "versioning" {
   default = true
 }
 
-variable "version_lifecycle" {
-  default = false
-}
-
 variable "abort_incomplete_uploads" {
   default = false
 }
