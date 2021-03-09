@@ -1,10 +1,3 @@
-data "aws_vpc" "consignment_export_current" {
-  count = local.count_consignment_export
-  tags = {
-    Name = "tdr-vpc-${local.environment}"
-  }
-}
-
 resource "aws_ecs_task_definition" "consignment_export_task_definition" {
   count = local.count_consignment_export
   container_definitions = templatefile(
@@ -110,7 +103,7 @@ resource "aws_security_group" "consignment_export_ecs_run_efs" {
   count       = local.count_consignment_export
   name        = "consignment-export-allow-ecs-mount-efs"
   description = "Allow Consignment Export ECS task to mount EFS volume"
-  vpc_id      = data.aws_vpc.consignment_export_current[count.index].id
+  vpc_id      = var.vpc_id
 
   egress {
     protocol    = "-1"

@@ -19,9 +19,9 @@ output "consignment_export_cluster_arn" {
 }
 
 output "consignment_export_task_role_arn" {
-  value = var.consignment_export == true ? aws_iam_role.consignment_export_ecs_task.*.arn[0] : ""
+  value = var.consignment_export == true && length(aws_iam_role.consignment_export_ecs_task) > 0 ? aws_iam_role.consignment_export_ecs_task.*.arn[0] : ""
 }
 
 output "consignment_export_execution_role_arn" {
-  value = var.consignment_export == true ? aws_iam_role.consignment_export_ecs_execution.*.arn[0] : ""
+  value = var.consignment_export == true && length(aws_iam_role.consignment_export_ecs_execution) > 0 ? aws_iam_role.consignment_export_ecs_execution.*.arn[0] : ""
 }

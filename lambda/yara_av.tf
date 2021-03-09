@@ -4,8 +4,7 @@ resource "aws_lambda_function" "lambda_function" {
   handler       = "matcher.matcher_lambda_handler"
   role          = aws_iam_role.lambda_iam_role.*.arn[0]
   runtime       = "python3.7"
-  s3_bucket     = "tdr-backend-checks-${local.environment}"
-  s3_key        = "yara-av.zip"
+  filename      = "${path.module}/functions/yara-av.zip"
   timeout       = 180
   memory_size   = 3008
   tags          = var.common_tags
@@ -32,6 +31,8 @@ resource "aws_lambda_function" "lambda_function" {
   lifecycle {
     ignore_changes = [filename]
   }
+
+  depends_on = [var.mount_target_zero, var.mount_target_one]
 }
 
 resource "aws_lambda_event_source_mapping" "av_sqs_queue_mapping" {
@@ -81,7 +82,7 @@ resource "aws_security_group" "allow_efs_lambda_av" {
   count       = local.count_av_yara
   name        = "allow-efs-lambda-antivirus"
   description = "Allow EFS inbound traffic"
-  vpc_id      = data.aws_vpc.current[count.index].id
+  vpc_id      = var.vpc_id
 
   egress {
     protocol    = "-1"

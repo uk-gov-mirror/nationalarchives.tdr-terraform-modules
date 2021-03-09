@@ -31,6 +31,8 @@ resource "aws_lambda_function" "checksum_lambda_function" {
   lifecycle {
     ignore_changes = [filename]
   }
+
+  depends_on = [var.mount_target_zero, var.mount_target_one]
 }
 
 resource "aws_lambda_event_source_mapping" "checksum_sqs_queue_mapping" {
@@ -67,7 +69,7 @@ resource "aws_security_group" "allow_efs_lambda_checksum" {
   count       = local.count_checksum
   name        = "allow-efs-lambda-checksum"
   description = "Allow EFS inbound traffic"
-  vpc_id      = data.aws_vpc.current[count.index].id
+  vpc_id      = var.vpc_id
 
   egress {
     protocol    = "-1"

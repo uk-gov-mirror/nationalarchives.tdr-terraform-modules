@@ -20,16 +20,4 @@ data "aws_ssm_parameter" "prod_account_number" {
   name  = "/mgmt/prod_account"
 }
 
-data "aws_ssm_parameter" "backend_checks_client_secret" {
-  count = var.project == "tdr" && var.use_efs ? 1 : 0
-  name  = "/${local.environment}/keycloak/backend_checks_client/secret"
-}
-
-data "aws_vpc" "current" {
-  count = local.count_efs
-  tags = {
-    Name = "${var.project}-vpc-${local.environment}"
-  }
-}
-
 data "aws_availability_zones" "available" {}

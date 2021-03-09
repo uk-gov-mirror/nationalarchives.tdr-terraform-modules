@@ -7,7 +7,8 @@
       "Principal": {
         "AWS": [
           "arn:aws:iam::${intg_account}:role/TDRFileFormatECSExecutionRoleIntg",
-          "arn:aws:iam::${staging_account}:role/TDRFileFormatECSExecutionRoleStaging"
+          "arn:aws:iam::${staging_account}:role/TDRFileFormatECSExecutionRoleStaging",
+          "arn:aws:iam::${prod_account}:role/TDRFileFormatECSExecutionRoleProd"
         ]
       },
       "Action": [

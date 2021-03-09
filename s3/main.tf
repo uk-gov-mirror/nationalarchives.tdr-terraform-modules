@@ -35,9 +35,10 @@ resource "aws_s3_bucket_public_access_block" "log_bucket" {
 }
 
 resource "aws_s3_bucket_policy" "log_bucket" {
-  count  = var.access_logs == true && var.apply_resource == true ? 1 : 0
-  bucket = aws_s3_bucket.log_bucket.*.id[0]
-  policy = templatefile("./tdr-terraform-modules/s3/templates/secure_transport.json.tpl", { bucket_name = aws_s3_bucket.log_bucket.*.id[0] })
+  count      = var.access_logs == true && var.apply_resource == true ? 1 : 0
+  bucket     = aws_s3_bucket.log_bucket.*.id[0]
+  policy     = templatefile("./tdr-terraform-modules/s3/templates/secure_transport.json.tpl", { bucket_name = aws_s3_bucket.log_bucket.*.id[0] })
+  depends_on = [aws_s3_bucket_public_access_block.log_bucket]
 }
 
 resource "aws_s3_bucket_notification" "log_bucket_notification" {
@@ -48,6 +49,7 @@ resource "aws_s3_bucket_notification" "log_bucket_notification" {
     topic_arn = local.log_data_sns_topic_arn
     events    = ["s3:ObjectCreated:*"]
   }
+  depends_on = [aws_s3_bucket_policy.log_bucket]
 }
 
 resource "aws_s3_bucket" "bucket" {
@@ -85,6 +87,10 @@ resource "aws_s3_bucket" "bucket" {
       id                                     = "abort-incomplete-uploads"
       enabled                                = true
       abort_incomplete_multipart_upload_days = 7
+      expiration {
+        days                         = 0
+        expired_object_delete_marker = false
+      }
     }
   }
 
@@ -115,9 +121,10 @@ resource "aws_s3_bucket" "bucket" {
 }
 
 resource "aws_s3_bucket_policy" "bucket" {
-  count  = var.apply_resource == true ? 1 : 0
-  bucket = aws_s3_bucket.bucket.*.id[0]
-  policy = local.environment == "mgmt" && contains(["log-data", "lambda_update"], var.bucket_policy) ? templatefile("./tdr-terraform-modules/s3/templates/${var.bucket_policy}.json.tpl", { bucket_name = aws_s3_bucket.bucket.*.id[0], account_id = data.aws_caller_identity.current.account_id, external_account_1 = data.aws_ssm_parameter.intg_account_number.*.value[0], external_account_2 = data.aws_ssm_parameter.staging_account_number.*.value[0], external_account_3 = data.aws_ssm_parameter.prod_account_number.*.value[0] }) : templatefile("./tdr-terraform-modules/s3/templates/${var.bucket_policy}.json.tpl", { bucket_name = aws_s3_bucket.bucket.*.id[0], aws_elb_account = data.aws_ssm_parameter.aws_elb_account_number.value })
+  count      = var.apply_resource == true ? 1 : 0
+  bucket     = aws_s3_bucket.bucket.*.id[0]
+  policy     = local.environment == "mgmt" && contains(["log-data", "lambda_update"], var.bucket_policy) ? templatefile("./tdr-terraform-modules/s3/templates/${var.bucket_policy}.json.tpl", { bucket_name = aws_s3_bucket.bucket.*.id[0], account_id = data.aws_caller_identity.current.account_id, external_account_1 = data.aws_ssm_parameter.intg_account_number.*.value[0], external_account_2 = data.aws_ssm_parameter.staging_account_number.*.value[0], external_account_3 = data.aws_ssm_parameter.prod_account_number.*.value[0] }) : templatefile("./tdr-terraform-modules/s3/templates/${var.bucket_policy}.json.tpl", { bucket_name = aws_s3_bucket.bucket.*.id[0], aws_elb_account = data.aws_ssm_parameter.aws_elb_account_number.value })
+  depends_on = [aws_s3_bucket_public_access_block.bucket]
 }
 
 resource "aws_s3_bucket_public_access_block" "bucket" {
@@ -127,7 +134,6 @@ resource "aws_s3_bucket_public_access_block" "bucket" {
   block_public_policy     = var.block_public_policy
   ignore_public_acls      = var.ignore_public_acls
   restrict_public_buckets = var.restrict_public_buckets
-  depends_on              = [aws_s3_bucket_policy.bucket]
 }
 
 resource "aws_s3_bucket_notification" "bucket_notification" {

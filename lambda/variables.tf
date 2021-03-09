@@ -108,11 +108,6 @@ variable "use_efs" {
   default = false
 }
 
-variable "mount_target_ids" {
-  default = []
-  type    = list(string)
-}
-
 variable "event_rule_arns" {
   type    = set(string)
   default = []
@@ -132,5 +127,17 @@ variable "private_subnet_ids" {
 }
 
 variable "api_gateway_arn" {
+  default = ""
+}
+
+variable "backend_checks_client_secret" {
+  default = ""
+}
+
+variable "mount_target_zero" {
+  default = ""
+}
+
+variable "mount_target_one" {
   default = ""
 }

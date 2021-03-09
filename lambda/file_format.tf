@@ -30,6 +30,8 @@ resource "aws_lambda_function" "file_format_lambda_function" {
   lifecycle {
     ignore_changes = [filename]
   }
+
+  depends_on = [var.mount_target_zero, var.mount_target_one]
 }
 
 resource "aws_lambda_event_source_mapping" "file_format_sqs_queue_mapping" {
@@ -66,7 +68,7 @@ resource "aws_security_group" "allow_efs_lambda_file_format" {
   count       = local.count_file_format
   name        = "allow-efs"
   description = "Allow EFS inbound traffic"
-  vpc_id      = data.aws_vpc.current[count.index].id
+  vpc_id      = var.vpc_id
 
   egress {
     protocol    = "-1"
