@@ -7,6 +7,7 @@ resource "aws_lambda_function" "lambda_api_update_function" {
   filename      = "${path.module}/functions/api-update.jar"
   timeout       = 20
   memory_size   = 512
+  kms_key_arn   = var.kms_key_id
   tags          = var.common_tags
   environment {
     variables = {

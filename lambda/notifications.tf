@@ -8,6 +8,7 @@ resource "aws_lambda_function" "notifications_lambda_function" {
   timeout       = 180
   memory_size   = 1024
   tags          = var.common_tags
+  kms_key_arn   = var.kms_key_id
   environment {
     variables = {
       SLACK_WEBHOOK = data.aws_ssm_parameter.slack_webook[count.index].value

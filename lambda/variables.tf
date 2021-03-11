@@ -141,3 +141,7 @@ variable "mount_target_zero" {
 variable "mount_target_one" {
   default = ""
 }
+
+variable "kms_key_id" {
+  default = ""
+}

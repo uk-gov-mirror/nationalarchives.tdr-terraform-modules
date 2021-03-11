@@ -7,6 +7,7 @@ resource "aws_lambda_function" "lambda_function" {
   filename      = "${path.module}/functions/yara-av.zip"
   timeout       = 180
   memory_size   = 3008
+  kms_key_arn   = var.kms_key_id
   tags          = var.common_tags
   environment {
     variables = {
