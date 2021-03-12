@@ -11,6 +11,7 @@ locals {
   count_notifications         = var.apply_resource == true && var.lambda_ecr_scan_notifications == true ? 1 : 0
   count_ecr_scan              = var.apply_resource == true && var.lambda_ecr_scan == true ? 1 : 0
   count_efs                   = var.apply_resource == true && var.use_efs ? 1 : 0
+  count_create_db_users       = var.apply_resource == true && var.lambda_create_db_users ? 1 : 0
   count_export_api_authoriser = var.apply_resource == true && var.lambda_export_authoriser == true ? 1 : 0
   api_update_queue_name       = "tdr-api-update-${local.environment}"
   api_update_queue            = "arn:aws:sqs:${var.region}:${data.aws_caller_identity.current.account_id}:${local.api_update_queue_name}"
