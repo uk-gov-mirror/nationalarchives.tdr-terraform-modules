@@ -7,7 +7,6 @@ resource "aws_lambda_function" "download_files_lambda_function" {
   filename      = "${path.module}/functions/download-files.jar"
   timeout       = 180
   memory_size   = 1024
-  kms_key_arn   = var.kms_key_id
   tags          = var.common_tags
   environment {
     variables = {

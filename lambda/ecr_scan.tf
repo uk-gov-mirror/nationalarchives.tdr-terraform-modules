@@ -7,7 +7,6 @@ resource "aws_lambda_function" "ecr_scan_lambda_function" {
   filename      = "${path.module}/functions/ecr-scan.jar"
   timeout       = 180
   memory_size   = 512
-  kms_key_arn   = var.kms_key_id
   tags          = var.common_tags
 
   lifecycle {
