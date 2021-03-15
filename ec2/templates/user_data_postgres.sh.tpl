@@ -24,3 +24,4 @@ export PGPASSWORD="$(aws rds generate-db-auth-token --hostname $RDSHOST --port 5
 psql "host=$RDSHOST port=5432 sslmode=verify-full sslrootcert=rds-combined-ca-bundle.pem dbname=consignmentapi user=bastion_user password=$PGPASSWORD"
 EOF
 chmod +x connect.sh
+chown -R 1001:1001 /home/ssm-user
