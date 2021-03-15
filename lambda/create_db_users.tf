@@ -10,9 +10,9 @@ resource "aws_lambda_function" "create_db_users_lambda_function" {
   tags          = var.common_tags
   environment {
     variables = {
-      DB_ADMIN_USER          = var.db_admin_user
-      DB_ADMIN_PASSWORD      = var.db_admin_password
-      DB_URL                 = "jdbc:postgresql://${var.db_url}:5432/consignmentapi"
+      DB_ADMIN_USER     = var.db_admin_user
+      DB_ADMIN_PASSWORD = var.db_admin_password
+      DB_URL            = "jdbc:postgresql://${var.db_url}:5432/consignmentapi"
     }
   }
 
