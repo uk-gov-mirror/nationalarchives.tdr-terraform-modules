@@ -141,3 +141,23 @@ variable "mount_target_zero" {
 variable "mount_target_one" {
   default = ""
 }
+
+variable "consignment_database_sg_id" {
+  default = ""
+}
+
+variable "lambda_create_db_users" {
+  default = false
+}
+
+variable "db_admin_user" {
+  default = ""
+}
+
+variable "db_admin_password" {
+  default = ""
+}
+
+variable "db_url" {
+  default = ""
+}

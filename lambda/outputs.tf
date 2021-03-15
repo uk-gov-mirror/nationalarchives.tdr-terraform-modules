@@ -25,3 +25,7 @@ output "ecr_scan_lambda_arn" {
 output "export_api_authoriser_arn" {
   value = local.export_api_authoriser_arn
 }
+
+output "create_users_lambda_security_group_id" {
+  value = aws_security_group.create_db_users_lambda.*.id
+}
