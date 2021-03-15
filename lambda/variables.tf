@@ -156,7 +156,6 @@ variable "db_admin_user" {
 
 variable "db_admin_password" {
   default   = ""
-  sensitive = true
 }
 
 variable "db_url" {
