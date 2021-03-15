@@ -13,8 +13,6 @@ resource "aws_lambda_function" "create_db_users_lambda_function" {
       DB_ADMIN_USER          = var.db_admin_user
       DB_ADMIN_PASSWORD      = var.db_admin_password
       DB_URL                 = "jdbc:postgresql://${var.db_url}:5432/consignmentapi"
-      API_DB_PASSWORD        = random_password.api_password[count.index].result
-      MIGRATIONS_DB_PASSWORD = random_password.migrations_password[count.index].result
     }
   }
 
@@ -26,32 +24,6 @@ resource "aws_lambda_function" "create_db_users_lambda_function" {
   lifecycle {
     ignore_changes = [filename]
   }
-}
-
-resource "random_password" "migrations_password" {
-  count   = local.count_create_db_users
-  length  = 41
-  special = false
-}
-
-resource "aws_ssm_parameter" "migrations_password_parameter" {
-  count = local.count_create_db_users
-  name  = "/${local.environment}/consignmentapi/database/migrations/password"
-  type  = "SecureString"
-  value = random_password.migrations_password[count.index].result
-}
-
-resource "random_password" "api_password" {
-  count   = local.count_create_db_users
-  length  = 41
-  special = false
-}
-
-resource "aws_ssm_parameter" "api_password_parameter" {
-  count = local.count_create_db_users
-  name  = "/${local.environment}/consignmentapi/database/api/password"
-  type  = "SecureString"
-  value = random_password.api_password[count.index].result
 }
 
 resource "aws_cloudwatch_log_group" "create_db_users_lambda_log_group" {
