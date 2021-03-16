@@ -33,6 +33,6 @@ variable "public_key" {
   default = ""
 }
 variable "additional_policy_arns" {
-  type = list(string)
+  type    = list(string)
   default = []
 }
