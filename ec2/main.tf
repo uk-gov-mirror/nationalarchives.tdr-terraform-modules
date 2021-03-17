@@ -47,7 +47,6 @@ resource "aws_iam_role" "ec2_role" {
 }
 
 resource "aws_iam_role_policy_attachment" "ec2_role_policy_attachment" {
-  for_each   = toset(concat(["arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"], var.additional_policy_arns))
-  policy_arn = each.key
+  policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
   role       = aws_iam_role.ec2_role.name
 }

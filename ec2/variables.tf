@@ -32,7 +32,3 @@ variable "subnet_id" {}
 variable "public_key" {
   default = ""
 }
-variable "additional_policy_arns" {
-  type    = list(string)
-  default = []
-}
