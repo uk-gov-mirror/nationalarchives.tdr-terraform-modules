@@ -5,3 +5,7 @@ output "public_ip" {
 output "instance_arn" {
   value = aws_instance.instance.arn
 }
+
+output "role_id" {
+  value = aws_iam_role.ec2_role.id
+}
