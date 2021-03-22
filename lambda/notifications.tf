@@ -10,8 +10,9 @@ resource "aws_lambda_function" "notifications_lambda_function" {
   tags          = var.common_tags
   environment {
     variables = {
-      SLACK_WEBHOOK = data.aws_ssm_parameter.slack_webook[count.index].value
-      TO_EMAIL      = "${data.aws_ssm_parameter.notification_email_prefix[count.index].value}@nationalarchives.gov.uk"
+      SLACK_WEBHOOK         = data.aws_ssm_parameter.slack_webook[count.index].value
+      TO_EMAIL              = "${data.aws_ssm_parameter.notification_email_prefix[count.index].value}@nationalarchives.gov.uk"
+      MUTED_VULNERABILITIES = join(",", var.muted_scan_alerts)
     }
   }
 
