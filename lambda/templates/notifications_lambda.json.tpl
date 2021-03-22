@@ -19,6 +19,13 @@
         "arn:aws:ses:eu-west-2:${account_id}:identity/${email}",
         "arn:aws:ses:eu-west-2:${account_id}:identity/tdr-management.nationalarchives.gov.uk"
       ]
+    },
+    {
+      "Effect": "Allow",
+      "Action": "ecr:DescribeImageScanFindings",
+      "Resource": [
+        "arn:aws:ecr:eu-west-2:${account_id}:repository/*"
+      ]
     }
   ]
 }
