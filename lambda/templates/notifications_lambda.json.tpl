@@ -26,6 +26,14 @@
       "Resource": [
         "arn:aws:ecr:eu-west-2:${account_id}:repository/*"
       ]
+    },
+    {
+      "Sid": "DecryptEnvVar",
+      "Effect": "Allow",
+      "Action": [
+        "kms:Decrypt"
+      ],
+      "Resource": "${kms_arn}"
     }
   ]
 }

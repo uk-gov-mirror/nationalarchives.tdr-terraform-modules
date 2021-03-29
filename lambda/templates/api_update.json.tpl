@@ -23,6 +23,14 @@
       "Resource": [
         "${input_sqs_arn}"
       ]
+    },
+    {
+      "Sid": "DecryptEnvVar",
+      "Effect": "Allow",
+      "Action": [
+        "kms:Decrypt"
+      ],
+      "Resource": "${kms_arn}"
     }
   ]
 }

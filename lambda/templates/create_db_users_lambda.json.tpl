@@ -20,6 +20,14 @@
         "ec2:DescribeNetworkInterfaces"
       ],
       "Resource": "*"
+    },
+    {
+      "Sid": "DecryptEnvVar",
+      "Effect": "Allow",
+      "Action": [
+        "kms:Decrypt"
+      ],
+      "Resource": "${kms_arn}"
     }
   ]
 }

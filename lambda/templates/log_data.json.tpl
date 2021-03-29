@@ -19,6 +19,14 @@
         "s3:PutObjectAcl"
       ],
       "Resource": "arn:aws:s3:::tdr-log-data-mgmt/*"
+    },
+    {
+      "Sid": "DecryptEnvVar",
+      "Effect": "Allow",
+      "Action": [
+        "kms:Decrypt"
+      ],
+      "Resource": "${kms_arn}"
     }
   ]
 }
