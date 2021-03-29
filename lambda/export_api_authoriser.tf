@@ -1,6 +1,6 @@
 resource "aws_lambda_function" "export_api_authoriser_lambda_function" {
   count         = local.count_export_api_authoriser
-  function_name = "${var.project}-export-api-authoriser-${local.environment}"
+  function_name = local.export_api_authoriser_function_name
   handler       = "uk.gov.nationalarchives.consignmentexport.authoriser.Lambda::process"
   role          = aws_iam_role.export_api_authoriser_lambda_iam_role.*.arn[0]
   runtime       = "java11"
@@ -10,13 +10,20 @@ resource "aws_lambda_function" "export_api_authoriser_lambda_function" {
   tags          = var.common_tags
   environment {
     variables = {
-      API_URL = "${var.api_url}/graphql"
+      API_URL = data.aws_kms_ciphertext.environment_vars_export_api_authoriser["api_url"].ciphertext_blob
     }
   }
 
   lifecycle {
     ignore_changes = [filename]
   }
+}
+
+data "aws_kms_ciphertext" "environment_vars_export_api_authoriser" {
+  for_each  = local.count_export_api_authoriser == 0 ? {} : { api_url = "${var.api_url}/graphql" }
+  key_id    = var.kms_key_arn
+  plaintext = each.value
+  context   = { "LambdaFunctionName" = local.export_api_authoriser_function_name }
 }
 
 resource "aws_cloudwatch_log_group" "export_api_authoriser_lambda_log_group" {
@@ -34,7 +41,7 @@ resource "aws_iam_role" "export_api_authoriser_lambda_iam_role" {
 resource "aws_iam_policy" "export_authoriser_policy" {
   count  = local.count_export_api_authoriser
   name   = "${upper(var.project)}ExportApiAuthoriserLambdaPolicy${title(local.environment)}"
-  policy = templatefile("${path.module}/templates/export_authoriser_policy.json.tpl", { account_id = data.aws_caller_identity.current.account_id, environment = local.environment })
+  policy = templatefile("${path.module}/templates/export_authoriser_policy.json.tpl", { account_id = data.aws_caller_identity.current.account_id, environment = local.environment, kms_arn = var.kms_key_arn })
 }
 
 resource "aws_iam_role_policy_attachment" "export_authoriser_attachment" {

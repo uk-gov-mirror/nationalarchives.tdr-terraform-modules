@@ -49,7 +49,7 @@
       "Action": [
         "kms:Decrypt"
       ],
-      "Resource": "arn:aws:kms:eu-west-2:229554778675:key/b05401ed-cc76-46f6-bf2c-76cb0a859542"
+      "Resource": "${kms_arn}"
     }
   ]
 }

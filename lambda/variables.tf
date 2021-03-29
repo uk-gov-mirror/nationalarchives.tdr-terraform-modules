@@ -167,3 +167,8 @@ variable "muted_scan_alerts" {
   type        = list(string)
   default     = []
 }
+
+variable "kms_key_arn" {
+  default     = ""
+  description = "The KMS arn to encrypt environment variables. Not all lambdas need this so it has a default"
+}

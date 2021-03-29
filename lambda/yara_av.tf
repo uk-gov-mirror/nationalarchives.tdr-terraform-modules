@@ -1,6 +1,6 @@
 resource "aws_lambda_function" "lambda_function" {
   count         = local.count_av_yara
-  function_name = "${var.project}-yara-av-${local.environment}"
+  function_name = local.yara_av_function_name
   handler       = "matcher.matcher_lambda_handler"
   role          = aws_iam_role.lambda_iam_role.*.arn[0]
   runtime       = "python3.7"
@@ -35,6 +35,13 @@ resource "aws_lambda_function" "lambda_function" {
   depends_on = [var.mount_target_zero, var.mount_target_one]
 }
 
+data "aws_kms_ciphertext" "environment_vars_yara_av" {
+  for_each  = local.count_av_yara == 0 ? {} : { environment = local.environment, root_directory = var.backend_checks_efs_root_directory_path, input_queue = local.antivirus_queue_url, output_queue = local.api_update_queue_url }
+  key_id    = var.kms_key_arn
+  plaintext = each.value
+  context   = { "LambdaFunctionName" = local.yara_av_function_name }
+}
+
 resource "aws_lambda_event_source_mapping" "av_sqs_queue_mapping" {
   count            = local.count_av_yara
   event_source_arn = local.antivirus_queue
@@ -60,7 +67,8 @@ resource "aws_iam_policy" "lambda_policy" {
       account_id      = data.aws_caller_identity.current.account_id,
       update_queue    = local.api_update_queue,
       input_sqs_queue = local.antivirus_queue,
-      file_system_id  = var.file_system_id
+      file_system_id  = var.file_system_id,
+      kms_arn         = var.kms_key_arn
     }
   )
   name = "${upper(var.project)}YaraAvPolicy"
