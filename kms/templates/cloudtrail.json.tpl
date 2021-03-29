@@ -50,7 +50,8 @@
           "kms:CallerAccount": "${account_id}"
         },
         "StringLike": {
-          "kms:EncryptionContext:aws:cloudtrail:arn": "arn:aws:cloudtrail:*:${account_id}:trail/*"
+          "kms:EncryptionContext:aws:cloudtrail:arn": "arn:aws:cloudtrail:*:${account_id}:trail/*",
+          "kms:EncryptionContext:LambdaFunctionName": ["tdr-log-data-intg", "tdr-log-data-staging", "tdr-log-data-prod", "tdr-log-data-mgmt", "tdr-notifications-mgmt"]
         }
       }
     },
