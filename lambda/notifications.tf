@@ -17,7 +17,7 @@ resource "aws_lambda_function" "notifications_lambda_function" {
   }
 
   lifecycle {
-    ignore_changes = [filename]
+    ignore_changes = [filename, environment]
   }
 }
 

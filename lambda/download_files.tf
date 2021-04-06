@@ -34,7 +34,7 @@ resource "aws_lambda_function" "download_files_lambda_function" {
   }
 
   lifecycle {
-    ignore_changes = [filename]
+    ignore_changes = [filename, environment]
   }
 }
 

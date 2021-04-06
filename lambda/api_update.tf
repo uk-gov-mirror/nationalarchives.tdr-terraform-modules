@@ -18,7 +18,7 @@ resource "aws_lambda_function" "lambda_api_update_function" {
     }
   }
   lifecycle {
-    ignore_changes = [filename]
+    ignore_changes = [filename, environment]
   }
 }
 data "aws_kms_ciphertext" "environment_vars_api_update" {

@@ -22,7 +22,7 @@ resource "aws_lambda_function" "create_db_users_lambda_function" {
   }
 
   lifecycle {
-    ignore_changes = [filename]
+    ignore_changes = [filename, environment]
   }
 }
 

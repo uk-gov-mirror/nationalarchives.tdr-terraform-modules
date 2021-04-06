@@ -15,7 +15,7 @@ resource "aws_lambda_function" "export_api_authoriser_lambda_function" {
   }
 
   lifecycle {
-    ignore_changes = [filename]
+    ignore_changes = [filename, environment]
   }
 }
 

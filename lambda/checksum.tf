@@ -29,7 +29,7 @@ resource "aws_lambda_function" "checksum_lambda_function" {
   }
 
   lifecycle {
-    ignore_changes = [filename]
+    ignore_changes = [filename, environment]
   }
 
   depends_on = [var.mount_target_zero, var.mount_target_one]
