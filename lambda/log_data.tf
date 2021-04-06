@@ -19,7 +19,7 @@ resource "aws_iam_role_policy_attachment" "log_data_base_policy_attach" {
 resource "aws_iam_policy" "log_data_policy" {
   count  = local.count_log_data
   name   = "${upper(var.project)}LogData${title(local.environment)}"
-  policy = templatefile("./tdr-terraform-modules/lambda/templates/log_data.json.tpl", { mgmt_account_id = data.aws_ssm_parameter.mgmt_account_number.*.value[0] })
+  policy = templatefile("./tdr-terraform-modules/lambda/templates/log_data.json.tpl", { mgmt_account_id = data.aws_ssm_parameter.mgmt_account_number.*.value[0], kms_arn = var.kms_key_arn })
 }
 
 resource "aws_iam_role_policy_attachment" "log_data_policy_attach" {
@@ -37,7 +37,7 @@ data "archive_file" "log_data_lambda" {
 resource "aws_lambda_function" "log_data_lambda" {
   count            = local.count_log_data
   filename         = data.archive_file.log_data_lambda.output_path
-  function_name    = "${var.project}-log-data-${local.environment}"
+  function_name    = local.log_data_function_name
   description      = "Aggregate log data to a target S3 bucket"
   role             = aws_iam_role.log_data_assume_role.*.arn[0]
   handler          = "lambda_function.lambda_handler"
@@ -55,13 +55,20 @@ resource "aws_lambda_function" "log_data_lambda" {
 
   environment {
     variables = {
-      TARGET_S3_BUCKET = var.target_s3_bucket
+      TARGET_S3_BUCKET = data.aws_kms_ciphertext.environment_vars_log_data["target_s3_bucket"].ciphertext_blob
     }
   }
 
   lifecycle {
-    ignore_changes = [last_modified]
+    ignore_changes = [last_modified, environment]
   }
+}
+
+data "aws_kms_ciphertext" "environment_vars_log_data" {
+  for_each  = local.count_log_data == 0 ? {} : { target_s3_bucket = var.target_s3_bucket }
+  key_id    = var.kms_key_arn
+  plaintext = each.value
+  context   = { "LambdaFunctionName" = local.log_data_function_name }
 }
 
 resource "aws_sns_topic_subscription" "log_data" {

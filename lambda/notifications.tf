@@ -1,6 +1,6 @@
 resource "aws_lambda_function" "notifications_lambda_function" {
   count         = local.count_notifications
-  function_name = "${var.project}-notifications-${local.environment}"
+  function_name = local.notifications_function_name
   handler       = "uk.gov.nationalarchives.notifications.Lambda::process"
   role          = aws_iam_role.notifications_lambda_iam_role.*.arn[0]
   runtime       = "java11"
@@ -10,15 +10,25 @@ resource "aws_lambda_function" "notifications_lambda_function" {
   tags          = var.common_tags
   environment {
     variables = {
-      SLACK_WEBHOOK         = data.aws_ssm_parameter.slack_webook[count.index].value
-      TO_EMAIL              = "${data.aws_ssm_parameter.notification_email_prefix[count.index].value}@nationalarchives.gov.uk"
-      MUTED_VULNERABILITIES = join(",", var.muted_scan_alerts)
+      SLACK_WEBHOOK         = data.aws_kms_ciphertext.environment_vars_notifications["slack_webhook"].ciphertext_blob
+      TO_EMAIL              = data.aws_kms_ciphertext.environment_vars_notifications["to_email"].ciphertext_blob
+      MUTED_VULNERABILITIES = data.aws_kms_ciphertext.environment_vars_notifications["muted_vulnerabilities"].ciphertext_blob
     }
   }
 
   lifecycle {
     ignore_changes = [filename]
   }
+}
+
+data "aws_kms_ciphertext" "environment_vars_notifications" {
+  for_each = local.count_notifications == 0 ? {} : { slack_webhook = data.aws_ssm_parameter.slack_webook[0].value, to_email = "${data.aws_ssm_parameter.notification_email_prefix[0].value}@nationalarchives.gov.uk", muted_vulnerabilities = join(",", var.muted_scan_alerts) }
+  # This lambda is created by the tdr-terraform-backend project as it only exists in the management account so we can't use any KMS keys
+  # created by the terraform environments project as they won't exist when we first run the backend project.
+  # This KMS key is created by tdr-accounts which means it will exist when we run the terraform backend project for the first time
+  key_id    = "alias/tdr-account-mgmt"
+  plaintext = each.value
+  context   = { "LambdaFunctionName" = local.notifications_function_name }
 }
 
 data aws_ssm_parameter "notification_email_prefix" {
@@ -39,7 +49,7 @@ resource "aws_cloudwatch_log_group" "notifications_lambda_log_group" {
 
 resource "aws_iam_policy" "notifications_lambda_policy" {
   count  = local.count_notifications
-  policy = templatefile("${path.module}/templates/notifications_lambda.json.tpl", { account_id = data.aws_caller_identity.current.account_id, environment = local.environment, email = "${data.aws_ssm_parameter.notification_email_prefix[count.index].value}@nationalarchives.gov.uk" })
+  policy = templatefile("${path.module}/templates/notifications_lambda.json.tpl", { account_id = data.aws_caller_identity.current.account_id, environment = local.environment, email = "${data.aws_ssm_parameter.notification_email_prefix[count.index].value}@nationalarchives.gov.uk", kms_arn = var.kms_key_arn })
   name   = "${upper(var.project)}NotificationsLambdaPolicy${title(local.environment)}"
 }
 

@@ -42,6 +42,14 @@
         "elasticfilesystem:DescribeMountTargets"
       ],
       "Resource" : "arn:aws:elasticfilesystem:eu-west-2:${account_id}:file-system/${file_system_id}"
+    },
+    {
+      "Sid": "DecryptEnvVar",
+      "Effect": "Allow",
+      "Action": [
+        "kms:Decrypt"
+      ],
+      "Resource": "${kms_arn}"
     }
   ]
 }

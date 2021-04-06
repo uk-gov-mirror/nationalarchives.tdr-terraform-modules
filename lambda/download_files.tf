@@ -1,6 +1,6 @@
 resource "aws_lambda_function" "download_files_lambda_function" {
   count         = local.count_download_files
-  function_name = "${var.project}-download-files-${local.environment}"
+  function_name = local.download_files_function_name
   handler       = "uk.gov.nationalarchives.downloadfiles.Lambda::process"
   role          = aws_iam_role.download_files_lambda_iam_role.*.arn[0]
   runtime       = "java11"
@@ -10,16 +10,16 @@ resource "aws_lambda_function" "download_files_lambda_function" {
   tags          = var.common_tags
   environment {
     variables = {
-      ENVIRONMENT       = local.environment
-      INPUT_QUEUE       = local.download_files_queue_url
-      ANTIVIRUS_QUEUE   = local.antivirus_queue_url
-      FILE_FORMAT_QUEUE = local.file_format_queue_url
-      CHECKSUM_QUEUE    = local.checksum_queue_url
-      AUTH_URL          = var.auth_url
-      API_URL           = "${var.api_url}/graphql"
-      CLIENT_ID         = "tdr-backend-checks"
-      CLIENT_SECRET     = var.backend_checks_client_secret
-      ROOT_DIRECTORY    = var.backend_checks_efs_root_directory_path
+      ENVIRONMENT       = data.aws_kms_ciphertext.environment_vars_download_files["environment"].ciphertext_blob
+      INPUT_QUEUE       = data.aws_kms_ciphertext.environment_vars_download_files["input_queue"].ciphertext_blob
+      ANTIVIRUS_QUEUE   = data.aws_kms_ciphertext.environment_vars_download_files["antivirus_queue"].ciphertext_blob
+      FILE_FORMAT_QUEUE = data.aws_kms_ciphertext.environment_vars_download_files["file_format_queue"].ciphertext_blob
+      CHECKSUM_QUEUE    = data.aws_kms_ciphertext.environment_vars_download_files["checksum_queue"].ciphertext_blob
+      AUTH_URL          = data.aws_kms_ciphertext.environment_vars_download_files["auth_url"].ciphertext_blob
+      API_URL           = data.aws_kms_ciphertext.environment_vars_download_files["api_url"].ciphertext_blob
+      CLIENT_ID         = data.aws_kms_ciphertext.environment_vars_download_files["client_id"].ciphertext_blob
+      CLIENT_SECRET     = data.aws_kms_ciphertext.environment_vars_download_files["client_secret"].ciphertext_blob
+      ROOT_DIRECTORY    = data.aws_kms_ciphertext.environment_vars_download_files["root_directory"].ciphertext_blob
     }
   }
   file_system_config {
@@ -38,6 +38,13 @@ resource "aws_lambda_function" "download_files_lambda_function" {
   }
 }
 
+data "aws_kms_ciphertext" "environment_vars_download_files" {
+  for_each  = local.count_download_files == 0 ? {} : { environment = local.environment, input_queue = local.download_files_queue_url, antivirus_queue = local.antivirus_queue_url, file_format_queue = local.file_format_queue_url, checksum_queue = local.checksum_queue_url, auth_url = var.auth_url, api_url = "${var.api_url}/graphql", client_id = "tdr-backend-checks", client_secret = var.backend_checks_client_secret, root_directory = var.backend_checks_efs_root_directory_path }
+  key_id    = var.kms_key_arn
+  plaintext = each.value
+  context   = { "LambdaFunctionName" = local.download_files_function_name }
+}
+
 resource "aws_lambda_event_source_mapping" "download_files_sqs_queue_mapping" {
   count            = local.count_download_files
   event_source_arn = local.download_files_queue
@@ -53,7 +60,7 @@ resource "aws_cloudwatch_log_group" "download_files_lambda_log_group" {
 
 resource "aws_iam_policy" "download_files_lambda_policy" {
   count  = local.count_download_files
-  policy = templatefile("${path.module}/templates/download_files_lambda.json.tpl", { environment = local.environment, account_id = data.aws_caller_identity.current.account_id, antivirus_queue = local.antivirus_queue, checksum_queue = local.checksum_queue, file_format_queue = local.file_format_queue, download_files_queue = local.download_files_queue, file_system_id = var.file_system_id })
+  policy = templatefile("${path.module}/templates/download_files_lambda.json.tpl", { environment = local.environment, account_id = data.aws_caller_identity.current.account_id, antivirus_queue = local.antivirus_queue, checksum_queue = local.checksum_queue, file_format_queue = local.file_format_queue, download_files_queue = local.download_files_queue, file_system_id = var.file_system_id, kms_arn = var.kms_key_arn })
   name   = "${upper(var.project)}DownloadFilesPolicy"
 }
 
