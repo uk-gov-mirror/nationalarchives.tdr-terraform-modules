@@ -10,10 +10,10 @@ resource "aws_lambda_function" "lambda_function" {
   tags          = var.common_tags
   environment {
     variables = {
-      ENVIRONMENT    = local.environment
-      ROOT_DIRECTORY = var.backend_checks_efs_root_directory_path
-      INPUT_QUEUE    = local.antivirus_queue_url
-      OUTPUT_QUEUE   = local.api_update_queue_url
+      ENVIRONMENT    = data.aws_kms_ciphertext.environment_vars_yara_av["environment"].ciphertext_blob
+      ROOT_DIRECTORY = data.aws_kms_ciphertext.environment_vars_yara_av["root_directory"].ciphertext_blob
+      INPUT_QUEUE    = data.aws_kms_ciphertext.environment_vars_yara_av["input_queue"].ciphertext_blob
+      OUTPUT_QUEUE   = data.aws_kms_ciphertext.environment_vars_yara_av["output_queue"].ciphertext_blob
     }
   }
 
@@ -29,7 +29,7 @@ resource "aws_lambda_function" "lambda_function" {
   }
 
   lifecycle {
-    ignore_changes = [filename]
+    ignore_changes = [filename, environment]
   }
 
   depends_on = [var.mount_target_zero, var.mount_target_one]
