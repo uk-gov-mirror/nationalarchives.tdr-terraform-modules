@@ -31,6 +31,10 @@ data "aws_kms_ciphertext" "environment_vars_notifications" {
   context   = { "LambdaFunctionName" = local.notifications_function_name }
 }
 
+data "aws_kms_key" "encryption_key" {
+  key_id = "alias/tdr-account-${local.environment}"
+}
+
 data aws_ssm_parameter "notification_email_prefix" {
   count = local.count_notifications
   name  = "/${local.environment}/notification/email/prefix"
@@ -49,7 +53,7 @@ resource "aws_cloudwatch_log_group" "notifications_lambda_log_group" {
 
 resource "aws_iam_policy" "notifications_lambda_policy" {
   count  = local.count_notifications
-  policy = templatefile("${path.module}/templates/notifications_lambda.json.tpl", { account_id = data.aws_caller_identity.current.account_id, environment = local.environment, email = "${data.aws_ssm_parameter.notification_email_prefix[count.index].value}@nationalarchives.gov.uk", kms_arn = var.kms_key_arn })
+  policy = templatefile("${path.module}/templates/notifications_lambda.json.tpl", { account_id = data.aws_caller_identity.current.account_id, environment = local.environment, email = "${data.aws_ssm_parameter.notification_email_prefix[count.index].value}@nationalarchives.gov.uk", kms_arn = data.aws_kms_key.encryption_key.arn })
   name   = "${upper(var.project)}NotificationsLambdaPolicy${title(local.environment)}"
 }
 
