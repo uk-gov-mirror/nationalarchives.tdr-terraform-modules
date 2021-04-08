@@ -10,16 +10,16 @@ resource "aws_lambda_function" "download_files_lambda_function" {
   tags          = var.common_tags
   environment {
     variables = {
-      ENVIRONMENT       = data.aws_kms_ciphertext.environment_vars_download_files["environment"].ciphertext_blob
-      INPUT_QUEUE       = data.aws_kms_ciphertext.environment_vars_download_files["input_queue"].ciphertext_blob
-      ANTIVIRUS_QUEUE   = data.aws_kms_ciphertext.environment_vars_download_files["antivirus_queue"].ciphertext_blob
-      FILE_FORMAT_QUEUE = data.aws_kms_ciphertext.environment_vars_download_files["file_format_queue"].ciphertext_blob
-      CHECKSUM_QUEUE    = data.aws_kms_ciphertext.environment_vars_download_files["checksum_queue"].ciphertext_blob
-      AUTH_URL          = data.aws_kms_ciphertext.environment_vars_download_files["auth_url"].ciphertext_blob
-      API_URL           = data.aws_kms_ciphertext.environment_vars_download_files["api_url"].ciphertext_blob
-      CLIENT_ID         = data.aws_kms_ciphertext.environment_vars_download_files["client_id"].ciphertext_blob
-      CLIENT_SECRET     = data.aws_kms_ciphertext.environment_vars_download_files["client_secret"].ciphertext_blob
-      ROOT_DIRECTORY    = data.aws_kms_ciphertext.environment_vars_download_files["root_directory"].ciphertext_blob
+      ENVIRONMENT       = aws_kms_ciphertext.environment_vars_download_files["environment"].ciphertext_blob
+      INPUT_QUEUE       = aws_kms_ciphertext.environment_vars_download_files["input_queue"].ciphertext_blob
+      ANTIVIRUS_QUEUE   = aws_kms_ciphertext.environment_vars_download_files["antivirus_queue"].ciphertext_blob
+      FILE_FORMAT_QUEUE = aws_kms_ciphertext.environment_vars_download_files["file_format_queue"].ciphertext_blob
+      CHECKSUM_QUEUE    = aws_kms_ciphertext.environment_vars_download_files["checksum_queue"].ciphertext_blob
+      AUTH_URL          = aws_kms_ciphertext.environment_vars_download_files["auth_url"].ciphertext_blob
+      API_URL           = aws_kms_ciphertext.environment_vars_download_files["api_url"].ciphertext_blob
+      CLIENT_ID         = aws_kms_ciphertext.environment_vars_download_files["client_id"].ciphertext_blob
+      CLIENT_SECRET     = aws_kms_ciphertext.environment_vars_download_files["client_secret"].ciphertext_blob
+      ROOT_DIRECTORY    = aws_kms_ciphertext.environment_vars_download_files["root_directory"].ciphertext_blob
     }
   }
   file_system_config {
@@ -34,11 +34,11 @@ resource "aws_lambda_function" "download_files_lambda_function" {
   }
 
   lifecycle {
-    ignore_changes = [filename, environment]
+    ignore_changes = [filename]
   }
 }
 
-data "aws_kms_ciphertext" "environment_vars_download_files" {
+resource "aws_kms_ciphertext" "environment_vars_download_files" {
   for_each  = local.count_download_files == 0 ? {} : { environment = local.environment, input_queue = local.download_files_queue_url, antivirus_queue = local.antivirus_queue_url, file_format_queue = local.file_format_queue_url, checksum_queue = local.checksum_queue_url, auth_url = var.auth_url, api_url = "${var.api_url}/graphql", client_id = "tdr-backend-checks", client_secret = var.backend_checks_client_secret, root_directory = var.backend_checks_efs_root_directory_path }
   key_id    = var.kms_key_arn
   plaintext = each.value

@@ -10,18 +10,18 @@ resource "aws_lambda_function" "notifications_lambda_function" {
   tags          = var.common_tags
   environment {
     variables = {
-      SLACK_WEBHOOK         = data.aws_kms_ciphertext.environment_vars_notifications["slack_webhook"].ciphertext_blob
-      TO_EMAIL              = data.aws_kms_ciphertext.environment_vars_notifications["to_email"].ciphertext_blob
-      MUTED_VULNERABILITIES = data.aws_kms_ciphertext.environment_vars_notifications["muted_vulnerabilities"].ciphertext_blob
+      SLACK_WEBHOOK         = aws_kms_ciphertext.environment_vars_notifications["slack_webhook"].ciphertext_blob
+      TO_EMAIL              = aws_kms_ciphertext.environment_vars_notifications["to_email"].ciphertext_blob
+      MUTED_VULNERABILITIES = aws_kms_ciphertext.environment_vars_notifications["muted_vulnerabilities"].ciphertext_blob
     }
   }
 
   lifecycle {
-    ignore_changes = [filename, environment]
+    ignore_changes = [filename]
   }
 }
 
-data "aws_kms_ciphertext" "environment_vars_notifications" {
+resource "aws_kms_ciphertext" "environment_vars_notifications" {
   for_each = local.count_notifications == 0 ? {} : { slack_webhook = data.aws_ssm_parameter.slack_webook[0].value, to_email = "${data.aws_ssm_parameter.notification_email_prefix[0].value}@nationalarchives.gov.uk", muted_vulnerabilities = join(",", var.muted_scan_alerts) }
   # This lambda is created by the tdr-terraform-backend project as it only exists in the management account so we can't use any KMS keys
   # created by the terraform environments project as they won't exist when we first run the backend project.

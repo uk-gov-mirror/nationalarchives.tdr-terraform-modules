@@ -10,7 +10,7 @@ resource "aws_lambda_function" "ecr_scan_lambda_function" {
   tags          = var.common_tags
 
   lifecycle {
-    ignore_changes = [filename, environment]
+    ignore_changes = [filename]
   }
 }
 

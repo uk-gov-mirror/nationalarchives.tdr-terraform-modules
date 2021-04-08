@@ -10,18 +10,18 @@ resource "aws_lambda_function" "lambda_api_update_function" {
   tags          = var.common_tags
   environment {
     variables = {
-      API_URL       = data.aws_kms_ciphertext.environment_vars_api_update["api_url"].ciphertext_blob
-      AUTH_URL      = data.aws_kms_ciphertext.environment_vars_api_update["auth_url"].ciphertext_blob
-      CLIENT_ID     = data.aws_kms_ciphertext.environment_vars_api_update["client_id"].ciphertext_blob
-      CLIENT_SECRET = data.aws_kms_ciphertext.environment_vars_api_update["client_secret"].ciphertext_blob
-      QUEUE_URL     = data.aws_kms_ciphertext.environment_vars_api_update["queue_url"].ciphertext_blob
+      API_URL       = aws_kms_ciphertext.environment_vars_api_update["api_url"].ciphertext_blob
+      AUTH_URL      = aws_kms_ciphertext.environment_vars_api_update["auth_url"].ciphertext_blob
+      CLIENT_ID     = aws_kms_ciphertext.environment_vars_api_update["client_id"].ciphertext_blob
+      CLIENT_SECRET = aws_kms_ciphertext.environment_vars_api_update["client_secret"].ciphertext_blob
+      QUEUE_URL     = aws_kms_ciphertext.environment_vars_api_update["queue_url"].ciphertext_blob
     }
   }
   lifecycle {
-    ignore_changes = [filename, environment]
+    ignore_changes = [filename]
   }
 }
-data "aws_kms_ciphertext" "environment_vars_api_update" {
+resource "aws_kms_ciphertext" "environment_vars_api_update" {
   for_each  = local.count_api_update == 0 ? {} : { api_url = "${var.api_url}/graphql", auth_url = var.auth_url, client_id = "tdr-backend-checks", client_secret = var.keycloak_backend_checks_client_secret, queue_url = local.api_update_queue_url }
   key_id    = var.kms_key_arn
   plaintext = each.value

@@ -10,16 +10,16 @@ resource "aws_lambda_function" "export_api_authoriser_lambda_function" {
   tags          = var.common_tags
   environment {
     variables = {
-      API_URL = data.aws_kms_ciphertext.environment_vars_export_api_authoriser["api_url"].ciphertext_blob
+      API_URL = aws_kms_ciphertext.environment_vars_export_api_authoriser["api_url"].ciphertext_blob
     }
   }
 
   lifecycle {
-    ignore_changes = [filename, environment]
+    ignore_changes = [filename]
   }
 }
 
-data "aws_kms_ciphertext" "environment_vars_export_api_authoriser" {
+resource "aws_kms_ciphertext" "environment_vars_export_api_authoriser" {
   for_each  = local.count_export_api_authoriser == 0 ? {} : { api_url = "${var.api_url}/graphql" }
   key_id    = var.kms_key_arn
   plaintext = each.value

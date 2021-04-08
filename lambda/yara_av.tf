@@ -10,10 +10,10 @@ resource "aws_lambda_function" "lambda_function" {
   tags          = var.common_tags
   environment {
     variables = {
-      ENVIRONMENT    = data.aws_kms_ciphertext.environment_vars_yara_av["environment"].ciphertext_blob
-      ROOT_DIRECTORY = data.aws_kms_ciphertext.environment_vars_yara_av["root_directory"].ciphertext_blob
-      INPUT_QUEUE    = data.aws_kms_ciphertext.environment_vars_yara_av["input_queue"].ciphertext_blob
-      OUTPUT_QUEUE   = data.aws_kms_ciphertext.environment_vars_yara_av["output_queue"].ciphertext_blob
+      ENVIRONMENT    = aws_kms_ciphertext.environment_vars_yara_av["environment"].ciphertext_blob
+      ROOT_DIRECTORY = aws_kms_ciphertext.environment_vars_yara_av["root_directory"].ciphertext_blob
+      INPUT_QUEUE    = aws_kms_ciphertext.environment_vars_yara_av["input_queue"].ciphertext_blob
+      OUTPUT_QUEUE   = aws_kms_ciphertext.environment_vars_yara_av["output_queue"].ciphertext_blob
     }
   }
 
@@ -29,13 +29,13 @@ resource "aws_lambda_function" "lambda_function" {
   }
 
   lifecycle {
-    ignore_changes = [filename, environment]
+    ignore_changes = [filename]
   }
 
   depends_on = [var.mount_target_zero, var.mount_target_one]
 }
 
-data "aws_kms_ciphertext" "environment_vars_yara_av" {
+resource "aws_kms_ciphertext" "environment_vars_yara_av" {
   for_each  = local.count_av_yara == 0 ? {} : { environment = local.environment, root_directory = var.backend_checks_efs_root_directory_path, input_queue = local.antivirus_queue_url, output_queue = local.api_update_queue_url }
   key_id    = var.kms_key_arn
   plaintext = each.value

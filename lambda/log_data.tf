@@ -55,16 +55,16 @@ resource "aws_lambda_function" "log_data_lambda" {
 
   environment {
     variables = {
-      TARGET_S3_BUCKET = data.aws_kms_ciphertext.environment_vars_log_data["target_s3_bucket"].ciphertext_blob
+      TARGET_S3_BUCKET = aws_kms_ciphertext.environment_vars_log_data["target_s3_bucket"].ciphertext_blob
     }
   }
 
   lifecycle {
-    ignore_changes = [last_modified, environment]
+    ignore_changes = [last_modified]
   }
 }
 
-data "aws_kms_ciphertext" "environment_vars_log_data" {
+resource "aws_kms_ciphertext" "environment_vars_log_data" {
   for_each  = local.count_log_data == 0 ? {} : { target_s3_bucket = var.target_s3_bucket }
   key_id    = var.kms_key_arn
   plaintext = each.value
