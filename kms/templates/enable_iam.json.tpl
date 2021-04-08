@@ -10,6 +10,44 @@
       },
       "Action": "kms:*",
       "Resource": "*"
+    },
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "Service": "sns.amazonaws.com"
+      },
+      "Action": [
+        "kms:GenerateDataKey",
+        "kms:Decrypt"
+      ],
+      "Resource": "*",
+      "Condition": {
+        "StringLike": {
+          "kms:EncryptionContext:aws:sqs:arn": [
+            "arn:aws:sqs:eu-west-2:${account_id}:tdr-backend-check-failure-${environment}",
+            "arn:aws:sqs:eu-west-2:${account_id}:tdr-download-files-${environment}"
+
+          ]
+        }
+      }
+    },
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "Service": "s3.amazonaws.com"
+      },
+      "Action": [
+        "kms:GenerateDataKey",
+        "kms:Decrypt"
+      ],
+      "Resource": "*",
+      "Condition": {
+        "StringLike": {
+          "kms:EncryptionContext:aws:sns:topicArn": [
+            "arn:aws:sns:eu-west-2:${account_id}:tdr-s3-dirty-upload-${environment}"
+          ]
+        }
+      }
     }
   ]
 }

@@ -68,7 +68,8 @@
       "Sid": "DecryptEnvVar",
       "Effect": "Allow",
       "Action": [
-        "kms:Decrypt"
+        "kms:Decrypt",
+        "kms:GenerateDataKey"
       ],
       "Resource": "${kms_arn}"
     }

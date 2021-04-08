@@ -33,7 +33,7 @@
       "Action": [
         "kms:Decrypt"
       ],
-      "Resource": "${kms_arn}"
+      "Resource": ["${kms_arn}"]
     }
   ]
 }

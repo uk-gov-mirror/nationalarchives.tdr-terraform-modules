@@ -13,6 +13,7 @@ resource "aws_sqs_queue" "sqs_queue" {
       "Name", local.sqs_name,
     )
   )
+  kms_master_key_id = var.kms_key_id != "" ? var.kms_key_id : null
 }
 
 resource "aws_sns_topic_subscription" "sqs_topic_subscription" {

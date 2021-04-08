@@ -1,8 +1,9 @@
 data "template_file" "key_policy" {
   template = file("./tdr-terraform-modules/kms/templates/${var.key_policy}.json.tpl")
   vars = {
-    account_id  = data.aws_caller_identity.current.account_id
-    environment = var.environment
+    account_id      = data.aws_caller_identity.current.account_id
+    environment     = var.environment
+    mgmt_account_id = data.aws_ssm_parameter.mgmt_account_number.value
   }
 }
 
