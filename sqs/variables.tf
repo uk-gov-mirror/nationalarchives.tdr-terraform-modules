@@ -45,6 +45,4 @@ variable "visibility_timeout" {
   default = 30
 }
 
-variable "kms_key_id" {
-  default = ""
-}
+variable "kms_key_id" {}
