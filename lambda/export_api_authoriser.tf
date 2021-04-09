@@ -6,7 +6,7 @@ resource "aws_lambda_function" "export_api_authoriser_lambda_function" {
   runtime       = "java11"
   filename      = "${path.module}/functions/export-authoriser.jar"
   timeout       = 10
-  memory_size   = 1024
+  memory_size   = 4096
   tags          = var.common_tags
   environment {
     variables = {
