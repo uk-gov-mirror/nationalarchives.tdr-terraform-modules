@@ -10,10 +10,10 @@ resource "aws_lambda_function" "file_format_lambda_function" {
   tags          = var.common_tags
   environment {
     variables = {
-      ENVIRONMENT    = data.aws_kms_ciphertext.environment_vars_file_format["environment"].ciphertext_blob
-      INPUT_QUEUE    = data.aws_kms_ciphertext.environment_vars_file_format["input_queue"].ciphertext_blob
-      OUTPUT_QUEUE   = data.aws_kms_ciphertext.environment_vars_file_format["output_queue"].ciphertext_blob
-      ROOT_DIRECTORY = data.aws_kms_ciphertext.environment_vars_file_format["root_directory"].ciphertext_blob
+      ENVIRONMENT    = aws_kms_ciphertext.environment_vars_file_format["environment"].ciphertext_blob
+      INPUT_QUEUE    = aws_kms_ciphertext.environment_vars_file_format["input_queue"].ciphertext_blob
+      OUTPUT_QUEUE   = aws_kms_ciphertext.environment_vars_file_format["output_queue"].ciphertext_blob
+      ROOT_DIRECTORY = aws_kms_ciphertext.environment_vars_file_format["root_directory"].ciphertext_blob
     }
   }
   file_system_config {
@@ -34,7 +34,7 @@ resource "aws_lambda_function" "file_format_lambda_function" {
   depends_on = [var.mount_target_zero, var.mount_target_one]
 }
 
-data "aws_kms_ciphertext" "environment_vars_file_format" {
+resource "aws_kms_ciphertext" "environment_vars_file_format" {
   for_each  = local.count_file_format == 0 ? {} : { environment = local.environment, input_queue = local.file_format_queue_url, output_queue = local.api_update_queue_url, root_directory = var.backend_checks_efs_root_directory_path }
   key_id    = var.kms_key_arn
   plaintext = each.value
