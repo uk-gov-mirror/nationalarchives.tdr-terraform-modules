@@ -88,6 +88,23 @@
           "kms:EncryptionContext:aws:cloudtrail:arn": "arn:aws:cloudtrail:*:${account_id}:trail/*"
         }
       }
+    },
+    {
+      "Sid": "Allow S3 logs to send events to encrypted SNS topic",
+      "Effect": "Allow",
+      "Principal": {
+        "Service": "s3.amazonaws.com"
+      },
+      "Action": [
+        "kms:GenerateDataKey",
+        "kms:Decrypt"
+      ],
+      "Resource": "*",
+      "Condition": {
+        "StringLike": {
+          "kms:EncryptionContext:aws:sns:topicArn": "arn:aws:sns:eu-west-2:${account_id}:tdr-logs-${environment}"
+        }
+      }
     }
   ]
 }

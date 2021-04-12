@@ -59,6 +59,14 @@
         "sns:Publish"
       ],
       "Resource": "${sns_topic}"
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "kms:GenerateDataKey",
+        "kms:Decrypt"
+      ],
+      "Resource": "${kms_key_arn}"
     }
   ]
 }

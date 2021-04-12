@@ -44,3 +44,5 @@ variable "redrive_maximum_receives" {
 variable "visibility_timeout" {
   default = 30
 }
+
+variable "kms_key_id" {}

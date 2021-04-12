@@ -24,3 +24,7 @@ variable "sns_policy" {
   description = "allows a custom SNS policy to be set"
   default     = "default"
 }
+
+variable "kms_key_arn" {
+  default = ""
+}
