@@ -53,6 +53,7 @@ resource "aws_alb_target_group" "alb_module" {
 }
 
 resource "aws_alb_listener" "alb_module" {
+  count             = var.own_host_header_only == true ? 0 : 1
   load_balancer_arn = aws_alb.alb_module.id
   port              = "443"
   protocol          = "HTTPS"
@@ -62,6 +63,41 @@ resource "aws_alb_listener" "alb_module" {
   default_action {
     target_group_arn = aws_alb_target_group.alb_module.id
     type             = "forward"
+  }
+}
+
+resource "aws_alb_listener" "fixed_response_forbidden" {
+  count             = var.own_host_header_only == true ? 1 : 0
+  load_balancer_arn = aws_alb.alb_module.id
+  port              = "443"
+  protocol          = "HTTPS"
+  ssl_policy        = var.ssl_policy
+  certificate_arn   = var.certificate_arn
+
+  default_action {
+    type = "fixed-response"
+
+    fixed_response {
+      content_type = "text/plain"
+      status_code  = "403"
+    }
+  }
+}
+
+resource "aws_lb_listener_rule" "own_host_header_only" {
+  count        = var.own_host_header_only == true ? 1 : 0
+  listener_arn = aws_alb_listener.fixed_response_forbidden[count.index].arn
+  priority     = 1
+
+  action {
+    type             = "forward"
+    target_group_arn = aws_alb_target_group.alb_module.arn
+  }
+
+  condition {
+    host_header {
+      values = [var.host]
+    }
   }
 }
 
