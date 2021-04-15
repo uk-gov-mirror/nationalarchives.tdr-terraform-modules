@@ -80,7 +80,7 @@ variable "vpc_id" {
 }
 
 variable "own_host_header_only" {
-  description = "Only allow requests where the host header is set the the value of the host variable"
+  description = "Only allow requests where the host header is set to the value of the host variable"
   default     = false
 }
 
