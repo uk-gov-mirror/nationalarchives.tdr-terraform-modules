@@ -38,6 +38,3 @@ resource "aws_ses_email_identity" "email_address" {
   email = "${local.email}@${var.domain}"
 }
 
-resource "aws_ses_email_identity" "tdr_email_address" {
-  email = "aws_tdr_management@${var.domain}"
-}
