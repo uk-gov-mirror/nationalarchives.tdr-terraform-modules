@@ -78,3 +78,13 @@ variable "target_id" {
 variable "vpc_id" {
   description = "VPC ID"
 }
+
+variable "own_host_header_only" {
+  description = "Only allow requests where the host header is set to the value of the host variable"
+  default     = false
+}
+
+variable "host" {
+  default     = ""
+  description = "The host to allow requests from if using own_host_header_only"
+}
