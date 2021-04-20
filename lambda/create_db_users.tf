@@ -13,6 +13,7 @@ resource "aws_lambda_function" "create_db_users_lambda_function" {
       DB_ADMIN_USER     = aws_kms_ciphertext.environment_vars_create_db_users["db_admin_user"].ciphertext_blob
       DB_ADMIN_PASSWORD = aws_kms_ciphertext.environment_vars_create_db_users["db_admin_password"].ciphertext_blob
       DB_URL            = aws_kms_ciphertext.environment_vars_create_db_users["db_url"].ciphertext_blob
+      DATABASE_NAME = aws_kms_ciphertext.environment_vars_create_db_users["database_name"].ciphertext_blob
     }
   }
 
@@ -27,7 +28,7 @@ resource "aws_lambda_function" "create_db_users_lambda_function" {
 }
 
 resource "aws_kms_ciphertext" "environment_vars_create_db_users" {
-  for_each  = local.count_create_db_users == 0 ? {} : { db_admin_user = var.db_admin_user, db_admin_password = var.db_admin_password, db_url = "jdbc:postgresql://${var.db_url}:5432/consignmentapi" }
+  for_each  = local.count_create_db_users == 0 ? {} : { db_admin_user = var.db_admin_user, db_admin_password = var.db_admin_password, db_url = "jdbc:postgresql://${var.db_url}:5432/consignmentapi", database_name = "consignmentapi" }
   key_id    = var.kms_key_arn
   plaintext = each.value
   context   = { "LambdaFunctionName" = local.create_db_users_function_name }

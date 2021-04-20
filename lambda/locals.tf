@@ -12,10 +12,12 @@ locals {
   count_ecr_scan                      = var.apply_resource == true && var.lambda_ecr_scan == true ? 1 : 0
   count_efs                           = var.apply_resource == true && var.use_efs ? 1 : 0
   count_create_db_users               = var.apply_resource == true && var.lambda_create_db_users ? 1 : 0
+  count_create_keycloak_db_user               = var.apply_resource == true && var.lambda_create_keycloak_db_users ? 1 : 0
   count_export_api_authoriser         = var.apply_resource == true && var.lambda_export_authoriser == true ? 1 : 0
   api_update_function_name            = "${var.project}-api-update-${local.environment}"
   checksum_function_name              = "${var.project}-checksum-${local.environment}"
   create_db_users_function_name       = "${var.project}-create-db-users-${local.environment}"
+  create_keycloak_db_user_function_name = "${var.project}-create-keycloak-db-user-${local.environment}"
   download_files_function_name        = "${var.project}-download-files-${local.environment}"
   export_api_authoriser_function_name = "${var.project}-export-api-authoriser-${local.environment}"
   file_format_function_name           = "${var.project}-file-format-${local.environment}"

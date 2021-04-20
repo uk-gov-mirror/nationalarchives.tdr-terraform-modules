@@ -172,3 +172,19 @@ variable "kms_key_arn" {
   default     = ""
   description = "The KMS arn to encrypt environment variables. Not all lambdas need this so it has a default"
 }
+
+variable "keycloak_admin_user" {
+  default = ""
+}
+
+variable "keycloak_admin_password" {
+  default = ""
+}
+
+variable "keycloak_db_url" {
+  default = ""
+}
+
+variable "lambda_create_keycloak_db_users" {
+  default = false
+}
