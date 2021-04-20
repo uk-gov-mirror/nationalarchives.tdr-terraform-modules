@@ -13,7 +13,7 @@ resource "aws_lambda_function" "create_keycloak_db_user_lambda_function" {
       DB_ADMIN_USER     = aws_kms_ciphertext.environment_vars_create_keycloak_db_user["db_admin_user"].ciphertext_blob
       DB_ADMIN_PASSWORD = aws_kms_ciphertext.environment_vars_create_keycloak_db_user["db_admin_password"].ciphertext_blob
       DB_URL            = aws_kms_ciphertext.environment_vars_create_keycloak_db_user["db_url"].ciphertext_blob
-      DATABASE_NAME = aws_kms_ciphertext.environment_vars_create_keycloak_db_user["database_name"].ciphertext_blob
+      DATABASE_NAME     = aws_kms_ciphertext.environment_vars_create_keycloak_db_user["database_name"].ciphertext_blob
     }
   }
 
@@ -72,7 +72,7 @@ resource "aws_security_group" "create_keycloak_db_user_lambda" {
   }
 
   tags = merge(
-  var.common_tags,
-  map("Name", "${var.project}-create-keycloak-db-users-lambda-security-group")
+    var.common_tags,
+    map("Name", "${var.project}-create-keycloak-db-users-lambda-security-group")
   )
 }

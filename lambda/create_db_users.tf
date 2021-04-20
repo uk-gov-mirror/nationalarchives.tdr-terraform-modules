@@ -13,7 +13,7 @@ resource "aws_lambda_function" "create_db_users_lambda_function" {
       DB_ADMIN_USER     = aws_kms_ciphertext.environment_vars_create_db_users["db_admin_user"].ciphertext_blob
       DB_ADMIN_PASSWORD = aws_kms_ciphertext.environment_vars_create_db_users["db_admin_password"].ciphertext_blob
       DB_URL            = aws_kms_ciphertext.environment_vars_create_db_users["db_url"].ciphertext_blob
-      DATABASE_NAME = aws_kms_ciphertext.environment_vars_create_db_users["database_name"].ciphertext_blob
+      DATABASE_NAME     = aws_kms_ciphertext.environment_vars_create_db_users["database_name"].ciphertext_blob
     }
   }
 
