@@ -14,6 +14,7 @@ resource "aws_lambda_function" "create_keycloak_db_user_lambda_function" {
       DB_ADMIN_PASSWORD = aws_kms_ciphertext.environment_vars_create_keycloak_db_user["db_admin_password"].ciphertext_blob
       DB_URL            = aws_kms_ciphertext.environment_vars_create_keycloak_db_user["db_url"].ciphertext_blob
       DATABASE_NAME     = aws_kms_ciphertext.environment_vars_create_keycloak_db_user["database_name"].ciphertext_blob
+      KEYCLOAK_PASSWORD = aws_kms_ciphertext.environment_vars_create_keycloak_db_user["keycloak_password"].ciphertext_blob
     }
   }
 
@@ -28,7 +29,7 @@ resource "aws_lambda_function" "create_keycloak_db_user_lambda_function" {
 }
 
 resource "aws_kms_ciphertext" "environment_vars_create_keycloak_db_user" {
-  for_each  = local.count_create_keycloak_db_user == 0 ? {} : { db_admin_user = var.keycloak_admin_user, db_admin_password = var.keycloak_admin_password, db_url = "jdbc:postgresql://${var.keycloak_db_url}:5432/keycloak", database_name = "keycloak" }
+  for_each  = local.count_create_keycloak_db_user == 0 ? {} : { db_admin_user = var.db_admin_user, db_admin_password = var.db_admin_password, db_url = "jdbc:postgresql://${var.db_url}:5432/keycloak", database_name = "keycloak", keycloak_password = var.keycloak_password }
   key_id    = var.kms_key_arn
   plaintext = each.value
   context   = { "LambdaFunctionName" = local.create_keycloak_db_user_function_name }

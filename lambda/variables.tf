@@ -176,3 +176,7 @@ variable "kms_key_arn" {
 variable "lambda_create_keycloak_db_users" {
   default = false
 }
+
+variable "keycloak_password" {
+  default = ""
+}
