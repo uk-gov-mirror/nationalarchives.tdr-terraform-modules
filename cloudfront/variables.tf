@@ -19,3 +19,8 @@ variable "certificate_arn" {
 variable "api_gateway_url" {
   description = "The API gateway URL to create an origin for"
 }
+
+variable "waf_arn" {
+  description = "WAF to attach to this cloudfront distribution"
+  default     = null
+}

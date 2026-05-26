@@ -26,8 +26,9 @@ data "aws_cloudfront_cache_policy" "caching_disabled" {
 }
 
 resource "aws_cloudfront_distribution" "cloudfront_distribution" {
-  aliases = [var.alias_domain_name]
-  enabled = true
+  aliases    = [var.alias_domain_name]
+  enabled    = true
+  web_acl_id = var.waf_arn
   logging_config {
     bucket = var.logging_bucket_regional_domain_name
   }
