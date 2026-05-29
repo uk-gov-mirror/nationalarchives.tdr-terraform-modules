@@ -185,6 +185,13 @@ resource "aws_wafv2_web_acl" "cloudfront_waf" {
             }
           }
         }
+        rule_action_override {
+          name = "CrossSiteScripting_BODY"
+          action_to_use {
+            count {
+            }
+          }
+        }
       }
     }
 
@@ -232,6 +239,48 @@ resource "aws_wafv2_web_acl" "cloudfront_waf" {
     visibility_config {
       cloudwatch_metrics_enabled = true
       metric_name                = "waf-allow-GT8K-body-uploads"
+      sampled_requests_enabled   = true
+    }
+  }
+
+  # TDRD-1458
+  rule {
+    name     = "allow_CrossSiteScripting_BODY_on_uploads"
+    priority = 27
+
+    action {
+      block {}
+    }
+
+    statement {
+      and_statement {
+        statement {
+          label_match_statement {
+            key   = "awswaf:managed:aws:core-rule-set:CrossSiteScripting_Body"
+            scope = "LABEL"
+          }
+        }
+        statement {
+          byte_match_statement {
+            positional_constraint = "EXACTLY"
+            search_string         = "/cookies"
+
+            field_to_match {
+              uri_path {}
+            }
+
+            text_transformation {
+              priority = 0
+              type     = "NONE"
+            }
+          }
+        }
+      }
+    }
+
+    visibility_config {
+      cloudwatch_metrics_enabled = true
+      metric_name                = "waf-allow-CrossSiteScripting-BODY-on-uploads"
       sampled_requests_enabled   = true
     }
   }
