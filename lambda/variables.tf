@@ -17,33 +17,8 @@ variable "timeout_seconds" {
   default     = 180
 }
 
-variable "lambda_yara_av" {
-  description = "deploy Lambda function to run yara av checks on files"
-  default     = false
-}
-
-variable "lambda_checksum" {
-  description = "deploy Lambda function to run the checksum calculation"
-  default     = false
-}
-
 variable "lambda_log_data" {
   description = "deploy Lambda function to copy S3 from one bucket to another via SNS notifications"
-  default     = false
-}
-
-variable "lambda_api_update" {
-  description = "depoly Lambda function to update the api"
-  default     = false
-}
-
-variable "lambda_file_format" {
-  description = "deploy Lambda function to run the file format extraction"
-  default     = false
-}
-
-variable "lambda_download_files" {
-  description = "deploy Lambda function to download files to EFS"
   default     = false
 }
 
@@ -137,36 +112,9 @@ variable "tdr_reporting_slack_channel_id" {
   default     = ""
 }
 
-variable "keycloak_backend_checks_client_secret" {
-  description = "Keycloak backend checks client secret"
-  default     = ""
-}
-
-variable "backend_checks_efs_access_point" {
-  description = "The access point for the efs volume used by the backend checks"
-  default     = ""
-}
-
-variable "backend_checks_efs_root_directory_path" {
-  description = "The root directory of the efs volume used by the backend checks"
-  default     = ""
-}
-
 variable "vpc_id" {
   description = "The VPC ID"
   default     = ""
-}
-
-variable "file_system_id" {
-  default = ""
-}
-
-variable "s3_sns_topic" {
-  default = ""
-}
-
-variable "use_efs" {
-  default = false
 }
 
 variable "event_rule_arns" {
@@ -205,10 +153,6 @@ variable "backend_checks_api_arn" {
   default = ""
 }
 
-variable "backend_checks_client_secret" {
-  default = ""
-}
-
 variable "draft_metadata_api_arn" {
   default = ""
 }
@@ -221,20 +165,8 @@ variable "mount_target_one" {
   default = ""
 }
 
-variable "consignment_database_sg_id" {
-  default = ""
-}
-
 variable "lambda_create_db_users" {
   default = false
-}
-
-variable "db_admin_user" {
-  default = ""
-}
-
-variable "db_admin_password" {
-  default = ""
 }
 
 variable "db_url" {
@@ -263,10 +195,6 @@ variable "keycloak_password" {
 variable "efs_security_group_id" {
   default     = ""
   description = "The security group for the EFS mount targets"
-}
-
-variable "keycloak_database_security_group" {
-  default = ""
 }
 
 variable "database_security_group" {
@@ -338,10 +266,6 @@ variable "rotate_secrets_client_path" {
 }
 
 variable "rotate_keycloak_secrets_event_arn" {
-  default = ""
-}
-
-variable "upload_bucket" {
   default = ""
 }
 
