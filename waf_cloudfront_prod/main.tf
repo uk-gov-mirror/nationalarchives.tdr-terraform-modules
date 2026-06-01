@@ -47,7 +47,7 @@ resource "aws_wafv2_web_acl" "cloudfront_waf" {
   name     = local.waf_name
   scope    = "CLOUDFRONT"
   default_action {
-    block {}
+    allow {}
   }
 
   visibility_config {
@@ -117,8 +117,45 @@ resource "aws_wafv2_web_acl" "cloudfront_waf" {
   }
 
   rule {
-    name     = "rate_control"
+    name     = "block_not_in_GB"
     priority = 15
+    action {
+      block {}
+    }
+
+    statement {
+      and_statement {
+        statement {
+          not_statement {
+            statement {
+              geo_match_statement {
+                country_codes = ["GB"]
+              }
+            }
+          }
+        }
+        statement {
+          not_statement {
+            statement {
+              ip_set_reference_statement {
+                arn = aws_wafv2_ip_set.allowlist_ips.arn
+              }
+            }
+          }
+        }
+      }
+    }
+
+    visibility_config {
+      cloudwatch_metrics_enabled = true
+      metric_name                = "waf-block-not-in-GB"
+      sampled_requests_enabled   = true
+    }
+  }
+
+  rule {
+    name     = "rate_control"
+    priority = 20
     action {
       block {}
     }
@@ -140,7 +177,7 @@ resource "aws_wafv2_web_acl" "cloudfront_waf" {
 
   rule {
     name     = "AWS-AWSManagedRulesAmazonIpReputationList"
-    priority = 20
+    priority = 25
     override_action {
       none {}
     }
@@ -161,7 +198,7 @@ resource "aws_wafv2_web_acl" "cloudfront_waf" {
 
   rule {
     name     = "AWS-AWSManagedRulesCommonRuleSet"
-    priority = 25
+    priority = 30
     override_action {
       none {}
     }
@@ -204,7 +241,7 @@ resource "aws_wafv2_web_acl" "cloudfront_waf" {
 
   rule {
     name     = "allow_GT8K_body_uploads"
-    priority = 26
+    priority = 31
 
     action {
       block {}
@@ -246,7 +283,7 @@ resource "aws_wafv2_web_acl" "cloudfront_waf" {
   # TDRD-1458
   rule {
     name     = "allow_CrossSiteScripting_BODY_on_uploads"
-    priority = 27
+    priority = 32
 
     action {
       block {}
@@ -287,7 +324,7 @@ resource "aws_wafv2_web_acl" "cloudfront_waf" {
 
   rule {
     name     = "AWS-AWSManagedRulesKnownBadInputsRuleSet"
-    priority = 30
+    priority = 35
     override_action {
       none {}
     }
@@ -302,26 +339,6 @@ resource "aws_wafv2_web_acl" "cloudfront_waf" {
     visibility_config {
       cloudwatch_metrics_enabled = true
       metric_name                = "AWS-AWSManagedRulesKnownBadInputsRuleSet"
-      sampled_requests_enabled   = true
-    }
-  }
-
-  rule {
-    name     = "allow_in_allowlist"
-    priority = 35
-    action {
-      allow {}
-    }
-
-    statement {
-      ip_set_reference_statement {
-        arn = aws_wafv2_ip_set.allowlist_ips.arn
-      }
-    }
-
-    visibility_config {
-      cloudwatch_metrics_enabled = true
-      metric_name                = "waf-allow-in-allowlist"
       sampled_requests_enabled   = true
     }
   }
