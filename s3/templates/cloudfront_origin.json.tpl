@@ -22,16 +22,6 @@
     },
   %{ endif }
     {
-      "Effect": "Allow",
-      "Principal": {
-        "AWS": [
-          "arn:aws:iam::${account_id}:role/TDRYaraAVV2LambdaRole${title_environment}"
-        ]
-      },
-      "Action": "s3:GetObject",
-      "Resource": "arn:aws:s3:::tdr-upload-files-cloudfront-dirty-${environment}/*"
-    },
-    {
       "Sid": "AllowConditionalPut",
       "Effect": "Allow",
       "Principal": {
