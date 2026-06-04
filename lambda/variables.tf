@@ -177,24 +177,9 @@ variable "db_secrets_arn" {
   default = ""
 }
 
-variable "muted_scan_alerts" {
-  description = "Parameter for the notification lambda listing which ECR scan alerts should be muted"
-  type        = list(string)
-  default     = []
-}
-
 variable "kms_key_arn" {
   default     = ""
   description = "The KMS arn to encrypt environment variables. Not all lambdas need this so it has a default"
-}
-
-variable "keycloak_password" {
-  default = ""
-}
-
-variable "efs_security_group_id" {
-  default     = ""
-  description = "The security group for the EFS mount targets"
 }
 
 variable "database_security_group" {
@@ -230,14 +215,6 @@ variable "s3_bucket_arn" {
 }
 
 variable "keycloak_user_management_api_arn" {
-  default = ""
-}
-
-variable "judgment_export_s3_bucket_name" {
-  default = ""
-}
-
-variable "standard_export_s3_bucket_name" {
   default = ""
 }
 

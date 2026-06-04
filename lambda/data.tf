@@ -5,21 +5,6 @@ data "aws_ssm_parameter" "mgmt_account_number" {
   name  = "/mgmt/management_account"
 }
 
-data "aws_ssm_parameter" "intg_account_number" {
-  count = var.project == "tdr" && local.environment == "mgmt" ? 1 : 0
-  name  = "/mgmt/intg_account"
-}
-
-data "aws_ssm_parameter" "staging_account_number" {
-  count = var.project == "tdr" && local.environment == "mgmt" ? 1 : 0
-  name  = "/mgmt/staging_account"
-}
-
-data "aws_ssm_parameter" "prod_account_number" {
-  count = var.project == "tdr" && local.environment == "mgmt" ? 1 : 0
-  name  = "/mgmt/prod_account"
-}
-
 data "aws_ssm_parameter" "cloudfront_private_key_pem" {
   count = var.project == "tdr" && local.environment != "mgmt" && local.environment != "sbox" ? 1 : 0
   name  = "/${local.environment}/cloudfront/key/private/pem"
