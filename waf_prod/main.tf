@@ -117,7 +117,12 @@ resource "aws_wafv2_web_acl" "waf" {
     name     = "block_admin_urls_unless_in_allowlist"
     priority = 20
     action {
-      block {}
+      block {
+        custom_response {
+          response_code            = 403
+          custom_response_body_key = "forbidden-admin-network"
+        }
+      }
     }
 
     statement {
@@ -412,6 +417,21 @@ resource "aws_wafv2_web_acl" "waf" {
       metric_name                = "AWS-AWSManagedRulesSQLiRuleSet"
       sampled_requests_enabled   = true
     }
+  }
+
+  custom_response_body {
+    key          = "forbidden-admin-network"
+    content_type = "TEXT_HTML"
+    content      = <<-HTML
+      <!DOCTYPE html>
+      <html>
+      <head><title>Access Denied</title></head>
+      <body>
+        <h1>Access Denied</h1>
+        <p>This page is only accessible from the TNA network. Please connect to the office network or VPN and try again.</p>
+      </body>
+      </html>
+    HTML
   }
 }
 
