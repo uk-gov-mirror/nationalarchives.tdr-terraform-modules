@@ -24,3 +24,9 @@ variable "waf_arn" {
   description = "WAF to attach to this cloudfront distribution"
   default     = null
 }
+
+variable "signed_cookie_public_key_paths" {
+  description = "A list of public keys valid cookie can be signed by.  These should be in the keys directory"
+  type = list(string)
+}
+ 

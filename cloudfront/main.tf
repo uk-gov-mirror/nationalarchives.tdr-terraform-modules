@@ -129,6 +129,7 @@ resource "aws_cloudfront_origin_request_policy" "sign_cookies_api_policy" {
   }
 }
 
+# Old
 resource "aws_cloudfront_public_key" "cookie_signing_key" {
   comment     = "Public key for signed cookies"
   encoded_key = file("${path.module}/keys/sign_cookies_public_key_${var.environment}.pem")
@@ -139,6 +140,19 @@ resource "aws_cloudfront_key_group" "cookie_signing_key_group" {
   comment = "Key group for the signed cookie key"
   items   = [aws_cloudfront_public_key.cookie_signing_key.id]
   name    = "tdr-signed-cookie-group-${var.environment}"
+}
+
+# New
+resource "aws_cloudfront_public_key" "cookie_signing_keys" {
+  foreach = var.signed_cookie_public_keys
+  comment     = "Public keys for signed cookies"
+  encoded_key = file("${path.module}/keys/${each.key}")
+}
+
+resource "aws_cloudfront_key_group" "cookie_signing_key_group" {
+  comment = "Key group for the signed cookie keys"
+  items   = [aws_cloudfront_public_key.cookie_signing_keys[*].id]
+  name    = "tdr-signed-cookies-group-${var.environment}"
 }
 
 resource "aws_cloudfront_response_headers_policy" "default_response_headers_policy" {
