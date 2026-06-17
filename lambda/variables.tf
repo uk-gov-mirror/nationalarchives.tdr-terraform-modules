@@ -82,6 +82,12 @@ variable "cloudfront_key_pair_id" {
   default     = ""
 }
 
+variable "cloudfront_private_key_ssm_name" {
+  description = "The name of the ssm param holding the enccrypted private key"
+  default     = ""
+  type        = string
+}
+
 variable "api_url" {
   description = "The url of the graphql api"
   default     = ""
