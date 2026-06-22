@@ -50,7 +50,7 @@ resource "aws_cloudfront_distribution" "cloudfront_distribution" {
     viewer_protocol_policy     = "https-only"
     cache_policy_id            = data.aws_cloudfront_cache_policy.caching_disabled.id
     origin_request_policy_id   = aws_cloudfront_origin_request_policy.request_policy.id
-    trusted_key_groups         = [aws_cloudfront_key_group.cookie_signing_keys_group.id, aws_cloudfront_key_group.cookie_signing_key_group.id]
+    trusted_key_groups         = sort([aws_cloudfront_key_group.cookie_signing_keys_group.id, aws_cloudfront_key_group.cookie_signing_key_group.id])
     response_headers_policy_id = aws_cloudfront_response_headers_policy.default_response_headers_policy.id
   }
 
