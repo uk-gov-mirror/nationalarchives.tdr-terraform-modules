@@ -7,8 +7,7 @@ data "aws_ssm_parameter" "mgmt_account_number" {
 
 data "aws_ssm_parameter" "cloudfront_private_key_pem" {
   count = var.project == "tdr" && var.lambda_signed_cookies && local.environment != "mgmt" && local.environment != "sbox" ? 1 : 0
-  name  = var.cloudfront_private_key_ssm_name
-  #name  = "/${local.environment}/cloudfront/key/private/pem"
+  name  = var.signing_private_key_ssm_param_name
 }
 
 data "aws_availability_zones" "available" {}

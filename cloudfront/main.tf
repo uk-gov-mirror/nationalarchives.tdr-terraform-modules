@@ -144,7 +144,7 @@ resource "aws_cloudfront_key_group" "cookie_signing_key_group" {
 
 # New
 resource "aws_cloudfront_public_key" "cookie_signing_keys" {
-  for_each    = toset(var.signed_cookie_public_key_names)
+  for_each    = toset(var.trusted_public_key_file_names)
   comment     = "Public keys for signed cookies"
   encoded_key = file("${path.module}/keys/${each.key}")
 }

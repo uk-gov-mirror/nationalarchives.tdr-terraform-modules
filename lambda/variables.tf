@@ -82,7 +82,7 @@ variable "cloudfront_key_pair_id" {
   default     = ""
 }
 
-variable "cloudfront_private_key_ssm_name" {
+variable "signing_private_key_ssm_param_name" {
   description = "The name of the ssm param holding the enccrypted private key"
   default     = ""
   type        = string
