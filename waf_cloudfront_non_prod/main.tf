@@ -192,6 +192,14 @@ resource "aws_wafv2_web_acl" "cloudfront_waf" {
             }
           }
         }
+        # TDRD-1652
+        rule_action_override {
+          name = "GenericLFI_BODY"
+          action_to_use {
+            count {
+            }
+          }
+        }
       }
     }
 
