@@ -1,4 +1,4 @@
-CREATE EXTERNAL TABLE `keycloak_alb_logs`(
+CREATE EXTERNAL TABLE `keycloak_new_alb_logs`(
  type string,
             time string,
             elb string,
@@ -53,4 +53,4 @@ TBLPROPERTIES (
 'projection.timestamp.interval.unit'='DAYS', 
 'projection.timestamp.range'='2021/01/01,NOW', 
 'projection.timestamp.type'='date', 
-'storage.location.template'='s3://tdr-alb-logs-${environment}/tdr-keycloak-${environment}/AWSLogs/${account_id}/elasticloadbalancing/eu-west-2/$${timestamp}')
+'storage.location.template'='s3://tdr-alb-logs-${environment}/tdr-keycloak-new-${environment}/AWSLogs/${account_id}/elasticloadbalancing/eu-west-2/$${timestamp}')
