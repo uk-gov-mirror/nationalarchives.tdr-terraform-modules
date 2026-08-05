@@ -36,5 +36,10 @@ resource "aws_athena_named_query" "query" {
   name      = element(var.queries[*], count.index)
   workgroup = aws_athena_workgroup.workgroup.*.id[0]
   database  = aws_athena_database.data.*.name[0]
-  query     = templatefile("./tdr-terraform-modules/athena/templates/${element(var.queries[*], count.index)}.sql.tpl", { account_id = data.aws_caller_identity.current.account_id, database_name = aws_athena_database.data.*.name[0], environment = var.environment })
+  query = templatefile("./tdr-terraform-modules/athena/templates/${element(var.queries[*], count.index)}.sql.tpl",
+    { account_id    = data.aws_caller_identity.current.account_id,
+      database_name = aws_athena_database.data.*.name[0],
+      environment   = var.environment,
+      org_id        = data.aws_organizations_organization.org.id
+  })
 }
