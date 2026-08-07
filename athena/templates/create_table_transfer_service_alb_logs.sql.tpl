@@ -1,4 +1,4 @@
-CREATE EXTERNAL TABLE IF NOT EXISTS frontend_alb_logs(type string,
+CREATE EXTERNAL TABLE IF NOT EXISTS transfer_service_alb_logs(type string,
     time string,
     elb string,
     client_ip string,
@@ -39,7 +39,7 @@ WITH SERDEPROPERTIES(
     'serialization.format' = '1',
     'input.regex' ='([^ ]*) ([^ ]*) ([^ ]*) ([^ ]*):([0-9]*) ([^ ]*)[:-]([0-9]*) ([-.0-9]*) ([-.0-9]*) ([-.0-9]*) (|[-0-9]*) (-|[-0-9]*) ([-0-9]*) ([-0-9]*) \"([^ ]*) (.*) (- |[^ ]*)\" \"([^\"]*)\" ([A-Z0-9-_]+) ([A-Za-z0-9.-]*) ([^ ]*) \"([^\"]*)\" \"([^\"]*)\" \"([^\"]*)\" ([-.0-9]*) ([^ ]*) \"([^\"]*)\" \"([^\"]*)\" \"([^ ]*)\" \"([^\s]+?)\" \"([^\s]+)\" \"([^ ]*)\" \"([^ ]*)\" ?([^ ]*)?( .*)?')
 LOCATION
-  's3://tdr-alb-logs-${environment}/tdr-frontend-${environment}/AWSLogs/${account_id}/elasticloadbalancing/eu-west-2'
+  's3://tdr-alb-logs-${environment}/tdr-transfer-service-${environment}/AWSLogs/${account_id}/elasticloadbalancing/eu-west-2'
 TBLPROPERTIES (
 'projection.enabled'='true', 
 'projection.timestamp.format'='yyyy/MM/dd', 
@@ -47,4 +47,4 @@ TBLPROPERTIES (
 'projection.timestamp.interval.unit'='DAYS', 
 'projection.timestamp.range'='2021/01/01,NOW', 
 'projection.timestamp.type'='date', 
-'storage.location.template'='s3://tdr-alb-logs-${environment}/tdr-frontend-${environment}/AWSLogs/${account_id}/elasticloadbalancing/eu-west-2/$${timestamp}')
+'storage.location.template'='s3://tdr-alb-logs-${environment}/tdr-transfer-service-${environment}/AWSLogs/${account_id}/elasticloadbalancing/eu-west-2/$${timestamp}')
