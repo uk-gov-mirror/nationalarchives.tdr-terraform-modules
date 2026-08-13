@@ -32,4 +32,4 @@ STORED AS INPUTFORMAT
 OUTPUTFORMAT
   'org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat'
 LOCATION
-  's3://tdr-upload-files-cloudfront-dirty-${environment}-logs/tdr-upload-files-cloudfront-dirty-${environment}/'
+  's3://tdr-upload-files-cloudfront-dirty-${environment}-logs/tdr-upload-files-cloudfront-dirty-${environment}/${account_id}'

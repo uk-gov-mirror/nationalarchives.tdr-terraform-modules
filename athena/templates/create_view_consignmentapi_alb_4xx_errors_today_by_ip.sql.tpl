@@ -1,3 +1,4 @@
+CREATE OR REPLACE VIEW consignmentapi_alb_4xx_errors_today_by_ip AS
 SELECT client_ip,
        elb_status_code,
        count(*) as count
