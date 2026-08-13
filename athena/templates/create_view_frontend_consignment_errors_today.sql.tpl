@@ -4,7 +4,7 @@ FROM (
   SELECT
     regexp_extract(request_url, 'consignment/([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})', 1) AS consignment_id,
     *
-  FROM "tdr_security_logs_intg"."frontend_alb_logs"
+  FROM frontend_alb_logs
   WHERE "timestamp" = date_format(current_date, '%Y/%m/%d')
   AND "elb_status_code" BETWEEN 400 AND 599
 ) t
