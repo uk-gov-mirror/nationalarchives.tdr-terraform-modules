@@ -153,6 +153,17 @@ resource "aws_cloudfront_response_headers_policy" "default_response_headers_poli
       content_security_policy = "default-src 'self'"
       override                = false
     }
+    frame_options {
+      frame_option = "DENY"
+      override     = false
+    }
+    content_type_options {
+      override = false
+    }
+    referrer_policy {
+      override        = false
+      referrer_policy = "origin"
+    }
   }
   custom_headers_config {
     items {
