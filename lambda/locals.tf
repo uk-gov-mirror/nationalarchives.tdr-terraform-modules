@@ -38,4 +38,5 @@ locals {
   slack_transfers_webhook                = "/${local.environment}/slack/transfers/webhook"
   slack_releases_webhook                 = "/${local.environment}/release/slack/webhook"
   slack_dev_notifications_webhook        = "/${local.environment}/slack/dev_notifications/webhook"
+  slack_admin_action_alert_webhook       = "/${local.environment}/slack/admin_action_alert/webhook"
 }

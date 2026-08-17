@@ -17,21 +17,22 @@ resource "aws_lambda_function" "notifications_lambda_function" {
   tags                           = var.common_tags
   environment {
     variables = {
-      SLACK_WEBHOOK                   = local.slack_notifications_webhook
-      SLACK_JUDGMENT_WEBHOOK          = local.slack_judgment_webhook
-      SLACK_STANDARD_WEBHOOK          = local.slack_standard_webhook
-      SLACK_TDR_WEBHOOK               = local.slack_tdr_webhook
-      SLACK_EXPORT_WEBHOOK            = local.slack_export_webhook
-      SLACK_BAU_WEBHOOK               = local.slack_bau_webhook
-      SLACK_TRANSFERS_WEBHOOK         = local.slack_transfers_webhook
-      SLACK_RELEASES_WEBHOOK          = local.slack_releases_webhook
-      SLACK_DEV_NOTIFICATIONS_WEBHOOK = local.slack_dev_notifications_webhook
-      TO_EMAIL                        = aws_kms_ciphertext.environment_vars_notifications["to_email"].ciphertext_blob
-      DA_EVENT_BUS                    = aws_kms_ciphertext.environment_vars_notifications["da_event_bus"].ciphertext_blob
-      GOV_UK_NOTIFY_API_KEY           = aws_kms_ciphertext.environment_vars_notifications["gov_uk_notify_api_key"].ciphertext_blob
-      SEND_GOV_UK_NOTIFICATIONS       = aws_kms_ciphertext.environment_vars_notifications["send_gov_uk_notifications"].ciphertext_blob
-      TDR_INBOX_EMAIL                 = aws_kms_ciphertext.environment_vars_notifications["tdr_inbox_email"].ciphertext_blob
-      ENVIRONMENT                     = local.environment
+      SLACK_WEBHOOK                    = local.slack_notifications_webhook
+      SLACK_JUDGMENT_WEBHOOK           = local.slack_judgment_webhook
+      SLACK_STANDARD_WEBHOOK           = local.slack_standard_webhook
+      SLACK_TDR_WEBHOOK                = local.slack_tdr_webhook
+      SLACK_EXPORT_WEBHOOK             = local.slack_export_webhook
+      SLACK_BAU_WEBHOOK                = local.slack_bau_webhook
+      SLACK_TRANSFERS_WEBHOOK          = local.slack_transfers_webhook
+      SLACK_RELEASES_WEBHOOK           = local.slack_releases_webhook
+      SLACK_DEV_NOTIFICATIONS_WEBHOOK  = local.slack_dev_notifications_webhook
+      SLACK_ADMIN_ACTION_ALERT_WEBHOOK = local.slack_admin_action_alert_webhook
+      TO_EMAIL                         = aws_kms_ciphertext.environment_vars_notifications["to_email"].ciphertext_blob
+      DA_EVENT_BUS                     = aws_kms_ciphertext.environment_vars_notifications["da_event_bus"].ciphertext_blob
+      GOV_UK_NOTIFY_API_KEY            = aws_kms_ciphertext.environment_vars_notifications["gov_uk_notify_api_key"].ciphertext_blob
+      SEND_GOV_UK_NOTIFICATIONS        = aws_kms_ciphertext.environment_vars_notifications["send_gov_uk_notifications"].ciphertext_blob
+      TDR_INBOX_EMAIL                  = aws_kms_ciphertext.environment_vars_notifications["tdr_inbox_email"].ciphertext_blob
+      ENVIRONMENT                      = local.environment
     }
   }
 
@@ -86,7 +87,8 @@ resource "aws_iam_policy" "notifications_lambda_policy" {
       "arn:aws:ssm:eu-west-2:${data.aws_caller_identity.current.account_id}:parameter${local.slack_bau_webhook}",
       "arn:aws:ssm:eu-west-2:${data.aws_caller_identity.current.account_id}:parameter${local.slack_transfers_webhook}",
       "arn:aws:ssm:eu-west-2:${data.aws_caller_identity.current.account_id}:parameter${local.slack_releases_webhook}",
-      "arn:aws:ssm:eu-west-2:${data.aws_caller_identity.current.account_id}:parameter${local.slack_dev_notifications_webhook}"
+      "arn:aws:ssm:eu-west-2:${data.aws_caller_identity.current.account_id}:parameter${local.slack_dev_notifications_webhook}",
+      "arn:aws:ssm:eu-west-2:${data.aws_caller_identity.current.account_id}:parameter${local.slack_admin_action_alert_webhook}"
     ])
   })
   name = "${upper(var.project)}NotificationsLambdaPolicy${title(local.environment)}"
