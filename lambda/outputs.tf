@@ -6,10 +6,6 @@ output "ecr_scan_lambda_arn" {
   value = aws_lambda_function.ecr_scan_lambda_function.*.arn
 }
 
-output "export_api_authoriser_arn" {
-  value = local.export_api_authoriser_arn
-}
-
 output "signed_cookies_arn" {
   value = local.signed_cookies_arn
 }

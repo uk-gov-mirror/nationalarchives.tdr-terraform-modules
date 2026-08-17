@@ -32,11 +32,6 @@ variable "lambda_ecr_scan" {
   default     = false
 }
 
-variable "lambda_export_authoriser" {
-  description = "deploy Lambda function for the export api authoriser"
-  default     = false
-}
-
 variable "lambda_service_unavailable" {
   description = "deploy Lambda function for the service unavailable page"
   default     = false
@@ -146,14 +141,6 @@ variable "private_subnet_ids" {
 }
 
 variable "api_gateway_arn" {
-  default = ""
-}
-
-variable "backend_checks_api_arn" {
-  default = ""
-}
-
-variable "draft_metadata_api_arn" {
   default = ""
 }
 
