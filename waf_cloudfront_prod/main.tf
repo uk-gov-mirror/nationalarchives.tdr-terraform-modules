@@ -268,6 +268,9 @@ resource "aws_wafv2_web_acl" "cloudfront_waf" {
             positional_constraint = "EXACTLY"
             search_string         = "/cookies"
 
+
+            # something to change here rather than the other place
+
             field_to_match {
               uri_path {}
             }
@@ -347,6 +350,105 @@ resource "aws_wafv2_web_acl" "cloudfront_waf" {
     visibility_config {
       cloudwatch_metrics_enabled = true
       metric_name                = "AWS-AWSManagedRulesKnownBadInputsRuleSet"
+      sampled_requests_enabled   = true
+    }
+  }
+
+  #  TDRD-1541
+  rule {
+    name     = "AWS-Block-HEAD-MethodForCookies"
+    priority = 36
+    action {
+      block {}
+    }
+
+    statement {
+      and_statement {
+        statement {
+          byte_match_statement {
+            search_string         = "HEAD"
+            positional_constraint = "CONTAINS"
+
+            field_to_match {
+              method {}
+            }
+
+            text_transformation {
+              priority = 0
+              type     = "NONE"
+            }
+          }
+        }
+        statement {
+          byte_match_statement {
+            search_string         = "/cookies"
+            positional_constraint = "EXACTLY"
+
+            field_to_match {
+              uri_path {}
+            }
+
+            text_transformation {
+              priority = 0
+              type     = "NONE"
+            }
+          }
+        }
+      }
+    }
+    visibility_config {
+      cloudwatch_metrics_enabled = true
+      metric_name                = "waf-block-head-method-for-cookies"
+      sampled_requests_enabled   = true
+    }
+  }
+
+  rule {
+    name     = "AWS-Only-PUT-AndOptionsAllowed"
+    priority = 37
+
+    statement {
+      not_statement {
+        statement {
+          or_statement {
+            statement {
+              byte_match_statement {
+                search_string         = "PUT"
+                positional_constraint = "EXACTLY"
+
+                field_to_match {
+                  method {}
+                }
+
+                text_transformation {
+                  priority = 0
+                  type     = "NONE"
+                }
+              }
+            }
+            statement {
+              byte_match_statement {
+                search_string         = "OPTIONS"
+                positional_constraint = "EXACTLY"
+
+                field_to_match {
+                  method {}
+                }
+
+                text_transformation {
+                  priority = 0
+                  type     = "NONE"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+
+    visibility_config {
+      cloudwatch_metrics_enabled = true
+      metric_name                = "waf-limit-all-to-put-and-options"
       sampled_requests_enabled   = true
     }
   }
