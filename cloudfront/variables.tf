@@ -30,4 +30,3 @@ variable "trusted_public_key_file_names" {
   type        = list(string)
   default     = []
 }
-
