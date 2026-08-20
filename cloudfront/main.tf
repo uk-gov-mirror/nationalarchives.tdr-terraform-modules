@@ -50,7 +50,7 @@ resource "aws_cloudfront_distribution" "cloudfront_distribution" {
     viewer_protocol_policy     = "https-only"
     cache_policy_id            = data.aws_cloudfront_cache_policy.caching_disabled.id
     origin_request_policy_id   = aws_cloudfront_origin_request_policy.request_policy.id
-    trusted_key_groups         = [aws_cloudfront_key_group.cookie_signing_key_group.id]
+    trusted_key_groups         = [aws_cloudfront_key_group.cookie_signing_keys_group.id]
     response_headers_policy_id = aws_cloudfront_response_headers_policy.default_response_headers_policy.id
   }
 
@@ -129,16 +129,17 @@ resource "aws_cloudfront_origin_request_policy" "sign_cookies_api_policy" {
   }
 }
 
-resource "aws_cloudfront_public_key" "cookie_signing_key" {
-  comment     = "Public key for signed cookies"
-  encoded_key = file("${path.module}/keys/sign_cookies_public_key_${var.environment}.pem")
-  name        = "tdr-signed-cookie-public-key-${var.environment}"
+# TDRD-1533
+resource "aws_cloudfront_public_key" "cookie_signing_keys" {
+  for_each    = toset(var.trusted_public_key_file_names)
+  comment     = "Public keys for signed cookies"
+  encoded_key = file("${path.module}/keys/${each.key}")
 }
 
-resource "aws_cloudfront_key_group" "cookie_signing_key_group" {
-  comment = "Key group for the signed cookie key"
-  items   = [aws_cloudfront_public_key.cookie_signing_key.id]
-  name    = "tdr-signed-cookie-group-${var.environment}"
+resource "aws_cloudfront_key_group" "cookie_signing_keys_group" {
+  comment = "Key group for the signed cookie keys"
+  items   = [for p in aws_cloudfront_public_key.cookie_signing_keys : p.id]
+  name    = "tdr-signed-cookies-group-${var.environment}"
 }
 
 resource "aws_cloudfront_response_headers_policy" "default_response_headers_policy" {
