@@ -268,9 +268,6 @@ resource "aws_wafv2_web_acl" "cloudfront_waf" {
             positional_constraint = "EXACTLY"
             search_string         = "/cookies"
 
-
-            # something to change here rather than the other place
-
             field_to_match {
               uri_path {}
             }
@@ -414,7 +411,7 @@ resource "aws_wafv2_web_acl" "cloudfront_waf" {
             statement {
               byte_match_statement {
                 search_string         = "PUT"
-                positional_constraint = "EXACTLY"
+                positional_constraint = "CONTAINS"
 
                 field_to_match {
                   method {}
@@ -429,7 +426,7 @@ resource "aws_wafv2_web_acl" "cloudfront_waf" {
             statement {
               byte_match_statement {
                 search_string         = "OPTIONS"
-                positional_constraint = "EXACTLY"
+                positional_constraint = "CONTAINS"
 
                 field_to_match {
                   method {}
