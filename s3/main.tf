@@ -282,7 +282,7 @@ resource "aws_s3_bucket_lifecycle_configuration" "log_bucket_lifecycle" {
         for_each = length(keys(lookup(rule.value, "expiration", {}))) == 0 ? [] : [rule.value.expiration]
         content {
           date                         = lookup(expiration.value, "date", null)
-          days                         = local.log_bucket_expiration_days
+          days                         = lookup(expiration.value, "days", null)
           expired_object_delete_marker = lookup(expiration.value, "expired_object_delete_marker", null)
 
         }

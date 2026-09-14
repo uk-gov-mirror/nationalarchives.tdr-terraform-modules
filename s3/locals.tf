@@ -5,7 +5,6 @@ locals {
   global_bucket_name         = "${var.project}-${var.function}"
   bucket_name                = var.environment_suffix == true ? local.standard_bucket_name : local.global_bucket_name
   log_data_sns_topic_arn     = var.log_data_sns_topic_arn == "" ? "arn:aws:sns:${var.log_data_sns_topic_region}:${data.aws_caller_identity.current.account_id}:${var.project}-logs-${local.environment}" : var.log_data_sns_topic_arn
-  log_bucket_expiration_days = local.environment == "prod" ? 180 : 90
   s3_bucket_tags             = merge(var.common_tags, var.s3_bucket_additional_tags)
   s3_log_bucket_tags         = merge(var.common_tags, var.s3_logs_bucket_additional_tags)
 }
