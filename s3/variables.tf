@@ -182,7 +182,6 @@ variable "request_metrics_filters" {
   default = {}
 }
 
-# TDRD-1796
 variable "log_bucket_lifecycle_rules" {
   description = "List of maps describing configuration of object lifecycle management for the activity log buckets"
   type        = any

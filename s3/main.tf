@@ -264,9 +264,7 @@ resource "aws_s3_bucket_metric" "bucket_request_metrics_filter" {
   }
 }
 
-# TDRD-1796
 resource "aws_s3_bucket_lifecycle_configuration" "log_bucket_lifecycle" {
-  # this is where wiz has the issue. is the same on the other rule so should be fine but change to just 0 if needed
   count  = var.access_logs == true && var.apply_resource == true && length(var.log_bucket_lifecycle_rules) > 0 ? 1 : 0
   bucket = aws_s3_bucket.log_bucket[0].id
 
