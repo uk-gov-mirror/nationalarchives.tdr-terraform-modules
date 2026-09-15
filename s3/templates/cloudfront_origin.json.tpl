@@ -59,6 +59,9 @@
         "arn:aws:s3:::${bucket_name}/*"
       ],
       "Condition": {
+        "StringEquals": {
+          "AWS:SourceArn": ${cloudfront_distribution_arns}
+        },
         "Bool": {
           "s3:ObjectCreationOperation": "false"
         }
