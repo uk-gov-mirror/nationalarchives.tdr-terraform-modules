@@ -264,3 +264,34 @@ resource "aws_s3_bucket_metric" "bucket_request_metrics_filter" {
   }
 }
 
+resource "aws_s3_bucket_lifecycle_configuration" "log_bucket_lifecycle" {
+  count  = var.access_logs == true && var.apply_resource == true && length(var.log_bucket_lifecycle_rules) > 0 ? 1 : 0
+  bucket = aws_s3_bucket.log_bucket[0].id
+
+  dynamic "rule" {
+    for_each = var.log_bucket_lifecycle_rules
+    iterator = rule
+    content {
+      id     = rule.value.id
+      status = rule.value.status
+
+      dynamic "expiration" {
+
+        for_each = length(keys(lookup(rule.value, "expiration", {}))) == 0 ? [] : [rule.value.expiration]
+        content {
+          date                         = lookup(expiration.value, "date", null)
+          days                         = lookup(expiration.value, "days", null)
+          expired_object_delete_marker = lookup(expiration.value, "expired_object_delete_marker", null)
+
+        }
+      }
+      dynamic "noncurrent_version_expiration" {
+        for_each = length(keys(lookup(rule.value, "noncurrent_version_expiration", {}))) == 0 ? [] : [rule.value.noncurrent_version_expiration]
+        content {
+          noncurrent_days           = lookup(noncurrent_version_expiration.value, "noncurrent_days", null)
+          newer_noncurrent_versions = lookup(noncurrent_version_expiration.value, "newer_noncurrent_versions", null)
+        }
+      }
+    }
+  }
+}
