@@ -260,4 +260,14 @@ resource "aws_wafv2_web_acl_association" "association" {
 resource "aws_wafv2_web_acl_logging_configuration" "waf_logging" {
   log_destination_configs = var.log_destinations
   resource_arn            = aws_wafv2_web_acl.acl.arn
+  redacted_fields {
+    single_header {
+      name = "authorization"
+    }
+  }
+  redacted_fields {
+    single_header {
+      name = "cookie"
+    }
+  }
 }
