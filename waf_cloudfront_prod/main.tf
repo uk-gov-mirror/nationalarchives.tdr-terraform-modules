@@ -165,6 +165,52 @@ resource "aws_wafv2_web_acl" "cloudfront_waf" {
         aggregate_key_type    = "IP"
         evaluation_window_sec = var.rate_limit_evaluation_window_secs
         limit                 = var.rate_limit
+
+        # Uploading a consignment sends a preflight and a PUT for every file from a single address, so a
+        # large transfer exceeds any request rate a browsing user would produce and is blocked part way
+        # through. A block is returned without the CORS headers, so the browser reports it as a CORS
+        # failure and the upload stops with no usable error. These requests are excluded from the count
+        # instead: they are authenticated by a signed cookie restricted to the user's own prefix, so they
+        # cannot be made without a valid session. Every other request is still counted.
+        scope_down_statement {
+          not_statement {
+            statement {
+              or_statement {
+                statement {
+                  byte_match_statement {
+                    positional_constraint = "EXACTLY"
+                    search_string         = "PUT"
+
+                    field_to_match {
+                      method {}
+                    }
+
+                    text_transformation {
+                      priority = 0
+                      type     = "NONE"
+                    }
+                  }
+                }
+
+                statement {
+                  byte_match_statement {
+                    positional_constraint = "EXACTLY"
+                    search_string         = "OPTIONS"
+
+                    field_to_match {
+                      method {}
+                    }
+
+                    text_transformation {
+                      priority = 0
+                      type     = "NONE"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
       }
     }
 
