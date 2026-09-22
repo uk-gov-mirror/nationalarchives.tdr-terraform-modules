@@ -31,13 +31,13 @@ variable "log_retention_period_days" {
 }
 
 variable "rate_limit" {
-  description = "The maximum number of requests to allow during the specified time window between 10 - 2,000,000,000"
+  description = "Max requests per IP per evaluation window before blocking (10 - 2,000,000,000). PUT and OPTIONS are not counted."
   type        = number
   default     = 250
 }
 
 variable "rate_limit_evaluation_window_secs" {
-  description = "The amount of time to use for request counts - valid values are in seconds (60 120 300 600)"
+  description = "Sliding window in seconds for rate_limit. Valid values are 60, 120, 300 and 600."
   type        = number
   default     = 600
 }

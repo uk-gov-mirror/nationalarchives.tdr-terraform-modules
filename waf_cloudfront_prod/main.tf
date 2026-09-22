@@ -166,20 +166,17 @@ resource "aws_wafv2_web_acl" "cloudfront_waf" {
         evaluation_window_sec = var.rate_limit_evaluation_window_secs
         limit                 = var.rate_limit
 
-        # Uploading a consignment sends a preflight and a PUT for every file from a single address, so a
-        # large transfer exceeds any request rate a browsing user would produce and is blocked part way
-        # through. A block is returned without the CORS headers, so the browser reports it as a CORS
-        # failure and the upload stops with no usable error. These requests are excluded from the count
-        # instead: they are authenticated by a signed cookie restricted to the user's own prefix, so they
-        # cannot be made without a valid session. Every other request is still counted.
+        # Uploads send an OPTIONS and a PUT per file and trip the limit mid-transfer, which surfaces
+        # as an opaque CORS error, so those methods are not counted. /cookies still is: it is
+        # unauthenticated and Lambda-backed. Phrased as "what counts" to stay within the provider's
+        # statement nesting limit.
         scope_down_statement {
-          not_statement {
+          or_statement {
             statement {
-              or_statement {
+              not_statement {
                 statement {
-                  byte_match_statement {
-                    positional_constraint = "EXACTLY"
-                    search_string         = "PUT"
+                  regex_match_statement {
+                    regex_string = "^(PUT|OPTIONS)$"
 
                     field_to_match {
                       method {}
@@ -191,21 +188,21 @@ resource "aws_wafv2_web_acl" "cloudfront_waf" {
                     }
                   }
                 }
+              }
+            }
 
-                statement {
-                  byte_match_statement {
-                    positional_constraint = "EXACTLY"
-                    search_string         = "OPTIONS"
+            statement {
+              byte_match_statement {
+                positional_constraint = "EXACTLY"
+                search_string         = "/cookies"
 
-                    field_to_match {
-                      method {}
-                    }
+                field_to_match {
+                  uri_path {}
+                }
 
-                    text_transformation {
-                      priority = 0
-                      type     = "NONE"
-                    }
-                  }
+                text_transformation {
+                  priority = 0
+                  type     = "NONE"
                 }
               }
             }
