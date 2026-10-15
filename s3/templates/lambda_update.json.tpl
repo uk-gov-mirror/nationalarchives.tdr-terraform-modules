@@ -27,8 +27,8 @@
       "Principal": "*",
       "Action": "s3:*",
       "Resource": [
-        "arn:aws:s3:::tdr-backend-code-mgmt",
-        "arn:aws:s3:::tdr-backend-code-mgmt/*"
+        "arn:aws:s3:::${bucket_name}",
+        "arn:aws:s3:::${bucket_name}/*"
       ],
       "Condition": {
         "Bool": {
@@ -48,7 +48,7 @@
       },
       "Action": ["s3:GetObject"],
       "Resource": [
-        "arn:aws:s3:::tdr-backend-code-mgmt/*"
+        "arn:aws:s3:::${bucket_name}/*"
       ]
     }
   ]
