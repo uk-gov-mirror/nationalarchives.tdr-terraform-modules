@@ -171,7 +171,7 @@ resource "aws_wafv2_web_acl" "cloudfront_waf" {
   }
   rule {
     name     = "restrict_cookies_http_methods"
-    priority = 10
+    priority = 11
     action {
       block {}
     }
