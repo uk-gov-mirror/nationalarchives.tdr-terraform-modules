@@ -193,15 +193,19 @@ resource "aws_wafv2_web_acl" "cloudfront_waf" {
           }
         }
         statement {
-          regex_match_statement {
-            field_to_match {
-              method {}
-            }
-            regex_string = "^(?!GET$|OPTIONS$).*"
+          not_statement {
+            statement {
+              regex_match_statement {
+                field_to_match {
+                  method {}
+                }
+                regex_string = "^(GET|OPTIONS)$"
 
-            text_transformation {
-              priority = 0
-              type     = "NONE"
+                text_transformation {
+                  priority = 0
+                  type     = "NONE"
+                }
+              }
             }
           }
         }
@@ -235,15 +239,19 @@ resource "aws_wafv2_web_acl" "cloudfront_waf" {
           }
         }
         statement {
-          regex_match_statement {
-            field_to_match {
-              method {}
-            }
-            regex_string = "^(?!PUT$|POST$|OPTIONS$).*"
+          not_statement {
+            statement {
+              regex_match_statement {
+                field_to_match {
+                  method {}
+                }
+                regex_string = "^(PUT|POST|OPTIONS)$"
 
-            text_transformation {
-              priority = 0
-              type     = "NONE"
+                text_transformation {
+                  priority = 0
+                  type     = "NONE"
+                }
+              }
             }
           }
         }
